@@ -54,9 +54,7 @@ export class Server {
 
   public async $beforeInit() {
     dotenv.config();
-
-    new WinstonLogger().logger().info(process.env.CLUSTER_URL);
-    new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `);
+    new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
     await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
 
     // firebase.connect();
