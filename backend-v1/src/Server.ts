@@ -54,7 +54,7 @@ export class Server {
   public async $beforeInit() {
     dotenv.config({path: path.join(__dirname, '.env')});
     new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
-    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || 'mongodb+srv://charley_pons:cbd@cluster0.c20kz.mongodb.net/commercium?retryWrites=true&w=majority');
+    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
 
     // firebase.connect();
   }
