@@ -10,13 +10,13 @@ import {OfferCtrl} from "./offerCtrl";
     path: "/product",
     children: [OfferCtrl]
 })
-export class CalendarsCtrl {
+export class ProductCtrl {
     constructor(private _productService: ProductService) {}
 
     @Get("/")
     @Summary("Return all Product")
     @(Returns(200, Array).Of(Product))
-    async getAllCalendars(): Promise<Product[]> {
+    async getAllProduct(): Promise<Product[]> {
         return this._productService.findAll();
     }
 
@@ -24,10 +24,10 @@ export class CalendarsCtrl {
     @Summary("Return a Product from his ID")
     @(Status(200, Product).Description("Success"))
     async get(@PathParams("id") id: string): Promise<Product> {
-        const calendar = await this._productService.findById(id);
+        const product = await this._productService.findById(id);
 
-        if (calendar) {
-            return calendar;
+        if (product) {
+            return product;
         }
 
         throw new NotFound("Product not found");

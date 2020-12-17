@@ -9,7 +9,7 @@ constructor(){
     this.options = {
         file: {
             level: 'info',
-            filename: `${new Date().toUTCString()}/${process.env.LOGGER_FILE}`,
+            filename: `${process.env.LOGGER_FILE}/${new Date().toUTCString()}`,
             handleExceptions: true,
             json: true,
             maxsize: 5242880, // 5MB

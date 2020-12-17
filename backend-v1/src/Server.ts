@@ -12,7 +12,8 @@ import {IdDb} from "./core/models/id-db.enum";
 import DbConnectService from "./core/db-connect.service";
 import {WinstonLogger} from "./core/winston-logger";
 import * as dotenv from 'dotenv';
-import * as path from "path";
+// @ts-ignore
+import autoimport from 'auto-import';
 
 
 export const rootDir = __dirname;
@@ -52,9 +53,11 @@ export class Server {
   settings: Configuration;
 
   public async $beforeInit() {
-    dotenv.config({path: path.join(__dirname, '.env')});
-    new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
-    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || 'mongodb+srv://charley_pons:cbd@cluster0.c20kz.mongodb.net/commercium?retryWrites=true&w=majority');
+    dotenv.config();
+
+    new WinstonLogger().logger().info(process.env.CLUSTER_URL);
+    new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `);
+    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
 
     // firebase.connect();
   }
