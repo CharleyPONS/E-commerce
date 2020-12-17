@@ -6,12 +6,13 @@ import compress from "compression";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import cors from "cors";
-import "@tsed/ajv";
 import "@tsed/mongoose";
-import mongooseConfig from "./config/mongoose";
+import mongooseConfig from "./core/config/mongoose";
 import {IdDb} from "./core/models/id-db.enum";
 import DbConnectService from "./core/db-connect.service";
-import {firebase} from "./core";
+import {WinstonLogger} from "./core/winston-logger";
+import * as dotenv from 'dotenv';
+import * as path from "path";
 
 
 export const rootDir = __dirname;
@@ -23,8 +24,11 @@ export const rootDir = __dirname;
   httpsPort: false, // CHANGE
   mount: {
     "api/rest": [
-      `${rootDir}/controllers/**/*.ts`
+      `${rootDir}/**/controller/**/*.ts`
     ]
+  },
+  ajv: {
+
   },
   componentsScan: [
     `${rootDir}/core/middlewares/*.middleware.ts`,
@@ -48,8 +52,11 @@ export class Server {
   settings: Configuration;
 
   public async $beforeInit() {
-    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
-    firebase.connect();
+    dotenv.config({path: path.join(__dirname, '.env')});
+    new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
+    await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || 'mongodb+srv://charley_pons:cbd@cluster0.c20kz.mongodb.net/commercium?retryWrites=true&w=majority');
+
+    // firebase.connect();
   }
 
     $beforeRoutesInit(): void {

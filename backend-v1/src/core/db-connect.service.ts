@@ -8,11 +8,12 @@ import {Service} from "@tsed/common";
 @Service()
 export default class DbConnectService {
   constructor(private _mongooseService: MongooseService) {}
-   async connectDB(id: IdDb, url: string, options: ConnectOptions = {}) {
+   async connectDB(id: IdDb, url: string, options: ConnectOptions = { useNewUrlParser: true } ) {
     if (!id || !url) {
       return;
     }
     try {
+        console.log('toto');
       if (this._mongooseService.has(id)) {
         new WinstonLogger().logger().info("Connection already excist");
         return;

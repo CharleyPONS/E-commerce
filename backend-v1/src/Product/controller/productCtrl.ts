@@ -1,0 +1,35 @@
+import {Controller, Get, PathParams} from "@tsed/common";
+import {NotFound} from "@tsed/exceptions";
+import {Returns, Status, Summary} from "@tsed/schema";
+import {ProductService} from "../services/ProductService";
+import {Product} from "../models/product";
+import {OfferCtrl} from "./offerCtrl";
+
+
+@Controller({
+    path: "/product",
+    children: [OfferCtrl]
+})
+export class CalendarsCtrl {
+    constructor(private _productService: ProductService) {}
+
+    @Get("/")
+    @Summary("Return all Product")
+    @(Returns(200, Array).Of(Product))
+    async getAllCalendars(): Promise<Product[]> {
+        return this._productService.findAll();
+    }
+
+    @Get("/:id")
+    @Summary("Return a Product from his ID")
+    @(Status(200, Product).Description("Success"))
+    async get(@PathParams("id") id: string): Promise<Product> {
+        const calendar = await this._productService.findById(id);
+
+        if (calendar) {
+            return calendar;
+        }
+
+        throw new NotFound("Product not found");
+    }
+}
