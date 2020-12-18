@@ -8,13 +8,16 @@
 
 See [Ts.ED](https://tsed.io) project for more information.
 
-## Getting started
+## Install
 
 First of all, assuming you have all the environment ready on your physical server, let's get started
 
 ```bash
 npm install
 ```
+
+## Getting started
+
 You will need to add an .env file at the root of the project
 
 CLUSTER_URL= your mongodb url (own server or cluster in the cloud)
@@ -34,5 +37,11 @@ npm run watch
 npm run docs
 npm run start
 ```
+## Usages
 
+Don't change this code file
+
+<!-- AUTO-GENERATED-CONTENT:START (REMOTE:url=https://github.com/CharleyPONS/e-commerce/blob/main/backend-v1/README.md) -->
+This content will be dynamically replaced with code from the file
+<!-- AUTO-GENERATED-CONTENT:END -->
 
