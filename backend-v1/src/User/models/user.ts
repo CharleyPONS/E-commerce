@@ -7,9 +7,6 @@ import {Allow, Description, Email, Property, Required} from "@tsed/schema";
 connection: IdDb.SHOP_DATABASE
 })
 @PreHook("save", (user: User, next) => {
-    if (!user.numberOrder) {
-        user.numberOrder = 0;
-    }
     if (!user.amountOrder) {
         user.amountOrder = 0;
     }
@@ -37,11 +34,11 @@ export class User {
     email: string;
 
     @Property()
-    numberOrder: number;
+    numberOrder: Array<{isValidate: boolean, madeAt: string}>;
 
     @Property()
     @Description("Last modification date")
-    createdAt: Date = new Date();
+    updatedAt: string = new Date().toISOString();
 
     @Property()
     @Allow(null)
