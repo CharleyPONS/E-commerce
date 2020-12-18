@@ -2,11 +2,9 @@ import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
 import {User} from "../models/user";
 import {WinstonLogger} from "../../core/winston-logger";
-import {Product} from "../../Product/models/product";
-import {ObjectId} from "mongoose";
 
 @Service()
-export class UserService {
+export class UserCRUD {
     @Inject(User)
     private user: MongooseModel<User>;
 
@@ -42,7 +40,7 @@ export class UserService {
 
             const model = new this.user(user);
             new WinstonLogger().logger().info(`Save user`, {user});
-            await model.updateOne(user, {upsert: true});
+            await model.save();
             new WinstonLogger().logger().info(`Save user succeed`, {user});
 
             return model;

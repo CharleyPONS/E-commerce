@@ -1,7 +1,7 @@
 import {Controller, Get, PathParams} from "@tsed/common";
 import {NotFound} from "@tsed/exceptions";
 import {Returns, Status, Summary} from "@tsed/schema";
-import {ProductService} from "../services/ProductService";
+import {ProductCRUD} from "../services/ProductCRUD";
 import {Product} from "../models/product";
 import {OfferCtrl} from "./offerCtrl";
 
@@ -11,7 +11,7 @@ import {OfferCtrl} from "./offerCtrl";
     children: [OfferCtrl]
 })
 export class ProductCtrl {
-    constructor(private _productService: ProductService) {}
+    constructor(private _productService: ProductCRUD) {}
 
     @Get("/")
     @Summary("Return all Product")

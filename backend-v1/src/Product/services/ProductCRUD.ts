@@ -4,7 +4,7 @@ import {Product} from "../models/product";
 import {WinstonLogger} from "../../core/winston-logger";
 
 @Service()
-export class ProductService {
+export class ProductCRUD {
     @Inject(Product)
     private product: MongooseModel<Product>;
 

@@ -12,7 +12,7 @@ export class AuthJWTMiddleware implements IMiddleware {
         new WinstonLogger().logger().info('no token provided');
         return ctx.getResponse().status(404).send('no token provided in request headers')
     }
-    verify(token,process.env.JWT_KEY as string, ((err, decoded) => {
+    verify(token, process.env.JWT_KEY as string, ((err, decoded) => {
         if(err){
             if(err?.name === 'TokenExpiredError'){
                 new WinstonLogger().logger().info('TokenExpiredError',{err});

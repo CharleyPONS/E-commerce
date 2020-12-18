@@ -1,7 +1,8 @@
 import {Model, ObjectID, PreHook} from "@tsed/mongoose";
 import {IdDb} from "../../core/models/id-db.enum";
-import {Description, Pattern, Property, Required} from "@tsed/schema";
+import {Allow, Description, Email, Property, Required} from "@tsed/schema";
 
+// Use save in place of update to apply hook middleware
 @Model({
 connection: IdDb.SHOP_DATABASE
 })
@@ -31,7 +32,7 @@ export class User {
     password: string;
 
     @Required()
-    @Pattern('\t^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')
+    @Email()
     @Property()
     email: string;
 
@@ -43,6 +44,7 @@ export class User {
     createdAt: Date = new Date();
 
     @Property()
+    @Allow(null)
     @Description("JWT set for auth")
     token: string;
 

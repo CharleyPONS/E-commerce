@@ -1,11 +1,12 @@
 import {Service} from "@tsed/common";
 import {hashSync} from "bcrypt";
-import {UserService} from "../../User/services/UserService";
+import {UserCRUD} from "../../User/services/UserCRUD";
 import {User} from "../../User/models/user";
+import {WinstonLogger} from "../../core/winston-logger";
 
 @Service()
 export class RegistrationService {
-    constructor(private _userService: UserService) {
+    constructor(private _userService: UserCRUD) {
     }
 
     async main(registerUser: User){
@@ -16,6 +17,7 @@ export class RegistrationService {
     await this._userService.createUser(registerUserToSaved);
     const user = this._userService.findByEmail(registerUserToSaved.email);
     if(!user){
+        new WinstonLogger().logger().info(`user not found`, {user});
         throw new Error('user not found error during the save process')
     }
     return user;
