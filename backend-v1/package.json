@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "build": "yarn tsc",
+    "docs": "md-magic --path '**/*.md' --ignore 'node_modules'",
     "tsc": "tsc --project tsconfig.compile.json",
     "tsc:w": "tsc --project tsconfig.json -w",
     "start": "nodemon \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node src/index.ts",
@@ -56,6 +57,7 @@
     "@types/node": "^14.14.14",
     "auto-import": "^0.1.4",
     "concurrently": "^5.3.0",
+    "markdown-magic": "^1.0.0",
     "nodemon": "^2.0.6",
     "prettier": "2.2.1",
     "pretty-quick": "3.1.0",
