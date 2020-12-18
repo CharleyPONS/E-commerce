@@ -14,14 +14,16 @@ import {WinstonLogger} from "./core/winston-logger";
 import * as dotenv from 'dotenv';
 // @ts-ignore
 import autoimport from 'auto-import';
+import helmet = require("helmet/dist");
 
 
 export const rootDir = __dirname;
+dotenv.config();
 
 @Configuration({
   rootDir,
   acceptMimes: ["application/json"],
-  httpPort: process.env.PORT || 8083,
+  httpPort: process.env.PORT || 5000,
   httpsPort: false, // CHANGE
   mount: {
     "api/rest": [
@@ -53,7 +55,6 @@ export class Server {
   settings: Configuration;
 
   public async $beforeInit() {
-    dotenv.config();
     new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
     await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
 
@@ -62,13 +63,16 @@ export class Server {
 
     $beforeRoutesInit(): void {
     this.app
-      .use(cors())
+      .use(cors({
+        origin: process.env.CORS_ORIGIN || '*',
+        methods: ['GET', 'POST', 'DELETE']
+      }))
       .use(cookieParser())
       .use(compress({}))
       .use(methodOverride())
-      .use(bodyParser.json())
-      .use(bodyParser.urlencoded({
-        extended: true
-      }));
+        .use(bodyParser.json({ limit: '10mb' }))
+        .use(bodyParser.urlencoded({ limit: '10mb', extended: true })
+        )
+        .use(helmet())
   }
 }

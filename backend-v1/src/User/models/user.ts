@@ -27,9 +27,13 @@ export class User {
     surname: string;
 
     @Required()
+    @Property()
+    password: string;
+
+    @Required()
     @Pattern('\t^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')
     @Property()
-    email: number;
+    email: string;
 
     @Property()
     numberOrder: number;
@@ -37,6 +41,10 @@ export class User {
     @Property()
     @Description("Last modification date")
     createdAt: Date = new Date();
+
+    @Property()
+    @Description("JWT set for auth")
+    token: string;
 
     @Property()
     @Description("Depending on the product in stock we add the right unity of measure")

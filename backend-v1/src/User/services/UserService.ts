@@ -25,6 +25,18 @@ export class UserService {
         }
     }
 
+    async findByEmail(email: string): Promise<any>{
+        try{
+            new WinstonLogger().logger().info(`Search a product with id ${email}`);
+            const user =  await this.user.findOne({email: email}).exec();
+            return user;
+        }catch (e) {
+            new WinstonLogger().logger().warn(`Search a user with id ${email} request failed`,
+                {error: e})
+
+        }
+    }
+
     async save(user: User): Promise<any> {
         try {
 
@@ -33,6 +45,21 @@ export class UserService {
             await model.updateOne(user, {upsert: true});
             new WinstonLogger().logger().info(`Save user succeed`, {user});
 
+            return model;
+        }catch(e){
+            new WinstonLogger().logger().warn(`Save a user with id request failed`,
+                {error: e});
+
+        }
+    }
+
+    async createUser(user: User): Promise<any> {
+        try {
+
+            const model = new this.user(user);
+            new WinstonLogger().logger().info(`create user`, {user});
+            await this.user.create(model);
+            new WinstonLogger().logger().info(`Create user succeed`, {user});
             return model;
         }catch(e){
             new WinstonLogger().logger().warn(`Save a user with id request failed`,
