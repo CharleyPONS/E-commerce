@@ -13,7 +13,7 @@ export class EmailSenderService {
     constructor(private _userCRUD: UserCRUDService) {}
     async main(user: User, mailProcess: MailProcess): Promise<void>{
         const userData: any = this._userCRUD.findByEmail(user?.email);
-        if(!userData?.email || !process || !userData?.email.match('\t^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')){
+        if(!userData?.email || !mailProcess || !userData?.email.match('\t^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$')){
             return;
         }
 
