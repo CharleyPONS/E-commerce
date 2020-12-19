@@ -4,6 +4,7 @@ import {Product} from "../models/product";
 import {WinstonLogger} from "../../../core/winston-logger";
 import {User} from "../../User/models/user";
 import {FilterQuery, UpdateQuery} from "mongoose";
+import {CATEGORIES} from "../models/product.utils";
 
 @Service()
 export class ProductCRUDService {
@@ -19,6 +20,17 @@ export class ProductCRUDService {
             return await this.product.findById(id).exec();
         }catch (err) {
             new WinstonLogger().logger().warn(`Search a product with id ${id} request failed`),
+                {error: err};
+
+        }
+    }
+
+    async findByCategories(categoriesSelected: CATEGORIES): Promise<any>{
+        try{
+            new WinstonLogger().logger().info(`Search a product with id ${categoriesSelected}`);
+            return await this.product.findOne({categories: categoriesSelected}).exec();
+        }catch (err) {
+            new WinstonLogger().logger().warn(`Search a product with id ${categoriesSelected} request failed`),
                 {error: err};
 
         }
