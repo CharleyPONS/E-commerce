@@ -1,20 +1,33 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2017",
-      "dom"
-    ]
-  }
+    "allowSyntheticDefaultImports": true,
+    "target": "es2016",
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": false,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "isolatedModules": false,
+    "suppressImplicitAnyIndexErrors": false,
+    "noUnusedParameters": false,
+    "importHelpers": true,
+    "newLine": "LF",
+    "noEmit": true,
+    "typeRoots": ["./node_modules/@types", "reflect-metadata"],
+    "lib": ["es2016", "es7", "dom", "esnext.asynciterable"]
+  },
+  "compileOnSave": true,
+  "include": ["src/**/*.ts", "src/core/json/**/*.json"],
+  "files": ["node_modules/typescript/lib/lib.es6.d.ts"],
+  "exclude": ["node_modules", "src/**/*.test.ts", "dist"]
 }
