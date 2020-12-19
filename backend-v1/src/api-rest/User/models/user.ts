@@ -1,14 +1,19 @@
 import {Model, ObjectID, PreHook} from "@tsed/mongoose";
 import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Allow, Description, Email, Property, Required} from "@tsed/schema";
+import {Next} from "@tsed/common";
 
 // Use save in place of update to apply hook middleware
 @Model({
-connection: IdDb.SHOP_DATABASE
+connection: IdDb.SHOP_DATABASE,
+    name: 'Users'
 })
-@PreHook("save", (user: User, next) => {
+@PreHook("save", (user: User, next: Next) => {
     if (!user.amountOrder) {
         user.amountOrder = 0;
+    }
+    if(!user.updatedAt){
+        user.updatedAt = new Date().toISOString();
     }
     next();
 })
@@ -38,7 +43,7 @@ export class User {
 
     @Property()
     @Description("Last modification date")
-    updatedAt: string = new Date().toISOString();
+    updatedAt: string;
 
     @Property()
     @Allow(null)

@@ -14,34 +14,33 @@ export class ProductCRUDService {
     async findById(id: string): Promise<any>{
         try{
             new WinstonLogger().logger().info(`Search a product with id ${id}`);
-            const calendar =  await this.product.findById(id).exec();
-            return calendar;
-        }catch (e) {
+            return await this.product.findById(id).exec();
+        }catch (err) {
             new WinstonLogger().logger().warn(`Search a product with id ${id} request failed`),
-                {error: e};
+                {error: err};
 
         }
     }
 
     async save(product: Product): Promise<any> {
         try {
-
             const model = new this.product(product);
             new WinstonLogger().logger().info(`Save product`, {product});
-            await model.updateOne(product, {upsert: true});
+            await model.save();
             new WinstonLogger().logger().info(`Save product succeed`, {product});
 
             return model;
-        }catch(e){
+        }catch(err){
             new WinstonLogger().logger().warn(`Save a product with id request failed`),
-                {error: e};
+                {error: err};
 
         }
     }
 
-    async findAll(options = {}): Promise<Product[]> {
+    async findAll(): Promise<Product[]> {
         new WinstonLogger().logger().info(`Find all product`);
-        return this.product.find(options).exec();
+        const product: Product[] =  await this.product.find().exec();
+        return product;
     }
 
 
