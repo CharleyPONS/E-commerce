@@ -38,9 +38,9 @@ dotenv.config();
   },
   componentsScan: [
     `${rootDir}/core/middlewares/*.middleware.ts`,
-    `${rootDir}/api/**/**/*.middleware.ts`,
+    `${rootDir}/api-rest/**/**/*.middleware.ts`,
     `${rootDir}/core/services/*.services.ts`,
-    `${rootDir}/api/**/**/*.services.ts`
+    `${rootDir}/api-rest/**/**/*.services.ts`
   ],
   mongoose: mongooseConfig,
   exclude: [

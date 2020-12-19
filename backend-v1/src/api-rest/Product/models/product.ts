@@ -12,6 +12,7 @@ connection: IdDb.SHOP_DATABASE
     if(!product.dateUpdate){
         product.dateUpdate = new Date().toISOString();
     }
+    next();
 })
 export class Product {
     @ObjectID('id')
