@@ -9,19 +9,17 @@ connection: IdDb.SHOP_DATABASE,
     name: 'Users'
 })
 @PreHook("save", (user: User, next: Next) => {
-    if (!user.amountOrder) {
-        user.amountOrder = 0;
-    }
     if(!user.updatedAt){
         user.updatedAt = new Date().toISOString();
     }
     next();
 })
 export class User {
-    @SchemaIgnore()
+    @Required()
     @ObjectID('id')
     _id: string;
 
+    @Required()
     @ObjectID('id')
     userId: string;
 
@@ -53,9 +51,5 @@ export class User {
     @Allow(null)
     @Description("JWT set for auth")
     token: string;
-
-    @Property()
-    @Description("Depending on the product in stock we add the right unity of measure")
-    amountOrder: number
 
 }

@@ -1,5 +1,5 @@
 import {Controller} from "@tsed/common";
-import {ProductCRUDService} from "../services/ProductCRUD.service";
+import {ProductCRUDService} from "../services/productCRUD.service";
 
 
 @Controller({

@@ -14,7 +14,7 @@ export class RegistrationService {
     registerUserToSaved.name = registerUser.name;
     registerUserToSaved.email = registerUser.email;
     registerUserToSaved.password = hashSync(registerUser.password, 10);
-    await this._userService.createUser(registerUserToSaved);
+    await this._userService.save(registerUserToSaved);
     const user = this._userService.findByEmail(registerUserToSaved.email);
     if(!user){
         new WinstonLogger().logger().info(`user not found`, {user});

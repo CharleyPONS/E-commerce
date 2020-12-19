@@ -37,6 +37,18 @@ export class UserCRUDService {
         }
     }
 
+    async findByUserId(userId: string): Promise<any>{
+        try{
+            new WinstonLogger().logger().info(`Search a product with id ${userId}`);
+            const user =  await this.user.findOne({userId: userId}).exec();
+            return user;
+        }catch (err) {
+            new WinstonLogger().logger().warn(`Search a user with id ${userId} request failed`,
+                {error: err})
+
+        }
+    }
+
     async save(user: User): Promise<any> {
         try {
             const model = new this.user(user);

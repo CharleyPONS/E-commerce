@@ -1,7 +1,7 @@
 import {Controller, Get, PathParams} from "@tsed/common";
 import {NotFound} from "@tsed/exceptions";
 import {Returns, Status, Summary} from "@tsed/schema";
-import {ProductCRUDService} from "../services/ProductCRUD.service";
+import {ProductCRUDService} from "../services/productCRUD.service";
 import {Product} from "../models/product";
 import {OfferCtrl} from "./offerCtrl";
 
