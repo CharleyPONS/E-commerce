@@ -17,6 +17,7 @@ import * as dotenv from 'dotenv';
 // @ts-ignore
 import autoimport from 'auto-import';
 import helmet from 'helmet';
+import expressMongoSanitize from "express-mongo-sanitize";
 
 
 export const rootDir = __dirname;
@@ -70,7 +71,8 @@ export class Server {
       .use(cookieParser())
       .use(compress({}))
       .use(methodOverride())
-        .use(bodyParser.json({ limit: '10mb' }))
+      .use(expressMongoSanitize())
+    .use(bodyParser.json({ limit: '10mb' }))
         .use(bodyParser.urlencoded({ limit: '10mb', extended: true })
         )
         .use(helmet())
