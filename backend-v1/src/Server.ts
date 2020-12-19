@@ -8,7 +8,7 @@ import methodOverride from "method-override";
 import cors from "cors";
 import "@tsed/mongoose";
 import mongooseConfig from "./core/config/mongoose";
-import {IdDb} from "./core/models/id-db.enum";
+import {IdDb} from "./core/models/enum/id-db.enum";
 import DbConnectService from "./core/db-connect.service";
 import {WinstonLogger} from "./core/winston-logger";
 import * as dotenv from 'dotenv';

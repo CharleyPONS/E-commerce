@@ -1,4 +1,4 @@
-import {IdDb} from "../../models/id-db.enum";
+import {IdDb} from "../../models/enum/id-db.enum";
 
 export default {
   id: IdDb.SHOP_DATABASE,

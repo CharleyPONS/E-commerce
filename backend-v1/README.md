@@ -20,17 +20,29 @@ npm install
 
 You will need to add an .env file at the root of the project
 
+```bash
+#Main
+PORT= port you wanna use (3000 as default if not set)
+NODE_ENV= development
+
+#db
 CLUSTER_URL= your mongodb url (own server or cluster in the cloud)
 
+#log
 LOGGER_FILE= file path
 
-PORT= port you wanna use (3000 as default if not set)
-
+#Jwt
 JWT_KEY= secret key token for JWT
-
 JWT_EXPIRES_MS= delay expiration token
-
 NODE_ENV= development
+
+#Nodemailer
+SERVICE= your service
+HOST_SMTP= your host
+AUTH_USER= your host user
+AUTH_PASSWORD= your host password
+
+```
 
 ```bash
 npm run watch
@@ -41,7 +53,7 @@ npm run start
 
 Don't change this code file
 
-<!-- AUTO-GENERATED-CONTENT:START (REMOTE:url=https://github.com/CharleyPONS/e-commerce/blob/main/backend-v1/README.md) -->
+<!-- AUTO-GENERATED-CONTENT:START (CODE:src=src/Server.ts) -->
 This content will be dynamically replaced with code from the file
 <!-- AUTO-GENERATED-CONTENT:END -->
 

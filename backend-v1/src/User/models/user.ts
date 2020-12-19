@@ -1,5 +1,5 @@
 import {Model, ObjectID, PreHook} from "@tsed/mongoose";
-import {IdDb} from "../../core/models/id-db.enum";
+import {IdDb} from "../../core/models/enum/id-db.enum";
 import {Allow, Description, Email, Property, Required} from "@tsed/schema";
 
 // Use save in place of update to apply hook middleware

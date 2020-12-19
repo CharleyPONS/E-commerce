@@ -1,5 +1,5 @@
 import {Model, ObjectID} from "@tsed/mongoose";
-import {IdDb} from "../../core/models/id-db.enum";
+import {IdDb} from "../../core/models/enum/id-db.enum";
 import {Description, Enum, Maximum, Minimum, Property, Required} from "@tsed/schema";
 import {CATEGORIES, UNITY} from "./product.utils";
 

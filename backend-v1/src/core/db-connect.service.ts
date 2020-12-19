@@ -2,7 +2,7 @@ import {ConnectOptions} from "mongoose";
 
 import {MongooseService} from "@tsed/mongoose";
 import {WinstonLogger} from "./winston-logger";
-import {IdDb} from "./models/id-db.enum";
+import {IdDb} from "./models/enum/id-db.enum";
 import {Service} from "@tsed/common";
 
 @Service()
