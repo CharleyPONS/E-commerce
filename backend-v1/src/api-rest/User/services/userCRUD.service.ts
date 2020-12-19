@@ -2,6 +2,8 @@ import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
 import {User} from "../models/user";
 import {WinstonLogger} from "../../../core/winston-logger";
+import {ObjectId} from "bson";
+import {FilterQuery, UpdateQuery} from "mongoose";
 
 @Service()
 export class UserCRUDService {
@@ -14,7 +16,7 @@ export class UserCRUDService {
     async findById(id: string): Promise<any>{
         try{
             new WinstonLogger().logger().info(`Search a product with id ${id}`);
-            const user =  await this.user.findById(id).exec();
+            const user =  await this.user.findById(new ObjectId(id)).exec();
             return user;
         }catch (err) {
             new WinstonLogger().logger().warn(`Search a user with id ${id} request failed`,
@@ -37,7 +39,6 @@ export class UserCRUDService {
 
     async save(user: User): Promise<any> {
         try {
-
             const model = new this.user(user);
             new WinstonLogger().logger().info(`Save user`, {user});
             await model.save();
@@ -51,16 +52,13 @@ export class UserCRUDService {
         }
     }
 
-    async createUser(user: User): Promise<any> {
+    async updateOne(filter: FilterQuery<User>, updateQuery: UpdateQuery<User>, user: User): Promise<any> {
         try {
-
-            const model = new this.user(user);
-            new WinstonLogger().logger().info(`create user`, {user});
-            await this.user.create(model);
-            new WinstonLogger().logger().info(`Create user succeed`, {user});
-            return model;
+            new WinstonLogger().logger().info(`update user`, {user});
+            await this.user.updateOne(filter, updateQuery);
+            new WinstonLogger().logger().info(`Update user succeed`, {user});
         }catch(err){
-            new WinstonLogger().logger().warn(`Save a user with id request failed`,
+            new WinstonLogger().logger().warn(`Update a user with id request failed`,
                 {error: err});
 
         }
@@ -78,16 +76,4 @@ export class UserCRUDService {
 
         }
     }
-
-    async deleteToken(userId: string): Promise<any> {
-        try{
-            new WinstonLogger().logger().info(`try to delete token`, {userId});
-            await this.user.updateOne({_id: userId}, {$unset: {token: 1}}  )
-
-        }catch(err){
-            new WinstonLogger().logger().warn(`Delete a token user with id ${userId} failed`,
-                {error: err});
-        }
-    }
-
 }

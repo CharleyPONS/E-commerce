@@ -1,8 +1,9 @@
 import {Model, ObjectID, PreHook} from "@tsed/mongoose";
 import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Description, Enum, Maximum, Minimum, Property, Required} from "@tsed/schema";
-import {CATEGORIES, UNITY} from "./product.utils";
+import {CATEGORIES} from "./product.utils";
 import {Next} from "@tsed/common";
+import {ProductStock} from "./product-stock";
 
 @Model({
 connection: IdDb.SHOP_DATABASE
@@ -14,7 +15,7 @@ connection: IdDb.SHOP_DATABASE
 })
 export class Product {
     @ObjectID('id')
-    id?: string;
+    _id?: string;
 
     @Required()
     @Property()
@@ -34,7 +35,7 @@ export class Product {
     @Minimum(0)
     @Maximum(80)
     @Property()
-    cbdRate: number;
+    cbdRate?: number;
 
     @Minimum(0)
     @Maximum(1)
@@ -47,6 +48,6 @@ export class Product {
 
     @Property()
     @Description("Depending on the product in stock we add the right unity of measure")
-    stock?: {quantity: number, unityMeasure: UNITY}
+    stock?: ProductStock
 
 }

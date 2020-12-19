@@ -5,6 +5,7 @@ import {UserCRUDService} from "../services/userCRUD.service";
 import {User} from "../models/user";
 import {AuthJWTMiddleware} from "../../../core/middleware/authJWT.middleware";
 import {UserLogInService} from "../services/userLogIn.service";
+import {UserDeleteTokenService} from "../services/userDeleteToken.service";
 
 
 
@@ -12,7 +13,9 @@ import {UserLogInService} from "../services/userLogIn.service";
     path: "/user",
 })
 export class UserCtrl {
-    constructor(private _userService: UserCRUDService, private _userLoginService: UserLogInService) {}
+    constructor(private _userService: UserCRUDService,
+                private _userLoginService: UserLogInService,
+                private _userDeleteToken: UserDeleteTokenService) {}
 
     @Get("/:id")
     @Summary("Return a User from his ID")
@@ -51,8 +54,8 @@ export class UserCtrl {
     @Post("/logout")
     @Summary("Delete JWT token")
     @(Status(200).Description('Success'))
-    async logOut(@Context() ctx: Context, @PathParams('id') userId: string): Promise<void> {
-        await this._userService.deleteToken(userId);
+    async logOut(@Context() ctx: Context, @BodyParams('user') userBody: User): Promise<void> {
+        await this._userDeleteToken.main(userBody);
         return;
     }
 }

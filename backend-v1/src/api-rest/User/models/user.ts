@@ -1,4 +1,4 @@
-import {Model, ObjectID, PreHook} from "@tsed/mongoose";
+import {Model, ObjectID, PreHook, SchemaIgnore} from "@tsed/mongoose";
 import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Allow, Description, Email, Property, Required} from "@tsed/schema";
 import {Next} from "@tsed/common";
@@ -18,8 +18,12 @@ connection: IdDb.SHOP_DATABASE,
     next();
 })
 export class User {
+    @SchemaIgnore()
     @ObjectID('id')
     _id: string;
+
+    @ObjectID('id')
+    userId: string;
 
     @Required()
     @Property()

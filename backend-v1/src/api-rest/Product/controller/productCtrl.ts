@@ -25,7 +25,6 @@ export class ProductCtrl {
     @(Status(200, Product).Description("Success"))
     async get(@PathParams("id") id: string): Promise<Product> {
         const product = await this._productService.findById(id);
-
         if (product) {
             return product;
         }

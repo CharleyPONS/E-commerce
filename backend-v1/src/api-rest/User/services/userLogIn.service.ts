@@ -25,7 +25,7 @@ export class UserLogInService {
            })
        }
        const token: string = sign({id: user._id}, process.env.JWT_KEY as string, {expiresIn: process.env.JWT_EXPIRES_MS});
-       await this._userCRUDService.save({...user, token: token});
+       await this._userCRUDService.updateOne({userId: user.userId},{token: token}, user);
        new WinstonLogger().logger().info(`Token create for user`, {user, token});
        return {...user, token: token};
     }

@@ -2,6 +2,8 @@ import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
 import {Product} from "../models/product";
 import {WinstonLogger} from "../../../core/winston-logger";
+import {User} from "../../User/models/user";
+import {FilterQuery, UpdateQuery} from "mongoose";
 
 @Service()
 export class ProductCRUDService {
@@ -34,6 +36,17 @@ export class ProductCRUDService {
             new WinstonLogger().logger().warn(`Save a product with id request failed`),
                 {error: err};
 
+        }
+    }
+
+    async updateOne(filter: FilterQuery<User>, updateQuery: UpdateQuery<User>,product: Product): Promise<any> {
+        try {
+            new WinstonLogger().logger().info(`update product`, {product});
+            await this.product.updateOne(filter, updateQuery);
+            new WinstonLogger().logger().info(`Update product succeed`, {product});
+        }catch(err){
+            new WinstonLogger().logger().warn(`Update a product with id request failed`,
+                {error: err});
         }
     }
 
