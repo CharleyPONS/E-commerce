@@ -24,6 +24,7 @@ You will need to add an .env file at the root of the project
 #Main
 PORT= port you wanna use (3000 as default if not set)
 NODE_ENV= development
+CORS_ORIGIN= your localhost
 
 #db
 CLUSTER_URL= your mongodb url (own server or cluster in the cloud)

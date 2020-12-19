@@ -15,8 +15,9 @@ export class ProductCtrl {
 
     @Get("/")
     @Summary("Return all Product")
-    async getAllProduct(): Promise<string> {
-        return 'hello world';
+    @(Returns(200, Array).Of(Product))
+    async getAllProduct(): Promise<Product[]> {
+        return this._productService.findAll();
     }
 
     @Get("/:id")

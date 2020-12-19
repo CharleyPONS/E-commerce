@@ -11,10 +11,12 @@ import mongooseConfig from "./core/config/mongoose";
 import {IdDb} from "./core/models/enum/id-db.enum";
 import DbConnectService from "./core/db-connect.service";
 import {WinstonLogger} from "./core/winston-logger";
+import '@tsed/ajv';
+
 import * as dotenv from 'dotenv';
 // @ts-ignore
 import autoimport from 'auto-import';
-import helmet = require("helmet/dist");
+import helmet from 'helmet';
 
 
 export const rootDir = __dirname;
@@ -26,7 +28,7 @@ dotenv.config();
   httpPort: process.env.PORT || 5000,
   httpsPort: false, // CHANGE
   mount: {
-    "api/rest": [
+    "/api/rest": [
       `${rootDir}/**/controller/**/*.ts`
     ]
   },
@@ -57,8 +59,6 @@ export class Server {
   public async $beforeInit() {
     new WinstonLogger().logger().info(`${process.env.CLUSTER_URL} okok `)
     await this._dbConnectService.connectDB(IdDb.SHOP_DATABASE, process.env.CLUSTER_URL || '');
-
-    // firebase.connect();
   }
 
     $beforeRoutesInit(): void {
