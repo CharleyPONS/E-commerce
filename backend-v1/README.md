@@ -8,10 +8,14 @@
 > Using nodemailer and express-handlebars
 
 See [Ts.ED](https://tsed.io) project for more information.
-See [Strips](https://stripe.com/docs/api) for more information
-See [Mongoose](https://mongoosejs.com/docs/middleware.html) for more information
-See [NodeMailer](https://nodemailer.com/) for more information
-See [express-handlebars](https://www.npmjs.com/package/express-handlebars) for more information
+
+See [Strips](https://stripe.com/docs/api) for more information.
+
+See [Mongoose](https://mongoosejs.com/docs/middleware.html) for more information.
+
+See [NodeMailer](https://nodemailer.com/) for more information.
+
+See [express-handlebars](https://www.npmjs.com/package/express-handlebars) for more information.
 
 
 ## Install
