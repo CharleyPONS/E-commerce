@@ -1,18 +1,20 @@
-import {Schema} from "@tsed/mongoose";
-import {IdDb} from "../../../core/models/enum/id-db.enum";
-import {Enum, Property, Required} from "@tsed/schema";
-import {UNITY} from "./product.enum";
+import { Schema } from '@tsed/mongoose';
+import { Enum, Property, Required } from '@tsed/schema';
+
+import { IdDb } from '../../../Core/models/enum/id-db.enum';
+
+import { UNITY } from './product.enum';
 
 @Schema({
-    connection: IdDb.SHOP_DATABASE
+  connection: IdDb.SHOP_DATABASE
 })
 export class ProductStockSchema {
-    @Required()
-    @Property()
-    quantity: number;
+  @Required()
+  @Property()
+  quantity: number;
 
-    @Required()
-    @Property()
-    @Enum(UNITY)
-    unityMeasure: UNITY;
+  @Required()
+  @Property()
+  @Enum(UNITY)
+  unityMeasure: UNITY;
 }

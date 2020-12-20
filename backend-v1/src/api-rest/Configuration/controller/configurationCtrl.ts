@@ -1,20 +1,20 @@
-import {Context, Controller, Get} from "@tsed/common";
-import {Returns, Summary} from "@tsed/schema";
-import {ConfigurationRepository} from "../service/configuration.repository";
-import {WinstonLogger} from "../../../core/winston-logger";
+import { Context, Controller, Get } from '@tsed/common';
+import { Returns, Summary } from '@tsed/schema';
 
+import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { ConfigurationRepository } from '../service/configuration.repository';
 
 @Controller({
-    path: "/configuration",
+  path: '/configuration'
 })
 export class ConfigurationCtrl {
-    constructor(private _configurationRepository: ConfigurationRepository) {}
+  constructor(private _configurationRepository: ConfigurationRepository) {}
 
-    @Get("")
-    @Summary("Return a User from his ID")
-    @Returns(200).Description('get Config')
-    async getConfiguration(@Context() ctx: Context): Promise<void> {
-        new WinstonLogger().logger().info(`retreive configuration`);
-        return await this._configurationRepository.find()
-    }
+  @Get('')
+  @Summary('Return a User from his ID')
+  @(Returns(200).Description('get Config'))
+  async getConfiguration(@Context() ctx: Context): Promise<void> {
+    new WinstonLogger().logger().info(`retreive configuration`);
+    return this._configurationRepository.find();
+  }
 }

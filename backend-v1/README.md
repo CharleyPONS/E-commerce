@@ -3,7 +3,7 @@
 ✨ Add a little magic ✨
 
 > Build in TSED bringing mongoose plugin for interaction with mongoDB
-> Using stripes 
+> Using stripes with custom payments flow
 > Using JWT token for authentication and bcrypt for password security
 
 See [Ts.ED](https://tsed.io) project for more information.
