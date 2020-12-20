@@ -4,7 +4,7 @@ import {Product} from "../models/product";
 import {WinstonLogger} from "../../../core/winston-logger";
 import {User} from "../../User/models/user";
 import {FilterQuery, UpdateQuery} from "mongoose";
-import {CATEGORIES} from "../models/product.utils";
+import {CATEGORIES} from "../models/product.enum";
 
 @Service()
 export class ProductCRUDService {

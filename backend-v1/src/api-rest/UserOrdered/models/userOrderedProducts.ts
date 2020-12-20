@@ -1,7 +1,7 @@
 import {Schema} from "@tsed/mongoose";
 import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Enum, Minimum, Property, Required} from "@tsed/schema";
-import {CATEGORIES, UNITY} from "../../Product/models/product.utils";
+import {CATEGORIES, UNITY} from "../../Product/models/product.enum";
 
 @Schema({
     connection: IdDb.SHOP_DATABASE

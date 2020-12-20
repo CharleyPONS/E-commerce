@@ -1,20 +1,20 @@
-import {BodyParams, Context, Controller, Get, Post, UseBefore} from "@tsed/common";
-import {Returns, Status, Summary} from "@tsed/schema";
-import {AuthJWTMiddleware} from "../../../core/middleware/authJWT.middleware";
-import {UserOrdered} from "../models/userOrdered";
-import {UserCommandService} from "../services/userCommand.service";
+import {Context, Controller, Get} from "@tsed/common";
+import {Returns, Summary} from "@tsed/schema";
+import {ConfigurationCRUDService} from "../service/configurationCRUD.service";
+import {WinstonLogger} from "../../../core/winston-logger";
 
 
 @Controller({
     path: "/configuration",
 })
 export class ConfigurationCtrl {
-    constructor(private _userCommandService: UserCommandService) {}
+    constructor(private _configurationCRUDService: ConfigurationCRUDService) {}
 
     @Get("")
     @Summary("Return a User from his ID")
     @Returns(200).Description('get Config')
     async getConfiguration(@Context() ctx: Context): Promise<void> {
-        await this._userCommandService.main(ctx, userCommand)
+        new WinstonLogger().logger().info(`retreive configuration`);
+        return await this._configurationCRUDService.find()
     }
 }

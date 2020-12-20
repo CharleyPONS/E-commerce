@@ -1,7 +1,7 @@
 import {Model, ObjectID, PreHook} from "@tsed/mongoose";
 import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Description, Enum, Maximum, Minimum, Property, Required} from "@tsed/schema";
-import {CATEGORIES} from "./product.utils";
+import {CATEGORIES} from "./product.enum";
 import {Next} from "@tsed/common";
 import {ProductStock} from "./product-stock";
 
