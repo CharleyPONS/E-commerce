@@ -3,7 +3,7 @@ import { NotFound } from '@tsed/exceptions';
 import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
-import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winston-logger';
 import { UserModel } from '../models/user.model';
 
 import { UserRepository } from './user.repository';

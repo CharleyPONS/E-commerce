@@ -1,7 +1,7 @@
 import { Schema } from '@tsed/mongoose';
 import { Property, Required } from '@tsed/schema';
 
-import { IdDb } from '../../../Core/models/enum/id-db.enum';
+import { IdDb } from '../../../core/models/enum/id-db.enum';
 
 @Schema({
   connection: IdDb.SHOP_DATABASE

@@ -2,7 +2,7 @@ import { Next } from '@tsed/common';
 import { Model, ObjectID, PreHook } from '@tsed/mongoose';
 import { Description, Email, Minimum, Property, Required } from '@tsed/schema';
 
-import { IdDb } from '../../../Core/models/enum/id-db.enum';
+import { IdDb } from '../../../core/models/enum/id-db.enum';
 
 import { UserOrderedProductsSchema } from './userOrderedProducts.schema';
 

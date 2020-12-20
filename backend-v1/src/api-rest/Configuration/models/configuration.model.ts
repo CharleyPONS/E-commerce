@@ -1,7 +1,7 @@
 import { Model, ObjectID } from '@tsed/mongoose';
 import { Enum, Property, Required } from '@tsed/schema';
 
-import { IdDb } from '../../../Core/models/enum/id-db.enum';
+import { IdDb } from '../../../core/models/enum/id-db.enum';
 
 import { AuthMethod } from './authMethod.enum';
 import { Transporter } from './transporter.enum';

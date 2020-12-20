@@ -2,7 +2,7 @@ import { Inject, Service } from '@tsed/common';
 import { MongooseModel } from '@tsed/mongoose';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
-import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winston-logger';
 import { UserModel } from '../../User/models/user.model';
 import { CATEGORIES } from '../models/product.enum';
 import { ProductModel } from '../models/product.model';

@@ -14,10 +14,10 @@ import expressMongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 
-import mongooseConfig from './Core/config/mongoose';
-import { IdDb } from './Core/models/enum/id-db.enum';
-import DbConnectService from './Core/services/db-connect.service';
-import { WinstonLogger } from './Core/services/winston-logger';
+import mongooseConfig from './core/config/mongoose';
+import { IdDb } from './core/models/enum/id-db.enum';
+import DbConnectService from './core/services/db-connect.service';
+import { WinstonLogger } from './core/services/winston-logger';
 
 export const rootDir = __dirname;
 dotenv.config();

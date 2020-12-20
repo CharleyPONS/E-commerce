@@ -1,7 +1,7 @@
 import { Inject, Service } from '@tsed/common';
 import { MongooseModel } from '@tsed/mongoose';
 
-import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winston-logger';
 import { ConfigurationModel } from '../models/configuration.model';
 
 @Service()

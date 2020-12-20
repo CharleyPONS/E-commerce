@@ -1,7 +1,7 @@
 import { BodyParams, Context, Controller, Post, UseBefore } from '@tsed/common';
 import { Returns, Summary } from '@tsed/schema';
 
-import { AuthJWTMiddleware } from '../../../Core/middleware/authJWT.middleware';
+import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
 import { UserOrderedModel } from '../models/userOrdered.model';
 import { UserCommandService } from '../services/userCommand.service';
 

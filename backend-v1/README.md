@@ -3,10 +3,16 @@
 ✨ Add a little magic ✨
 
 > Build in TSED bringing mongoose plugin for interaction with mongoDB
-> Using stripes with custom payments flow
+> Using stripes with custom payments flow validate in server side
 > Using JWT token for authentication and bcrypt for password security
+> Using nodemailer and express-handlebars
 
 See [Ts.ED](https://tsed.io) project for more information.
+See [Strips](https://stripe.com/docs/api) for more information
+See [Mongoose](https://mongoosejs.com/docs/middleware.html) for more information
+See [NodeMailer](https://nodemailer.com/) for more information
+See [express-handlebars](https://www.npmjs.com/package/express-handlebars) for more information
+
 
 ## Install
 
@@ -42,6 +48,11 @@ SERVICE= your service
 HOST_SMTP= your host
 AUTH_USER= your host user
 AUTH_PASSWORD= your host password
+
+#Stripe
+SECRET_KEY_DEVELOPMENT= your SK
+SECRET_KEY_PRODUCTION= your SK
+PROTOCOL_HTTP= http | https
 
 ```
 

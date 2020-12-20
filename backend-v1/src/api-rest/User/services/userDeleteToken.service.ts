@@ -1,6 +1,6 @@
 import { Service } from '@tsed/common';
 
-import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winston-logger';
 import { UserModel } from '../models/user.model';
 
 import { UserRepository } from './user.repository';

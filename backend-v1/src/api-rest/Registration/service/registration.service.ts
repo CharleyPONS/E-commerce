@@ -1,9 +1,9 @@
 import { Service } from '@tsed/common';
 import { hashSync } from 'bcrypt';
 
-import { MailProcess } from '../../../Core/models/enum/mail-process.enum';
-import { EmailSenderService } from '../../../Core/services/email-sender.service';
-import { WinstonLogger } from '../../../Core/services/winston-logger';
+import { MailProcess } from '../../../core/models/enum/mail-process.enum';
+import { EmailSenderService } from '../../../core/services/email-sender.service';
+import { WinstonLogger } from '../../../core/services/winston-logger';
 import { UserModel } from '../../User/models/user.model';
 import { UserRepository } from '../../User/services/user.repository';
 

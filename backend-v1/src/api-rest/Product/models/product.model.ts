@@ -2,10 +2,11 @@ import { Next } from '@tsed/common';
 import { Model, ObjectID, PreHook } from '@tsed/mongoose';
 import { Description, Enum, Maximum, Minimum, Property, Required } from '@tsed/schema';
 
-import { IdDb } from '../../../Core/models/enum/id-db.enum';
+import { IdDb } from '../../../core/models/enum/id-db.enum';
 
-import { ProductStockSchema } from './product-stock.schema';
+import { ProductStockSchema } from './productStock.schema';
 import { CATEGORIES } from './product.enum';
+import { ProductPriceSchema } from './productPrice.schema';
 
 @Model({
   connection: IdDb.SHOP_DATABASE,
@@ -34,7 +35,7 @@ export class ProductModel {
   @Minimum(5)
   @Maximum(100)
   @Property()
-  price: number;
+  price: ProductPriceSchema;
 
   @Minimum(0)
   @Maximum(80)
