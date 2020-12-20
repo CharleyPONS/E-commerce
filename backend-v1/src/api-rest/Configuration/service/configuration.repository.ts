@@ -1,17 +1,17 @@
 import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
 import {WinstonLogger} from "../../../core/winston-logger";
-import {Configuration} from "../models/configuration";
+import {ConfigurationModel} from "../models/configuration.model";
 
 @Service()
-export class ConfigurationCRUDService {
-    @Inject(Configuration)
-    private configuration: MongooseModel<Configuration>;
+export class ConfigurationRepository {
+    @Inject(ConfigurationModel)
+    private configuration: MongooseModel<ConfigurationModel>;
 
     async find(): Promise<any>{
         try{
-            const configuration =  await this.configuration.find().exec();
-            return configuration;
+            const configurationDb =  await this.configuration.find().exec();
+            return configurationDb;
         }catch (err) {
             new WinstonLogger().logger().warn(`Error retrieve configuration`,
                 {error: err})

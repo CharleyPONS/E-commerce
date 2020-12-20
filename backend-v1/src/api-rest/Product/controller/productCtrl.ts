@@ -1,8 +1,8 @@
 import {Controller, Get, PathParams} from "@tsed/common";
 import {NotFound} from "@tsed/exceptions";
-import {Returns, Status, Summary} from "@tsed/schema";
-import {ProductCRUDService} from "../services/productCRUD.service";
-import {Product} from "../models/product";
+import {Returns, Summary} from "@tsed/schema";
+import {ProductRepository} from "../services/product.repository";
+import {ProductModel} from "../models/product.model";
 import {OfferCtrl} from "./offerCtrl";
 
 
@@ -11,20 +11,20 @@ import {OfferCtrl} from "./offerCtrl";
     children: [OfferCtrl]
 })
 export class ProductCtrl {
-    constructor(private _productService: ProductCRUDService) {}
+    constructor(private _productRepository: ProductRepository) {}
 
     @Get("/")
     @Summary("Return all Product")
-    @(Returns(200, Array).Of(Product))
-    async getAllProduct(): Promise<Product[]> {
-        return this._productService.findAll();
+    @(Returns(200, Array).Of(ProductModel))
+    async getAllProduct(): Promise<ProductModel[]> {
+        return this._productRepository.findAll();
     }
 
     @Get("/:id")
     @Summary("Return a Product from his ID")
-    @(Status(200, Product).Description("Success"))
-    async get(@PathParams("id") id: string): Promise<Product> {
-        const product = await this._productService.findById(id);
+    @(Returns(200).Description("Success"))
+    async getProduct(@PathParams("id") id: string): Promise<ProductModel> {
+        const product = await this._productRepository.findById(id);
         if (product) {
             return product;
         }

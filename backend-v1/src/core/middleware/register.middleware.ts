@@ -1,10 +1,10 @@
 import {Context, IMiddleware, Middleware} from "@tsed/common";
-import {UserCRUDService} from "../../api-rest/User/services/userCRUD.service";
+import {UserRepository} from "../../api-rest/User/services/user.repository";
 import {WinstonLogger} from "../winston-logger";
 
 @Middleware()
 export class RegisterMiddleware implements IMiddleware {
-    constructor(private _userService: UserCRUDService)
+    constructor(private _userService: UserRepository)
     {}
     async use(@Context() ctx: Context): Promise<void> {
        const result = await this._userService.findByEmail(ctx.request.body.email);

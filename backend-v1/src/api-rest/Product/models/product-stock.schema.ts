@@ -6,7 +6,7 @@ import {UNITY} from "./product.enum";
 @Schema({
     connection: IdDb.SHOP_DATABASE
 })
-export class ProductStock {
+export class ProductStockSchema {
     @Required()
     @Property()
     quantity: number;

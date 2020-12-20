@@ -3,18 +3,19 @@ import {IdDb} from "../../../core/models/enum/id-db.enum";
 import {Description, Enum, Maximum, Minimum, Property, Required} from "@tsed/schema";
 import {CATEGORIES} from "./product.enum";
 import {Next} from "@tsed/common";
-import {ProductStock} from "./product-stock";
+import {ProductStockSchema} from "./product-stock.schema";
 
 @Model({
-connection: IdDb.SHOP_DATABASE
+    connection: IdDb.SHOP_DATABASE,
+    collection: 'products'
 })
-@PreHook("save" ,(product: Product, next: Next) => {
+@PreHook("save" ,(product: ProductModel, next: Next) => {
     if(!product.dateUpdate){
         product.dateUpdate = new Date().toISOString();
     }
     next();
 })
-export class Product {
+export class ProductModel {
     @ObjectID('id')
     _id?: string;
 
@@ -49,6 +50,6 @@ export class Product {
 
     @Property()
     @Description("Depending on the product in stock we add the right unity of measure")
-    stock?: ProductStock
+    stock?: ProductStockSchema
 
 }

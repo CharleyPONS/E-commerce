@@ -6,7 +6,7 @@ import {CATEGORIES, UNITY} from "../../Product/models/product.enum";
 @Schema({
     connection: IdDb.SHOP_DATABASE
 })
-export class UserOrderedProducts {
+export class UserOrderedProductsSchema {
     @Required()
     @Property()
     @Enum(CATEGORIES)

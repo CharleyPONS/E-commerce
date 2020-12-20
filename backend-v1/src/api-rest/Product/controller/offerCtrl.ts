@@ -1,10 +1,10 @@
 import {Controller} from "@tsed/common";
-import {ProductCRUDService} from "../services/productCRUD.service";
+import {ProductRepository} from "../services/product.repository";
 
 
 @Controller({
     path: "/offer",
 })
 export class OfferCtrl {
-    constructor(private _productService: ProductCRUDService) {}
+    constructor(private _productService: ProductRepository) {}
 }

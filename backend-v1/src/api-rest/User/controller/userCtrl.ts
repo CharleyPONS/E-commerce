@@ -1,8 +1,8 @@
 import {BodyParams, Context, Controller, Delete, Get, PathParams, Post, UseBefore} from "@tsed/common";
 import {NotFound} from "@tsed/exceptions";
 import {Status, Summary} from "@tsed/schema";
-import {UserCRUDService} from "../services/userCRUD.service";
-import {User} from "../models/user";
+import {UserRepository} from "../services/user.repository";
+import {UserModel} from "../models/user.model";
 import {AuthJWTMiddleware} from "../../../core/middleware/authJWT.middleware";
 import {UserLogInService} from "../services/userLogIn.service";
 import {UserDeleteTokenService} from "../services/userDeleteToken.service";
@@ -13,16 +13,15 @@ import {UserDeleteTokenService} from "../services/userDeleteToken.service";
     path: "/user",
 })
 export class UserCtrl {
-    constructor(private _userService: UserCRUDService,
+    constructor(private _userRepository: UserRepository,
                 private _userLoginService: UserLogInService,
-                private _userDeleteToken: UserDeleteTokenService) {}
+                private _userDeleteTokenService: UserDeleteTokenService) {}
 
     @Get("/:id")
     @Summary("Return a User from his ID")
-    @UseBefore(AuthJWTMiddleware)
-    @(Status(200, User).Description("Success"))
-    async getUser(@PathParams("id") id: string): Promise<User> {
-        const user = await this._userService.findById(id);
+    @(Status(200, UserModel).Description("Success"))
+    async getUser(@PathParams("id") id: string): Promise<UserModel> {
+        const user = await this._userRepository.findById(id);
 
         if (user) {
             return user;
@@ -33,9 +32,9 @@ export class UserCtrl {
 
     @Delete("/:id")
     @Summary("Delete a User from his ID")
-    @(Status(204, User).Description("Success delete"))
-    async deleteUser(@PathParams("id") id: string): Promise<User> {
-        const user = await this._userService.delete(id);
+    @(Status(204, UserModel).Description("Success delete"))
+    async deleteUser(@PathParams("id") id: string): Promise<UserModel> {
+        const user = await this._userRepository.delete(id);
         if (user) {
             return user;
         }
@@ -44,9 +43,9 @@ export class UserCtrl {
 
     @Post("/signIn")
     @Summary("Return JWT token if sign in succeed")
-    @(Status(200, User).Description('Success'))
-    async logInUser(@Context() ctx: Context, @BodyParams('user') userBody: User): Promise<User> {
-        const user: User = await this._userLoginService.main(ctx, userBody);
+    @(Status(200, UserModel).Description('Success'))
+    async logInUser(@Context() ctx: Context, @BodyParams('user') userBody: UserModel): Promise<UserModel> {
+        const user: UserModel = await this._userLoginService.main(ctx, userBody);
         return ctx.getResponse().status(200).send(user)
 
     }
@@ -54,8 +53,8 @@ export class UserCtrl {
     @Post("/logout")
     @Summary("Delete JWT token")
     @(Status(200).Description('Success'))
-    async logOut(@Context() ctx: Context, @BodyParams('user') userBody: User): Promise<void> {
-        await this._userDeleteToken.main(userBody);
+    async logOut(@Context() ctx: Context, @BodyParams('user') userBody: UserModel): Promise<void> {
+        await this._userDeleteTokenService.main(userBody);
         return;
     }
 }

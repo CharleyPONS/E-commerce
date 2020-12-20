@@ -3,18 +3,18 @@ import {MongooseModel} from "@tsed/mongoose";
 import {WinstonLogger} from "../../../core/winston-logger";
 import {ObjectId} from "bson";
 import {FilterQuery, UpdateQuery} from "mongoose";
-import {UserOrdered} from "../models/userOrdered";
+import {UserOrderedModel} from "../models/userOrdered.model";
 
 @Service()
-export class UserCommandCRUDService {
-    @Inject(UserOrdered)
-    private userOrdered: MongooseModel<UserOrdered>;
+export class UserCommandRepository {
+    @Inject(UserOrderedModel)
+    private userOrdered: MongooseModel<UserOrderedModel>;
 
 
     async findById(id: string): Promise<any>{
         try{
             new WinstonLogger().logger().info(`Search a userOrdered with id ${id}`);
-            const userOrdered =  await this.userOrdered.findById(new ObjectId(id)).exec();
+            const userOrdered =  await this.userOrdered.findById(id).exec();
             return userOrdered;
         }catch (err) {
             new WinstonLogger().logger().warn(`Search a userOrdered with id ${id} request failed`,
@@ -23,7 +23,7 @@ export class UserCommandCRUDService {
         }
     }
 
-    async save(userOrdered: UserOrdered): Promise<any> {
+    async save(userOrdered: UserOrderedModel): Promise<any> {
         try {
             const model = new this.userOrdered(userOrdered);
             new WinstonLogger().logger().info(`Save userOrdered`, {userOrdered});
@@ -37,7 +37,7 @@ export class UserCommandCRUDService {
         }
     }
 
-    async updateOne(filter: FilterQuery<UserOrdered>, updateQuery: UpdateQuery<UserOrdered>, userOrdered: UserOrdered): Promise<any> {
+    async updateOne(filter: FilterQuery<UserOrderedModel>, updateQuery: UpdateQuery<UserOrderedModel>, userOrdered: UserOrderedModel): Promise<any> {
         try {
             new WinstonLogger().logger().info(`update userOrdered`, {userOrdered});
             await this.userOrdered.updateOne(filter, updateQuery);

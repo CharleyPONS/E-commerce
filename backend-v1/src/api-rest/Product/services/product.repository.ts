@@ -1,15 +1,15 @@
 import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
-import {Product} from "../models/product";
+import {ProductModel} from "../models/product.model";
 import {WinstonLogger} from "../../../core/winston-logger";
-import {User} from "../../User/models/user";
+import {UserModel} from "../../User/models/user.model";
 import {FilterQuery, UpdateQuery} from "mongoose";
 import {CATEGORIES} from "../models/product.enum";
 
 @Service()
-export class ProductCRUDService {
-    @Inject(Product)
-    private product: MongooseModel<Product>;
+export class ProductRepository {
+    @Inject(ProductModel)
+    private product: MongooseModel<ProductModel>;
 
     $onInit(){
     }
@@ -36,7 +36,7 @@ export class ProductCRUDService {
         }
     }
 
-    async save(product: Product): Promise<any> {
+    async save(product: ProductModel): Promise<any> {
         try {
             const model = new this.product(product);
             new WinstonLogger().logger().info(`Save product`, {product});
@@ -51,7 +51,7 @@ export class ProductCRUDService {
         }
     }
 
-    async updateOne(filter: FilterQuery<User>, updateQuery: UpdateQuery<User>,product: Product): Promise<any> {
+    async updateOne(filter: FilterQuery<UserModel>, updateQuery: UpdateQuery<UserModel>, product: ProductModel): Promise<any> {
         try {
             new WinstonLogger().logger().info(`update product`, {product});
             await this.product.updateOne(filter, updateQuery);
@@ -62,9 +62,9 @@ export class ProductCRUDService {
         }
     }
 
-    async findAll(): Promise<Product[]> {
+    async findAll(): Promise<ProductModel[]> {
         new WinstonLogger().logger().info(`Find all product`);
-        const product: Product[] =  await this.product.find().exec();
+        const product: ProductModel[] =  await this.product.find().exec();
         return product;
     }
 

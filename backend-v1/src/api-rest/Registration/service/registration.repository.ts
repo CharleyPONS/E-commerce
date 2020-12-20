@@ -1,16 +1,16 @@
 import {Service} from "@tsed/common";
 import {hashSync} from "bcrypt";
-import {UserCRUDService} from "../../User/services/userCRUD.service";
-import {User} from "../../User/models/user";
+import {UserRepository} from "../../User/services/user.repository";
+import {UserModel} from "../../User/models/user.model";
 import {WinstonLogger} from "../../../core/winston-logger";
 
 @Service()
-export class RegistrationService {
-    constructor(private _userService: UserCRUDService) {
+export class RegistrationRepository {
+    constructor(private _userService: UserRepository) {
     }
 
-    async main(registerUser: User){
-    const registerUserToSaved: User = new User();
+    async main(registerUser: UserModel){
+    const registerUserToSaved: UserModel = new UserModel();
     registerUserToSaved.name = registerUser.name;
     registerUserToSaved.email = registerUser.email;
     registerUserToSaved.password = hashSync(registerUser.password, 10);

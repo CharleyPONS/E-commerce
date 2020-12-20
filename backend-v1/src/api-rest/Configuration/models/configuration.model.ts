@@ -5,9 +5,10 @@ import {AuthMethod} from "./authMethod.enum";
 import {Transporter} from "./transporter.enum";
 
 @Model({
-    connection: IdDb.SHOP_DATABASE
+    connection: IdDb.SHOP_DATABASE,
+    collection: 'configuration'
 })
-export class Configuration {
+export class ConfigurationModel {
     @ObjectID('id')
     _id?: string;
 

@@ -1,22 +1,21 @@
 import {Inject, Service} from "@tsed/common";
 import {MongooseModel} from "@tsed/mongoose";
-import {User} from "../models/user";
+import {UserModel} from "../models/user.model";
 import {WinstonLogger} from "../../../core/winston-logger";
-import {ObjectId} from "bson";
 import {FilterQuery, UpdateQuery} from "mongoose";
 
 @Service()
-export class UserCRUDService {
-    @Inject(User)
-    private user: MongooseModel<User>;
+export class UserRepository {
+    @Inject(UserModel)
+    private user: MongooseModel<UserModel>;
 
     $onInit(){
     }
 
     async findById(id: string): Promise<any>{
         try{
-            new WinstonLogger().logger().info(`Search a product with id ${id}`);
-            const user =  await this.user.findById(new ObjectId(id)).exec();
+            new WinstonLogger().logger().info(`Search a user with id ${id}`);
+            const user =  await this.user.findById(id);
             return user;
         }catch (err) {
             new WinstonLogger().logger().warn(`Search a user with id ${id} request failed`,
@@ -27,7 +26,7 @@ export class UserCRUDService {
 
     async findByEmail(email: string): Promise<any>{
         try{
-            new WinstonLogger().logger().info(`Search a product with id ${email}`);
+            new WinstonLogger().logger().info(`Search a user with id ${email}`);
             const user =  await this.user.findOne({email: email}).exec();
             return user;
         }catch (err) {
@@ -39,7 +38,7 @@ export class UserCRUDService {
 
     async findByUserId(userId: string): Promise<any>{
         try{
-            new WinstonLogger().logger().info(`Search a product with id ${userId}`);
+            new WinstonLogger().logger().info(`Search a user with id ${userId}`);
             const user =  await this.user.findOne({userId: userId}).exec();
             return user;
         }catch (err) {
@@ -49,7 +48,7 @@ export class UserCRUDService {
         }
     }
 
-    async save(user: User): Promise<any> {
+    async save(user: UserModel): Promise<any> {
         try {
             const model = new this.user(user);
             new WinstonLogger().logger().info(`Save user`, {user});
@@ -64,7 +63,7 @@ export class UserCRUDService {
         }
     }
 
-    async updateOne(filter: FilterQuery<User>, updateQuery: UpdateQuery<User>, user: User): Promise<any> {
+    async updateOne(filter: FilterQuery<UserModel>, updateQuery: UpdateQuery<UserModel>, user: UserModel): Promise<any> {
         try {
             new WinstonLogger().logger().info(`update user`, {user});
             await this.user.updateOne(filter, updateQuery);
@@ -78,7 +77,7 @@ export class UserCRUDService {
 
     async delete(userId: string): Promise<any> {
         try {
-            new WinstonLogger().logger().info(`try todelete user`, {userId});
+            new WinstonLogger().logger().info(`try to delete user`, {userId});
             await this.user.deleteOne({__id: userId});
             new WinstonLogger().logger().info(`Delete user succeed`, {userId});
             return;
