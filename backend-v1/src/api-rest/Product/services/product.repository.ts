@@ -19,8 +19,8 @@ export class ProductRepository {
       new WinstonLogger().logger().info(`Search a product with id ${id}`);
       return await this.product.findById(id).exec();
     } catch (err) {
-      new WinstonLogger().logger().warn(`Search a product with id ${id} request failed`),
-        { error: err };
+      new WinstonLogger().logger().warn(`Search a product with id ${id} request failed`,
+        { error: err });
     }
   }
 
@@ -31,8 +31,8 @@ export class ProductRepository {
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Search a product with id ${categoriesSelected} request failed`),
-        { error: err };
+        .warn(`Search a product with id ${categoriesSelected} request failed`,
+        { error: err });
     }
   }
 
@@ -45,7 +45,7 @@ export class ProductRepository {
 
       return model;
     } catch (err) {
-      new WinstonLogger().logger().warn(`Save a product with id request failed`), { error: err };
+      new WinstonLogger().logger().warn(`Save a product with id request failed`, { error: err });
     }
   }
 

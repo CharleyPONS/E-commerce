@@ -2,7 +2,7 @@
 
 ✨ Add a little magic ✨
 
-> Build in TSED bringing mongoose plugin for interaction with mongoDB
+> Build in TSED bringing typeorm plugin for interaction with PostgreSQL
 > Using stripes with custom payments flow validate in server side
 > Using JWT token for authentication and bcrypt for password security
 > Using nodemailer and express-handlebars
@@ -11,7 +11,7 @@ See [Ts.ED](https://tsed.io) project for more information.
 
 See [Strips](https://stripe.com/docs/api) for more information.
 
-See [Mongoose](https://mongoosejs.com/docs/middleware.html) for more information.
+See [TypeORM](https://typeorm.io/) for more information.
 
 See [NodeMailer](https://nodemailer.com/) for more information.
 
@@ -36,8 +36,11 @@ PORT= port you wanna use (3000 as default if not set)
 NODE_ENV= development
 CORS_ORIGIN= your localhost
 
-#db
-CLUSTER_URL= your mongodb url (own server or cluster in the cloud)
+# Postgres
+POSTGRES_URL=::1
+POSTGRES_DB=db name
+POSTGRES_USER= super user
+POSTGRES_PASSWORD= password
 
 #log
 LOGGER_FILE= file path

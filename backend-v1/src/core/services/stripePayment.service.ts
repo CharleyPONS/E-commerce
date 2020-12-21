@@ -4,7 +4,7 @@
 // TODO Il faut mettre un systeme d'editionc de facture ou le faire coté client avec la méthode bring in de strip
 import { Service } from '@tsed/di';
 import { NotFound } from '@tsed/exceptions';
-import { PaymentIntentCreateParams, Stripe } from 'stripe';
+import { Stripe } from 'stripe';
 
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';

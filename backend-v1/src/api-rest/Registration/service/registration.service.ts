@@ -25,7 +25,7 @@ export class RegistrationService {
       new WinstonLogger().logger().info(`user not found`, { user });
       throw new Error('user not found error during the save process');
     }
-    this._emailSenderService.main(registerUserToSaved, MailProcess.NEW_CLIENT);
+    await this._emailSenderService.main(registerUserToSaved, MailProcess.NEW_CLIENT);
     return user;
   }
 }
