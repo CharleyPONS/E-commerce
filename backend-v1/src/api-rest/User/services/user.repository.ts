@@ -3,7 +3,7 @@ import { MongooseModel } from '@tsed/mongoose';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../models/user.entity';
+import { UserEntity } from '../entity/user.entity';
 
 @Service()
 export class UserRepository {

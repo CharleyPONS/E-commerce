@@ -2,7 +2,7 @@ import { Controller, Get, PathParams } from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
 import { Returns, Summary } from '@tsed/schema';
 
-import { ProductEntity } from '../models/product.entity';
+import { ProductEntity } from '../entity/product.entity';
 import { ProductRepository } from '../services/product.repository';
 
 import { OfferCtrl } from './offerCtrl';

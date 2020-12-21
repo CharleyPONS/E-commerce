@@ -4,7 +4,7 @@ import { hashSync } from 'bcrypt';
 import { MailProcess } from '../../../core/models/enum/mail-process.enum';
 import { EmailSenderService } from '../../../core/services/email-sender.service';
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../../User/models/user.entity';
+import { UserEntity } from '../../User/entity/user.entity';
 import { UserRepository } from '../../User/services/user.repository';
 
 @Service()

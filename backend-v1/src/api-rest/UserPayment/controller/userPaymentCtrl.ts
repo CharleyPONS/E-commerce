@@ -3,7 +3,7 @@ import { Required, Summary } from '@tsed/schema';
 
 import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
 import { StripePaymentService } from '../../../core/services/stripePayment.service';
-import { IListOrderInterface } from '../models/listOrderInterface';
+import { IListOrderInterface } from '../entity/listOrderInterface';
 
 @Controller({
   path: '/create-payment-session'

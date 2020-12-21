@@ -3,9 +3,9 @@ import { NotFound } from '@tsed/exceptions';
 import { isEqual, merge } from 'lodash';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../../User/models/user.entity';
+import { UserEntity } from '../../User/entity/user.entity';
 import { UserRepository } from '../../User/services/user.repository';
-import { UserOrderedEntity } from '../models/userOrdered.entity';
+import { UserOrderedEntity } from '../entity/userOrdered.entity';
 
 import { UserCommandRepository } from './userCommand.repository';
 

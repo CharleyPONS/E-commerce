@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { UserAddressEntity } from './userAddress.entity';
-import { UserOrderedEntity } from '../../UserOrdered/models/userOrdered.entity';
+import { UserOrderedEntity } from '../../UserOrdered/entity/userOrdered.entity';
 
 // Use save in place of update to apply hook middleware
 @Entity()

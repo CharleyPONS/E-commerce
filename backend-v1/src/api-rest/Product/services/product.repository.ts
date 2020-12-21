@@ -3,9 +3,9 @@ import { MongooseModel } from '@tsed/mongoose';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../../User/models/user.entity';
-import { CATEGORIES } from '../models/product.enum';
-import { ProductEntity } from '../models/product.entity';
+import { UserEntity } from '../../User/entity/user.entity';
+import { CATEGORIES } from '../entity/product.enum';
+import { ProductEntity } from '../entity/product.entity';
 
 @Service()
 export class ProductRepository {

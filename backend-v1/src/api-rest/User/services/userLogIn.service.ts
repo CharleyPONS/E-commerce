@@ -4,7 +4,7 @@ import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../models/user.entity';
+import { UserEntity } from '../entity/user.entity';
 
 import { UserRepository } from './user.repository';
 

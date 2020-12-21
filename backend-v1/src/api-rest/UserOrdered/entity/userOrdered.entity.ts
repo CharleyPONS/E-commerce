@@ -1,7 +1,7 @@
 import { Required } from '@tsed/schema';
 import { BeforeInsert, BeforeUpdate, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { UserEntity } from '../../User/models/user.entity';
+import { UserEntity } from '../../User/entity/user.entity';
 
 // Use save in place of update to apply hook middleware
 

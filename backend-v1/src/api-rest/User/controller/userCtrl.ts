@@ -2,7 +2,7 @@ import { BodyParams, Context, Controller, Delete, Get, PathParams, Post } from '
 import { NotFound } from '@tsed/exceptions';
 import { Status, Summary } from '@tsed/schema';
 
-import { UserEntity } from '../models/user.entity';
+import { UserEntity } from '../entity/user.entity';
 import { UserRepository } from '../services/user.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';

@@ -7,7 +7,7 @@ import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
 
 import { UserRepository } from '../../api-rest/User/services/user.repository';
-import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
+import { IListOrderInterface } from '../../api-rest/UserPayment/entity/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
 import { WinstonLogger } from './winston-logger';

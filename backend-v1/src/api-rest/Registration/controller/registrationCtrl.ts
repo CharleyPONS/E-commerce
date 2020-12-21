@@ -2,7 +2,7 @@ import { BodyParams, Controller, Post, UseBefore } from '@tsed/common';
 import { Required, Returns, Summary } from '@tsed/schema';
 
 import { RegisterMiddleware } from '../../../core/middleware/register.middleware';
-import { UserEntity } from '../../User/models/user.entity';
+import { UserEntity } from '../../User/entity/user.entity';
 import { RegistrationService } from '../service/registration.service';
 
 @Controller({
