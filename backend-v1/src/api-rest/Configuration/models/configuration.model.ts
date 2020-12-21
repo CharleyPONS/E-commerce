@@ -1,32 +1,37 @@
-import { Model, ObjectID } from '@tsed/mongoose';
 import { Enum, Property, Required } from '@tsed/schema';
 
-import { IdDb } from '../../../core/models/enum/id-db.enum';
-
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { AuthMethod } from './authMethod.enum';
 import { Transporter } from './transporter.enum';
 
-@Model({
-  connection: IdDb.SHOP_DATABASE,
-  collection: 'configuration'
-})
+@Entity()
 export class ConfigurationModel {
-  @ObjectID('id')
-  _id?: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Required()
-  @Property()
+  @Column({ type: 'simple-array' })
   @Enum(AuthMethod)
   auth: AuthMethod[];
 
   @Required()
-  @Property()
+  @Column({ type: 'simple-array' })
   @Enum(Transporter)
   transporter: Transporter[];
 
   @Property()
-  isPromotion?: { active: boolean; dueDate: string };
+  @Column({ type: 'boolean' })
+  isPromotion?: boolean;
 
   @Property()
-  sponsorship?: { active: boolean; dueDate: string };
+  @Column({ type: 'boolean' })
+  sponsorship?: boolean;
+
+  @Property()
+  @Column({ type: 'varchar' })
+  dueDatePromotion?: string;
+
+  @Property()
+  @Column({ type: 'varchar' })
+  dueDateSponsorship?: string;
 }
