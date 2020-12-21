@@ -3,12 +3,12 @@ import { MongooseModel } from '@tsed/mongoose';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserOrderedModel } from '../models/userOrdered.model';
+import { UserOrderedEntity } from '../models/userOrdered.entity';
 
 @Service()
 export class UserCommandRepository {
-  @Inject(UserOrderedModel)
-  private userOrdered: MongooseModel<UserOrderedModel>;
+  @Inject(UserOrderedEntity)
+  private userOrdered: MongooseModel<UserOrderedEntity>;
 
   async findById(id: string): Promise<any> {
     try {
@@ -22,7 +22,7 @@ export class UserCommandRepository {
     }
   }
 
-  async save(userOrdered: UserOrderedModel): Promise<any> {
+  async save(userOrdered: UserOrderedEntity): Promise<any> {
     try {
       const model = new this.userOrdered(userOrdered);
       new WinstonLogger().logger().info(`Save userOrdered`, { userOrdered });
@@ -37,9 +37,9 @@ export class UserCommandRepository {
   }
 
   async updateOne(
-    filter: FilterQuery<UserOrderedModel>,
-    updateQuery: UpdateQuery<UserOrderedModel>,
-    userOrdered: UserOrderedModel
+    filter: FilterQuery<UserOrderedEntity>,
+    updateQuery: UpdateQuery<UserOrderedEntity>,
+    userOrdered: UserOrderedEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update userOrdered`, { userOrdered });

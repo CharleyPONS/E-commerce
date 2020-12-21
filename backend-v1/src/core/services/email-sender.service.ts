@@ -3,7 +3,7 @@ import { InternalServerError } from '@tsed/exceptions';
 import hbs = require('express-handlebars');
 import * as node_mailer from 'nodemailer';
 
-import { UserModel } from '../../api-rest/User/models/user.model';
+import { UserEntity } from '../../api-rest/User/models/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { MailProcess } from '../models/enum/mail-process.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';
@@ -13,7 +13,7 @@ import { WinstonLogger } from './winston-logger';
 @Service()
 export class EmailSenderService {
   constructor(private _userCRUD: UserRepository) {}
-  async main(user: UserModel, mailProcess: MailProcess): Promise<void> {
+  async main(user: UserEntity, mailProcess: MailProcess): Promise<void> {
     const userData: any = this._userCRUD.findByEmail(user?.email);
     if (
       !userData?.email ||

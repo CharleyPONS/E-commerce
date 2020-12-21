@@ -71,7 +71,6 @@
     "no-invalid-this": true,
     "no-irregular-whitespace": true,
     "no-misused-new": true,
-    "no-non-null-assertion": true,
     "no-parameter-reassignment": true,
     "no-require-imports": true,
     "no-return-await": true,

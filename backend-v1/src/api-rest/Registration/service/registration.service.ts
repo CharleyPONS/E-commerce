@@ -4,7 +4,7 @@ import { hashSync } from 'bcrypt';
 import { MailProcess } from '../../../core/models/enum/mail-process.enum';
 import { EmailSenderService } from '../../../core/services/email-sender.service';
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserModel } from '../../User/models/user.model';
+import { UserEntity } from '../../User/models/user.entity';
 import { UserRepository } from '../../User/services/user.repository';
 
 @Service()
@@ -14,8 +14,8 @@ export class RegistrationService {
     private _emailSenderService: EmailSenderService
   ) {}
 
-  async main(registerUser: UserModel) {
-    const registerUserToSaved: UserModel = new UserModel();
+  async main(registerUser: UserEntity) {
+    const registerUserToSaved: UserEntity = new UserEntity();
     registerUserToSaved.name = registerUser.name;
     registerUserToSaved.email = registerUser.email;
     registerUserToSaved.password = hashSync(registerUser.password, 10);

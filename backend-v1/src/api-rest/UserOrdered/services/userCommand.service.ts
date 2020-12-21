@@ -3,9 +3,9 @@ import { NotFound } from '@tsed/exceptions';
 import { isEqual, merge } from 'lodash';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserModel } from '../../User/models/user.model';
+import { UserEntity } from '../../User/models/user.entity';
 import { UserRepository } from '../../User/services/user.repository';
-import { UserOrderedModel } from '../models/userOrdered.model';
+import { UserOrderedEntity } from '../models/userOrdered.entity';
 
 import { UserCommandRepository } from './userCommand.repository';
 
@@ -15,8 +15,8 @@ export class UserCommandService {
     private _userRepository: UserRepository,
     private _userCommandRepository: UserCommandRepository
   ) {}
-  async main(context: Context, userCommand: UserOrderedModel): Promise<void> {
-    const user: UserModel = await this._userRepository.findByUserId(userCommand?.userId);
+  async main(context: Context, userCommand: UserOrderedEntity): Promise<void> {
+    const user: UserEntity = await this._userRepository.findByUserId(userCommand?.userId);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userCommand });
       throw new NotFound('User not found to login ');
@@ -31,7 +31,7 @@ export class UserCommandService {
       },
       user
     );
-    const command: UserOrderedModel = await this._userCommandRepository.findById(userCommand._id);
+    const command: UserOrderedEntity = await this._userCommandRepository.findById(userCommand._id);
     if (command) {
       if (isEqual(command, userCommand)) {
         new WinstonLogger()

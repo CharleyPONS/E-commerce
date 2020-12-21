@@ -4,15 +4,15 @@ import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserModel } from '../models/user.model';
+import { UserEntity } from '../models/user.entity';
 
 import { UserRepository } from './user.repository';
 
 @Service()
 export class UserLogInService {
   constructor(private _userRepository: UserRepository) {}
-  async main(context: Context, userBody: UserModel): Promise<UserModel> {
-    const user: UserModel = await this._userRepository.findByEmail(userBody?.email);
+  async main(context: Context, userBody: UserEntity): Promise<UserEntity> {
+    const user: UserEntity = await this._userRepository.findByEmail(userBody?.email);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userBody });
       throw new NotFound('User not found to login ');

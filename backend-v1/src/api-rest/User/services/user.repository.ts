@@ -3,12 +3,12 @@ import { MongooseModel } from '@tsed/mongoose';
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserModel } from '../models/user.model';
+import { UserEntity } from '../models/user.entity';
 
 @Service()
 export class UserRepository {
-  @Inject(UserModel)
-  private user: MongooseModel<UserModel>;
+  @Inject(UserEntity)
+  private user: MongooseModel<UserEntity>;
 
   $onInit() {}
 
@@ -48,7 +48,7 @@ export class UserRepository {
     }
   }
 
-  async save(user: UserModel): Promise<any> {
+  async save(user: UserEntity): Promise<any> {
     try {
       const model = new this.user(user);
       new WinstonLogger().logger().info(`Save user`, { user });
@@ -62,9 +62,9 @@ export class UserRepository {
   }
 
   async updateOne(
-    filter: FilterQuery<UserModel>,
-    updateQuery: UpdateQuery<UserModel>,
-    user: UserModel
+    filter: FilterQuery<UserEntity>,
+    updateQuery: UpdateQuery<UserEntity>,
+    user: UserEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update user`, { user });

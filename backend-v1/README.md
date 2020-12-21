@@ -35,6 +35,7 @@ You will need to add an .env file at the root of the project
 PORT= port you wanna use (3000 as default if not set)
 NODE_ENV= development
 CORS_ORIGIN= your localhost
+CONNECTION_NAME=connection name
 
 # Postgres
 POSTGRES_URL=::1
