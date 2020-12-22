@@ -16,8 +16,9 @@ export class ConfigurationCtrl {
   @(Returns(200).Description('get Config'))
   async getConfiguration(@Context() ctx: Context): Promise<void> {
     new WinstonLogger().logger().info(`retreive configuration`);
-    return this._configurationRepository.findByType(
+    const data = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
+    return data;
   }
 }

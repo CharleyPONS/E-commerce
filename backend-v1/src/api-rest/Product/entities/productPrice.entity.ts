@@ -1,28 +1,25 @@
 import { Description, Required } from '@tsed/schema';
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { ProductEntity } from './product.entity';
-
-@Entity()
+@Entity({ name: 'product_price' })
 export class ProductPriceEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  _id: number;
+  id: number;
 
   @Required()
   @Column({ type: 'int' })
   @Description('base price for one unit or one gramme for cbd')
   basePrice: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   priceForThreeGramme: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   priceForFiveGramme: number;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   priceForTenGramme: number;
 
-  @OneToOne(() => ProductEntity, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
-  @JoinColumn()
-  product: ProductEntity;
+  @Column({ type: 'varchar', length: '255' })
+  product: string;
 }

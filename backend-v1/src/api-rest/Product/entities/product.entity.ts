@@ -4,7 +4,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
-  Entity,
+  Entity, JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -13,7 +13,7 @@ import { CATEGORIES } from './product.enum';
 import { ProductPriceEntity } from './productPrice.entity';
 import { ProductStockEntity } from './productStock.entity';
 
-@Entity()
+@Entity({ name: 'product' })
 export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,18 +28,19 @@ export class ProductEntity extends BaseEntity {
   categories: CATEGORIES;
 
   @OneToOne(() => ProductPriceEntity, { cascade: true })
+  @JoinColumn()
   price: ProductPriceEntity;
 
   @Minimum(0)
   @Maximum(80)
   @Allow(null)
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   cbdRate?: number;
 
   @Minimum(0)
   @Maximum(1)
   @Allow(null)
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   thcRate?: number;
 
   @Column({ type: 'varchar', length: '255' })
@@ -48,6 +49,7 @@ export class ProductEntity extends BaseEntity {
 
   @Description('Depending on the product in stock we add the right unity of measure')
   @OneToOne(() => ProductStockEntity, { cascade: true })
+  @JoinColumn()
   stock?: ProductStockEntity;
   @BeforeInsert()
   @BeforeUpdate()

@@ -8,6 +8,7 @@ import { UserRepository } from '../../User/services/user.repository';
 import { UserOrderedEntity } from '../entities/userOrdered.entity';
 
 import { UserCommandRepository } from './userCommand.repository';
+import { UserEntity } from '../../User/entities/user.entity';
 
 @Service()
 export class UserCommandService {
@@ -16,7 +17,7 @@ export class UserCommandService {
     private _userCommandRepository: UserCommandRepository
   ) {}
   async main(context: Context, userCommand: UserOrderedEntity): Promise<void> {
-    const user: IUser | undefined = await this._userRepository.findById(userCommand?.id);
+    const user: UserEntity | undefined = await this._userRepository.findById(userCommand?.id);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userCommand });
       throw new NotFound('User not found to login ');

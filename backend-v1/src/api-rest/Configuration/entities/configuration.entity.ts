@@ -5,40 +5,29 @@ import { AuthMethod } from './authMethod.enum';
 import { ConfigurationType } from './configurationType.enum';
 import { Transporter } from './transporter.enum';
 
-@Entity()
+@Entity({ name: 'base_configuration' })
 export class ConfigurationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Required()
-  @Column({ type: 'simple-array' })
-  @Enum(AuthMethod)
+  @Column({ type: 'simple-array', nullable: true})
   auth: AuthMethod[];
 
-  @Required()
   @Column({ type: 'varchar' })
-  @Enum(ConfigurationType)
   configurationType: ConfigurationType;
 
-  @Required()
   @Column({ type: 'simple-array' })
-  @Enum(Transporter)
   transporter: Transporter[];
 
-  @Allow(null)
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', nullable: true, default: true })
   isPromotion?: boolean;
 
-  @Property()
-  @Allow(null)
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', nullable: true, default: true })
   sponsorship?: boolean;
 
-  @Allow(null)
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   dueDatePromotion?: string;
 
-  @Allow(null)
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   dueDateSponsorship?: string;
 }

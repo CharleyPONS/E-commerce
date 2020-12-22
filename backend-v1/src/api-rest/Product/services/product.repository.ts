@@ -15,7 +15,7 @@ export class ProductRepository extends Repository<ProductEntity> {
       new WinstonLogger().logger().info(`Search a product with id ${productId}`);
       const product: ProductEntity[] = await this.find({
         where: { id: productId },
-        relations: ['stock']
+        relations: ['stock', 'price']
       });
       return product;
     } catch (err) {
@@ -62,7 +62,7 @@ export class ProductRepository extends Repository<ProductEntity> {
 
   async findAll(): Promise<ProductEntity[]> {
     new WinstonLogger().logger().info(`Find all product`);
-    const product: ProductEntity[] = await this.find();
+    const product: ProductEntity[] = await this.find({ relations: ['stock', 'price'] });
     return product;
   }
 }

@@ -12,13 +12,13 @@ import { UserRepository } from './user.repository';
 @Service()
 export class UserLogInService {
   constructor(private _userRepository: UserRepository) {}
-  async main(context: Context, userBody: UserEntity): Promise<IUser> {
-    const user: UserEntity | undefined = await this._userRepository.findByEmail(userBody?.email);
+  async main(context: Context, userBody: UserEntity): Promise<any> {
+    const user: UserEntity | undefined = await this._userRepository.findByEmail(userBody.email);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userBody });
       throw new NotFound('User not found to login ');
     }
-    const passwordValid: boolean = compareSync(userBody?.password, user?.password);
+    const passwordValid: boolean = compareSync(userBody?.password, user.password);
     if (!passwordValid) {
       new WinstonLogger().logger().info(`Password wrong`, { userBody });
       context

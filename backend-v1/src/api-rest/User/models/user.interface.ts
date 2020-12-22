@@ -1,6 +1,8 @@
+import { IUserAddress } from './userAdress.interface';
+
 export interface IUser {
   id?: number;
-  address?: UserAdress;
+  address?: IUserAddress;
   name?: string;
   surname?: string;
   password?: string;
@@ -8,5 +10,4 @@ export interface IUser {
   numberOrder?: number;
   dateUpdate?: string;
   token?: string | null;
-  userOrder?: UserOrder;
 }

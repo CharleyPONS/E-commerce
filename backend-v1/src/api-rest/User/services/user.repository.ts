@@ -51,7 +51,7 @@ export class UserRepository extends Repository<UserEntity> {
   async updateOne(
     filter: FindConditions<UserEntity>,
     updateQuery: QueryDeepPartialEntity<UserEntity>,
-    user: IUser
+    user: UserEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update user`, { user });

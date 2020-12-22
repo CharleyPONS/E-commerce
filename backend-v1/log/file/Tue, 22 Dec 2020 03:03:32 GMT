@@ -1,0 +1,2 @@
+{"product":{"name":"toto","thcRate":2,"categories":"flower"},"level":"info","message":"Save product"}
+{"product":{"name":"toto","thcRate":2,"categories":"flower","dateUpdate":"Tue, 22 Dec 2020 03:03:32 GMT","cbdRate":null,"id":5},"level":"info","message":"Save product succeed"}

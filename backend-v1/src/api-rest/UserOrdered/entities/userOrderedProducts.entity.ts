@@ -2,9 +2,10 @@ import { Allow, Enum, Minimum, Property, Required } from '@tsed/schema';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CATEGORIES, UNITY } from '../../Product/entities/product.enum';
+
 import { UserOrderedEntity } from './userOrdered.entity';
 
-@Entity()
+@Entity({ name: 'user_ordered_products' })
 export class UserOrderedProductsEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

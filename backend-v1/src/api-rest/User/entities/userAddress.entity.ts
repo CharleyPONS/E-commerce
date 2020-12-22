@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColum
 
 import { UserEntity } from './user.entity';
 
-@Entity()
+@Entity({ name: 'user_address' })
 export class UserAddressEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,7 +28,7 @@ export class UserAddressEntity extends BaseEntity {
   @Column({ type: 'varchar' })
   country: string;
 
-  @OneToOne(() => UserEntity)
+  @OneToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn()
   userId: UserEntity;
 }

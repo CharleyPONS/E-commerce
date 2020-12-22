@@ -71,8 +71,4 @@ export class Server {
       .use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
       .use(helmet());
   }
-
-  $afterRoutesInit(): void | Promise<any> {
-    new WinstonLogger().logger().info(this._typeORMService.get());
-  }
 }

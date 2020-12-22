@@ -1,10 +1,9 @@
 import { Enum, Required } from '@tsed/schema';
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { ProductEntity } from './product.entity';
 import { UNITY } from './product.enum';
 
-@Entity()
+@Entity({ name: 'product_stock' })
 export class ProductStockEntity extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,7 +17,6 @@ export class ProductStockEntity extends BaseEntity{
   @Enum(UNITY)
   unityMeasure: UNITY;
 
-  @OneToOne(() => ProductEntity, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
-  @JoinColumn()
-  product: ProductEntity;
+  @Column({ type: 'varchar', length: '255' })
+  product: string;
 }

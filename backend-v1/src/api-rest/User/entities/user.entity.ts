@@ -1,10 +1,11 @@
-import { Allow, Description, Email, Property, Required } from '@tsed/schema';
+import { Allow, Description, Email, Required } from '@tsed/schema';
 import {
   BaseEntity,
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn
@@ -15,12 +16,12 @@ import { UserOrderedEntity } from '../../UserOrdered/entities/userOrdered.entity
 import { UserAddressEntity } from './userAddress.entity';
 
 // Use save in place of update to apply hook middleware
-@Entity()
+@Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => UserAddressEntity, { cascade: true })
+  @OneToOne(() => UserAddressEntity, { cascade: true})
   address: UserAddressEntity;
 
   @Required()
@@ -51,7 +52,7 @@ export class UserEntity extends BaseEntity {
   token: string | null;
 
   @OneToMany(() => UserOrderedEntity, userOrder => userOrder.user, { cascade: true })
-  userOrder: UserOrderedEntity[];
+  userOrder?: UserOrderedEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

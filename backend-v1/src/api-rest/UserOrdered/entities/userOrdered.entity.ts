@@ -5,6 +5,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
@@ -16,8 +17,8 @@ import { UserOrderedProductsEntity } from './userOrderedProducts.entity';
 
 // Use save in place of update to apply hook middleware
 
-@Entity()
-export class UserOrderedEntity extends BaseEntity{
+@Entity({ name: 'user_ordered' })
+export class UserOrderedEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,8 +38,10 @@ export class UserOrderedEntity extends BaseEntity{
   @OneToMany(() => UserOrderedProductsEntity, userOrderedProduct => userOrderedProduct.userOrder, {
     cascade: true
   })
+  @JoinColumn()
   product: UserOrderedProductsEntity[];
   @ManyToOne(() => UserEntity, user => user.userOrder)
+  @JoinColumn()
   user: UserEntity;
   @BeforeInsert()
   @BeforeUpdate()

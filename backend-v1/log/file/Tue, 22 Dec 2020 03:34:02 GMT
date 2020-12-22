@@ -1,0 +1,2 @@
+{"product":{"name":"polen","stock":{"product":"[Circular]","quantity":200,"unityMeasure":"gramme"},"price":{"product":"[Circular]","basePrice":2}},"level":"info","message":"Save product"}
+{"error":{},"level":"warn","message":"Save a product with id request failed"}
