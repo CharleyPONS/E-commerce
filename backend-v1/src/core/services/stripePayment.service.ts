@@ -1,19 +1,26 @@
-// TODO y'en aura pas beaucoup mais force toi a foutre des tests unitaires solide sur ce truc! Surout sur la logique de calcul de paiement
-// TODO Il faut faire au moins 10 combinaisons avec une carte de cred mocké et testé des réductions
-// TODO Il faut mettre un service d'enregistrement de la carte avec stripe
-// TODO Il faut mettre un systeme d'editionc de facture ou le faire coté client avec la méthode bring in de strip
 import { Service } from '@tsed/di';
 import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
 
+import { ConfigurationEntity } from '../../api-rest/Configuration/entities/configuration.entity';
+import { ConfigurationType } from '../../api-rest/Configuration/entities/configurationType.enum';
+import { ConfigurationRepository } from '../../api-rest/Configuration/service/configuration.repository';
+import { ProductEntity } from '../../api-rest/Product/entities/product.entity';
+import { CATEGORIES } from '../../api-rest/Product/entities/product.enum';
+import { ProductRepository } from '../../api-rest/Product/services/product.repository';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
+import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
 import { WinstonLogger } from './winston-logger';
-import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
+
 @Service()
 export class StripePaymentService {
-  constructor(private _userRepository: UserRepository) {}
+  constructor(
+    private _userRepository: UserRepository,
+    private _productRepository: ProductRepository,
+    private _configurationRepository: ConfigurationRepository
+  ) {}
   async main(
     userId: number,
     listOrder: IListOrderInterface
@@ -50,12 +57,34 @@ export class StripePaymentService {
     const stripeConfigOptions: IStripeConfigInterface = { ...stripeConfig };
     delete stripeConfigOptions.apiKey;
     const stripe = new Stripe(stripeConfig.apiKey as string, stripeConfigOptions);
-    const amount: { price: number } = await this.calculateOrderAmountLogic(listOrder);
+    const amount: { price: number } = await this.calculateOrderAmountLogic(userId, listOrder);
+    if (!amount) {
+      new WinstonLogger()
+        .logger()
+        .crit('user trying to purchase have an amount at 0', { userId, amount });
+      throw new NotFound('user trying to purchase have an amount at 0');
+    }
 
-    //TODO regarder en profondeur cette objet et les props de son modèle PaymentIntentCreateParams voir ce qu'on peut rajouter en config
+    new WinstonLogger()
+      .logger()
+      .info('price have been set for user transaction and payment can begin now', {
+        userId,
+        price: amount
+      });
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount.price,
-      currency: 'EUR'
+      amount: amount.price * 100,
+      receipt_email: process.env.EMAIL,
+      currency: 'EUR',
+      use_stripe_sdk: true,
+      description: `Product: ${listOrder?.product?.map(
+        v => v.productName
+      )}, Quantity: ${listOrder?.product?.map(m => m.quantity)}`,
+      statement_descriptor: `${process.env.STATEMENT_DESCRIPTOR}`.substr(0, 22),
+      metadata: {
+        client: `Email client: ${listOrder.userEmail}`,
+        amount: `Amount: ${amount}`
+      }
     });
     return {
       clientSecret: paymentIntent.client_secret
@@ -63,9 +92,76 @@ export class StripePaymentService {
   }
 
   private async calculateOrderAmountLogic(
+    userId: number,
     listOrder: IListOrderInterface
   ): Promise<{ price: number }> {
-    //TODO LOGIC PAYMENT
-    return { price: 10000000000000000000000000000000000 };
+    if (!Array.isArray(listOrder.product)) {
+      new WinstonLogger().logger().info('list order contain no product', {
+        userId,
+        listOrder
+      });
+    }
+    let amount = 0;
+    const listOrderProduct: Array<{ productName: string; quantity: number }> = listOrder.product;
+    const product: ProductEntity[] = await this._productRepository.findManyProduct(
+      listOrderProduct.map(v => v.productName)
+    );
+    // @ts-ignore
+    if (!product && !Array.isArray(product) && product.length < 1) {
+      new WinstonLogger()
+        .logger()
+        .crit('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE', {
+          userId,
+          listOrder
+        });
+      throw new NotFound('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE');
+    }
+    for (const productSelected of product) {
+      for (const productOrder of listOrderProduct) {
+        if (productSelected.name === productOrder.productName) {
+          switch (productSelected.categories) {
+            case CATEGORIES.FLOWER:
+            case CATEGORIES.RESINE:
+              switch (productOrder.quantity) {
+                case 3:
+                  amount = amount + productSelected?.price?.priceForThreeGramme;
+                  break;
+                case 5:
+                  amount = amount + productSelected?.price?.priceForFiveGramme;
+                  break;
+                case 10:
+                  amount = amount + productSelected?.price?.priceForTenGramme;
+                  break;
+                case 1:
+                  amount = amount + productSelected?.price?.basePrice;
+                  break;
+              }
+              break;
+            case CATEGORIES.ELIQUID:
+            case CATEGORIES.GRINDER:
+            case CATEGORIES.OIL:
+            case CATEGORIES.PAPER:
+              amount = amount + productSelected?.price?.basePrice * productOrder.quantity;
+              break;
+          }
+        }
+      }
+    }
+    const configuration: ConfigurationEntity = await this._configurationRepository.findByType(
+      process.env.CONFIGURATION_TYPE as ConfigurationType
+    );
+    if (listOrder.reduction && configuration.isPromotion && configuration.promotionReduction) {
+      const beforePrice: number = amount;
+      amount = amount - amount * (configuration.promotionReduction / 100);
+      new WinstonLogger().logger().info('reduction have been apply for user', {
+        userId,
+        priceBefore: beforePrice,
+        newPrice: amount,
+        reduction: configuration.promotionReduction
+      });
+    }
+    new WinstonLogger().logger().info('price have been set for user', { userId, price: amount });
+
+    return { price: amount };
   }
 }

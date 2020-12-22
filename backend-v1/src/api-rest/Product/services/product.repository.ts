@@ -1,4 +1,4 @@
-import { EntityRepository, FindConditions, Repository } from 'typeorm';
+import { EntityRepository, FindConditions, In, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
@@ -28,12 +28,17 @@ export class ProductRepository extends Repository<ProductEntity> {
   async findByCategories(categoriesSelected: CATEGORIES): Promise<ProductEntity[] | undefined> {
     try {
       new WinstonLogger().logger().info(`Search a product with id ${categoriesSelected}`);
-      return await this.find({ where: { categories: categoriesSelected } });
+      return this.find({ where: { categories: categoriesSelected } });
     } catch (err) {
       new WinstonLogger()
         .logger()
         .warn(`Search a product with id ${categoriesSelected} request failed`, { error: err });
     }
+  }
+
+  async findManyProduct(product: string[]): Promise<ProductEntity[]> {
+    new WinstonLogger().logger().info(`Search a list product ${product}`);
+    return this.find({ where: { name: In(product) } });
   }
 
   async saveProduct(product: ProductEntity): Promise<void> {

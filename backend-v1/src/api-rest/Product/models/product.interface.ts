@@ -1,20 +1,3 @@
-import { Allow, Description, Enum, Maximum, Minimum, Required } from '@tsed/schema';
-import {
-  BaseEntity,
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm';
-
-import { CATEGORIES } from './product.enum';
-import { ProductPriceEntity } from './productPrice.entity';
-import { ProductStockEntity } from './productStock.entity';
-
-@Entity({ name: 'product' })
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;

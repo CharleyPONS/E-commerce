@@ -1,4 +1,3 @@
-import { Allow, Enum, Property, Required } from '@tsed/schema';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { AuthMethod } from './authMethod.enum';
@@ -21,6 +20,9 @@ export class ConfigurationEntity {
 
   @Column({ type: 'boolean', nullable: true, default: true })
   isPromotion?: boolean;
+
+  @Column({ type: 'int', nullable: true, default: 0 })
+  promotionReduction?: number;
 
   @Column({ type: 'boolean', nullable: true, default: true })
   sponsorship?: boolean;
