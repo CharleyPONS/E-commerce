@@ -5,13 +5,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  Generated,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
-
-import { UserEntity } from '../../User/entities/user.entity';
 
 import { UserOrderedProductsEntity } from './userOrderedProducts.entity';
 
@@ -21,6 +19,10 @@ import { UserOrderedProductsEntity } from './userOrderedProducts.entity';
 export class UserOrderedEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated('uuid')
+  userOrderedId: string;
 
   @Column({ type: 'varchar', length: '255' })
   billId?: string;
@@ -40,9 +42,9 @@ export class UserOrderedEntity extends BaseEntity {
   })
   @JoinColumn()
   product: UserOrderedProductsEntity[];
-  @ManyToOne(() => UserEntity, user => user.userOrder)
-  @JoinColumn()
-  user: UserEntity;
+
+  @Column()
+  userId: string;
   @BeforeInsert()
   @BeforeUpdate()
   private updateDates() {

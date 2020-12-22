@@ -16,9 +16,13 @@ export class UserOrderedProductsEntity extends BaseEntity {
   type: CATEGORIES;
 
   @Required()
+  @Column({ type: 'varchar', length: '255'})
+  productName: string;
+
+  @Required()
   @Column({ type: 'int' })
   @Minimum(2)
-  amount: number;
+  quantity: number;
 
   @Required()
   @Property()

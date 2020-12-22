@@ -5,8 +5,7 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  JoinColumn,
-  OneToMany,
+  Generated,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -20,6 +19,10 @@ import { UserAddressEntity } from './userAddress.entity';
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated('uuid')
+  userId: string;
 
   @OneToOne(() => UserAddressEntity, { cascade: true})
   address: UserAddressEntity;
@@ -50,9 +53,6 @@ export class UserEntity extends BaseEntity {
   @Allow(null)
   @Column({ type: 'varchar', length: '255' })
   token: string | null;
-
-  @OneToMany(() => UserOrderedEntity, userOrder => userOrder.user, { cascade: true })
-  userOrder?: UserOrderedEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

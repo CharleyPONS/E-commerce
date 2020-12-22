@@ -3,18 +3,17 @@ import { NotFound } from '@tsed/exceptions';
 import { isEqual, merge } from 'lodash';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { IUser } from '../../User/models/user.interface';
 import { UserRepository } from '../../User/services/user.repository';
 import { UserOrderedEntity } from '../entities/userOrdered.entity';
 
-import { UserCommandRepository } from './userCommand.repository';
+import { UserOrderedRepository } from './userOrdered.repository';
 import { UserEntity } from '../../User/entities/user.entity';
 
 @Service()
 export class UserCommandService {
   constructor(
     private _userRepository: UserRepository,
-    private _userCommandRepository: UserCommandRepository
+    private _userCommandRepository: UserOrderedRepository
   ) {}
   async main(context: Context, userCommand: UserOrderedEntity): Promise<void> {
     const user: UserEntity | undefined = await this._userRepository.findById(userCommand?.id);

@@ -6,7 +6,7 @@ import { UserEntity } from '../../User/entities/user.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @EntityRepository(UserOrderedEntity)
-export class UserCommandRepository extends Repository<UserOrderedEntity> {
+export class UserOrderedRepository extends Repository<UserOrderedEntity> {
   async findById(userOrderId: number): Promise<any> {
     try {
       new WinstonLogger().logger().info(`Search a userOrdered with id ${userOrderId}`);
