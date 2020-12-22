@@ -27,8 +27,6 @@ export class ProductEntity extends BaseEntity {
   @Enum(CATEGORIES)
   categories: CATEGORIES;
 
-  @Required()
-  @Column()
   @OneToOne(() => ProductPriceEntity, { cascade: true })
   price: ProductPriceEntity;
 
@@ -48,7 +46,6 @@ export class ProductEntity extends BaseEntity {
   @Description('Last modification date')
   dateUpdate: string;
 
-  @Column()
   @Description('Depending on the product in stock we add the right unity of measure')
   @OneToOne(() => ProductStockEntity, { cascade: true })
   stock?: ProductStockEntity;

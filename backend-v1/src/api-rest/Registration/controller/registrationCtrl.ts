@@ -2,14 +2,14 @@ import { BodyParams, Controller, Post, UseBefore } from '@tsed/common';
 import { Required, Returns, Summary } from '@tsed/schema';
 
 import { RegisterMiddleware } from '../../../core/middleware/register.middleware';
-import { UserEntity } from '../../User/entity/user.entity';
+import { UserEntity } from '../../User/entities/user.entity';
 import { RegistrationService } from '../service/registration.service';
 
 @Controller({
   path: '/signup'
 })
 export class RegistrationCtrl {
-  constructor(private _registrationRepository: RegistrationService) {}
+  constructor(private _registrationService: RegistrationService) {}
 
   @Post('/')
   @Summary('Return all Product')
@@ -17,7 +17,7 @@ export class RegistrationCtrl {
   @(Returns(200, Object).Of(UserEntity).Description('Register Ok'))
   async registerUser(
     @Required() @BodyParams('registrationInfo') registrationInfo: UserEntity
-  ): Promise<void> {
-    return this._registrationRepository.main(registrationInfo);
+  ): Promise<UserEntity | undefined> {
+    return this._registrationService.main(registrationInfo);
   }
 }

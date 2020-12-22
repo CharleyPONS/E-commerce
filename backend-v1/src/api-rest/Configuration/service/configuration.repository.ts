@@ -1,18 +1,14 @@
-import { Inject, Service } from '@tsed/common';
-import { MongooseModel } from '@tsed/mongoose';
+import { EntityRepository, Repository } from 'typeorm';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { ConfigurationModel } from '../models/configuration.model';
+import { ConfigurationEntity } from '../entities/configuration.entity';
+import { ConfigurationType } from '../entities/configurationType.enum';
 
-@Service()
-export class ConfigurationRepository {
-  @Inject(ConfigurationModel)
-  private configuration: MongooseModel<ConfigurationModel>;
-
-  async find(): Promise<any> {
+@EntityRepository(ConfigurationEntity)
+export class ConfigurationRepository extends Repository<ConfigurationEntity> {
+  async findByType(type: ConfigurationType): Promise<any> {
     try {
-      const configurationDb = await this.configuration.find().exec();
-      return configurationDb;
+      return this.find({ where: { configurationType: type } });
     } catch (err) {
       new WinstonLogger().logger().warn(`Error retrieve configuration`, { error: err });
     }

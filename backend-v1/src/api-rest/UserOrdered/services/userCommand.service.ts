@@ -3,9 +3,9 @@ import { NotFound } from '@tsed/exceptions';
 import { isEqual, merge } from 'lodash';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../../User/entity/user.entity';
+import { IUser } from '../../User/models/user.interface';
 import { UserRepository } from '../../User/services/user.repository';
-import { UserOrderedEntity } from '../entity/userOrdered.entity';
+import { UserOrderedEntity } from '../entities/userOrdered.entity';
 
 import { UserCommandRepository } from './userCommand.repository';
 
@@ -16,22 +16,19 @@ export class UserCommandService {
     private _userCommandRepository: UserCommandRepository
   ) {}
   async main(context: Context, userCommand: UserOrderedEntity): Promise<void> {
-    const user: UserEntity = await this._userRepository.findByUserId(userCommand?.userId);
+    const user: IUser | undefined = await this._userRepository.findById(userCommand?.id);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userCommand });
       throw new NotFound('User not found to login ');
     }
     await this._userRepository.updateOne(
-      { userId: userCommand?.userId },
+      { id: userCommand?.id },
       {
-        numberOrder: (user?.numberOrder || []).concat({
-          isValidate: false,
-          madeAt: new Date().toISOString()
-        })
+        numberOrder: user.numberOrder ? parseInt(String(user.numberOrder), 10) + 1 : 1
       },
       user
     );
-    const command: UserOrderedEntity = await this._userCommandRepository.findById(userCommand._id);
+    const command: UserOrderedEntity = await this._userCommandRepository.findById(userCommand.id);
     if (command) {
       if (isEqual(command, userCommand)) {
         new WinstonLogger()
@@ -40,7 +37,7 @@ export class UserCommandService {
         return;
       }
       await this._userCommandRepository.updateOne(
-        { userOrderedId: userCommand.userOrderedId },
+        { id: userCommand.id },
         merge(command, userCommand),
         merge(command, userCommand)
       );

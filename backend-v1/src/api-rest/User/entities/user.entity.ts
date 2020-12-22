@@ -1,23 +1,25 @@
 import { Allow, Description, Email, Property, Required } from '@tsed/schema';
 import {
+  BaseEntity,
   BeforeInsert,
   BeforeUpdate,
   Column,
-  Entity, OneToMany,
+  Entity,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
 
+import { UserOrderedEntity } from '../../UserOrdered/entities/userOrdered.entity';
+
 import { UserAddressEntity } from './userAddress.entity';
-import { UserOrderedEntity } from '../../UserOrdered/entity/userOrdered.entity';
 
 // Use save in place of update to apply hook middleware
 @Entity()
-export class UserEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
   @OneToOne(() => UserAddressEntity, { cascade: true })
   address: UserAddressEntity;
 
@@ -46,10 +48,9 @@ export class UserEntity {
 
   @Allow(null)
   @Column({ type: 'varchar', length: '255' })
-  token: string;
+  token: string | null;
 
-  @Column()
-  @OneToMany(() => UserOrderedEntity, userOrder => userOrder.user)
+  @OneToMany(() => UserOrderedEntity, userOrder => userOrder.user, { cascade: true })
   userOrder: UserOrderedEntity[];
 
   @BeforeInsert()

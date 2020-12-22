@@ -7,15 +7,15 @@ import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
 
 import { UserRepository } from '../../api-rest/User/services/user.repository';
-import { IListOrderInterface } from '../../api-rest/UserPayment/entity/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
 import { WinstonLogger } from './winston-logger';
+import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 @Service()
 export class StripePaymentService {
   constructor(private _userRepository: UserRepository) {}
   async main(
-    userId: string,
+    userId: number,
     listOrder: IListOrderInterface
   ): Promise<{
     clientSecret: string | null;

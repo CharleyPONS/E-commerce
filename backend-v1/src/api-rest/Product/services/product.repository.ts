@@ -1,62 +1,59 @@
-import { Inject, Service } from '@tsed/common';
-import { MongooseModel } from '@tsed/mongoose';
-import { FilterQuery, UpdateQuery } from 'mongoose';
+import { EntityRepository, FindConditions, Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../../User/entity/user.entity';
-import { CATEGORIES } from '../entity/product.enum';
-import { ProductEntity } from '../entity/product.entity';
+import { UserEntity } from '../../User/entities/user.entity';
+import { ProductEntity } from '../entities/product.entity';
+import { CATEGORIES } from '../entities/product.enum';
 
-@Service()
-export class ProductRepository {
-  @Inject(ProductEntity)
-  private product: MongooseModel<ProductEntity>;
-
+@EntityRepository(ProductEntity)
+export class ProductRepository extends Repository<ProductEntity> {
   $onInit() {}
 
-  async findById(id: string): Promise<any> {
+  async findById(productId: number): Promise<ProductEntity[] | undefined> {
     try {
-      new WinstonLogger().logger().info(`Search a product with id ${id}`);
-      return await this.product.findById(id).exec();
-    } catch (err) {
-      new WinstonLogger().logger().warn(`Search a product with id ${id} request failed`,
-        { error: err });
-    }
-  }
-
-  async findByCategories(categoriesSelected: CATEGORIES): Promise<any> {
-    try {
-      new WinstonLogger().logger().info(`Search a product with id ${categoriesSelected}`);
-      return await this.product.findOne({ categories: categoriesSelected }).exec();
+      new WinstonLogger().logger().info(`Search a product with id ${productId}`);
+      const product: ProductEntity[] = await this.find({
+        where: { id: productId },
+        relations: ['stock']
+      });
+      return product;
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Search a product with id ${categoriesSelected} request failed`,
-        { error: err });
+        .warn(`Search a product with id ${productId} request failed`, { error: err });
     }
   }
 
-  async save(product: ProductEntity): Promise<any> {
+  async findByCategories(categoriesSelected: CATEGORIES): Promise<ProductEntity[] | undefined> {
     try {
-      const model = new this.product(product);
-      new WinstonLogger().logger().info(`Save product`, { product });
-      await model.save();
-      new WinstonLogger().logger().info(`Save product succeed`, { product });
+      new WinstonLogger().logger().info(`Search a product with id ${categoriesSelected}`);
+      return await this.find({ where: { categories: categoriesSelected } });
+    } catch (err) {
+      new WinstonLogger()
+        .logger()
+        .warn(`Search a product with id ${categoriesSelected} request failed`, { error: err });
+    }
+  }
 
-      return model;
+  async saveProduct(product: ProductEntity): Promise<void> {
+    try {
+      new WinstonLogger().logger().info(`Save product`, { product });
+      await this.save(product);
+      new WinstonLogger().logger().info(`Save product succeed`, { product });
     } catch (err) {
       new WinstonLogger().logger().warn(`Save a product with id request failed`, { error: err });
     }
   }
 
   async updateOne(
-    filter: FilterQuery<UserEntity>,
-    updateQuery: UpdateQuery<UserEntity>,
+    filter: FindConditions<UserEntity>,
+    updateQuery: QueryDeepPartialEntity<UserEntity>,
     product: ProductEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update product`, { product });
-      await this.product.updateOne(filter, updateQuery);
+      await this.update(filter, updateQuery);
       new WinstonLogger().logger().info(`Update product succeed`, { product });
     } catch (err) {
       new WinstonLogger().logger().warn(`Update a product with id request failed`, { error: err });
@@ -65,7 +62,7 @@ export class ProductRepository {
 
   async findAll(): Promise<ProductEntity[]> {
     new WinstonLogger().logger().info(`Find all product`);
-    const product: ProductEntity[] = await this.product.find().exec();
+    const product: ProductEntity[] = await this.find();
     return product;
   }
 }

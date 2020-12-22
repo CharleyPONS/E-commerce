@@ -22,7 +22,6 @@ export class ProductPriceEntity extends BaseEntity {
   @Column({ type: 'int' })
   priceForTenGramme: number;
 
-  @Column({ type: 'varchar' })
   @OneToOne(() => ProductEntity, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
   @JoinColumn()
   product: ProductEntity;

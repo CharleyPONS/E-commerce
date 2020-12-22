@@ -2,6 +2,7 @@ import { Context, Controller, Get } from '@tsed/common';
 import { Returns, Summary } from '@tsed/schema';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
+import { ConfigurationType } from '../entities/configurationType.enum';
 import { ConfigurationRepository } from '../service/configuration.repository';
 
 @Controller({
@@ -15,6 +16,8 @@ export class ConfigurationCtrl {
   @(Returns(200).Description('get Config'))
   async getConfiguration(@Context() ctx: Context): Promise<void> {
     new WinstonLogger().logger().info(`retreive configuration`);
-    return this._configurationRepository.find();
+    return this._configurationRepository.findByType(
+      process.env.CONFIGURATION_TYPE as ConfigurationType
+    );
   }
 }

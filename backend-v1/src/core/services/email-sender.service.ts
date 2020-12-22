@@ -3,7 +3,7 @@ import { InternalServerError } from '@tsed/exceptions';
 import hbs = require('express-handlebars');
 import * as node_mailer from 'nodemailer';
 
-import { UserEntity } from '../../api-rest/User/entity/user.entity';
+import { UserEntity } from '../../api-rest/User/entities/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { MailProcess } from '../models/enum/mail-process.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';

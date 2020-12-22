@@ -2,10 +2,11 @@ import { BodyParams, Context, Controller, Delete, Get, PathParams, Post } from '
 import { NotFound } from '@tsed/exceptions';
 import { Status, Summary } from '@tsed/schema';
 
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
 import { UserRepository } from '../services/user.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';
+import { IUser } from '../models/user.interface';
 
 @Controller({
   path: '/user'
@@ -20,7 +21,7 @@ export class UserCtrl {
   @Get('/:id')
   @Summary('Return a User from his ID')
   @(Status(200, UserEntity).Description('Success'))
-  async getUser(@PathParams('id') id: string): Promise<UserEntity> {
+  async getUser(@PathParams('id') id: number): Promise<UserEntity> {
     const user = await this._userRepository.findById(id);
 
     if (user) {
@@ -33,8 +34,8 @@ export class UserCtrl {
   @Delete('/:id')
   @Summary('Delete a User from his ID')
   @(Status(204, UserEntity).Description('Success delete'))
-  async deleteUser(@PathParams('id') id: string): Promise<UserEntity> {
-    const user = await this._userRepository.delete(id);
+  async deleteUser(@PathParams('id') id: number): Promise<UserEntity> {
+    const user = await this._userRepository.deleteUser(id);
     if (user) {
       return user;
     }
@@ -48,7 +49,7 @@ export class UserCtrl {
     @Context() ctx: Context,
     @BodyParams('user') userBody: UserEntity
   ): Promise<UserEntity> {
-    const user: UserEntity = await this._userLoginService.main(ctx, userBody);
+    const user: IUser = await this._userLoginService.main(ctx, userBody);
     return ctx.getResponse().status(200).send(user);
   }
 

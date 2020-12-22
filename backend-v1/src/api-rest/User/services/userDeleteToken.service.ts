@@ -1,7 +1,7 @@
 import { Service } from '@tsed/common';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
 
 import { UserRepository } from './user.repository';
 
@@ -10,12 +10,12 @@ export class UserDeleteTokenService {
   constructor(private _userRepository: UserRepository) {}
   async main(user: UserEntity): Promise<void> {
     try {
-      new WinstonLogger().logger().info(`try to delete token`, { user: user.userId });
-      await this._userRepository.updateOne({ _id: user.userId }, { $unset: { token: 1 } }, user);
+      new WinstonLogger().logger().info(`try to delete token`, { user: user.id });
+      await this._userRepository.updateOne({ id: user.id }, { token: null }, user);
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Delete a token user with id ${user.userId} failed`, { error: err });
+        .warn(`Delete a token user with id ${user.id} failed`, { error: err });
     }
   }
 }

@@ -3,7 +3,7 @@ import { Required, Summary } from '@tsed/schema';
 
 import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
 import { StripePaymentService } from '../../../core/services/stripePayment.service';
-import { IListOrderInterface } from '../entity/listOrderInterface';
+import { IListOrderInterface } from '../models/listOrderInterface';
 
 @Controller({
   path: '/create-payment-session'
@@ -16,7 +16,7 @@ export class UserPaymentCtrl {
   @UseBefore(AuthJWTMiddleware)
   async registerUser(
     @Context() ctx: Context,
-    @Required() @PathParams('userId') userId: string,
+    @Required() @PathParams('userId') userId: number,
     @BodyParams('listOrder')
     listOrder: IListOrderInterface
   ): Promise<void> {

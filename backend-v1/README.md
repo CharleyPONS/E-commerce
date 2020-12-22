@@ -36,6 +36,7 @@ PORT= port you wanna use (3000 as default if not set)
 NODE_ENV= development
 CORS_ORIGIN= your localhost
 CONNECTION_NAME=connection name
+CONFIGURATION_TYPE= type config
 
 # Postgres
 POSTGRES_URL=::1

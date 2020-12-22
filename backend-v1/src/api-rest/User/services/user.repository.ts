@@ -1,45 +1,21 @@
-import { Inject, Service } from '@tsed/common';
-import { MongooseModel } from '@tsed/mongoose';
-import { FilterQuery, UpdateQuery } from 'mongoose';
+import { EntityRepository, FindConditions, Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserEntity } from '../entity/user.entity';
+import { UserEntity } from '../entities/user.entity';
+import { IUser } from '../models/user.interface';
 
-@Service()
-export class UserRepository {
-  @Inject(UserEntity)
-  private user: MongooseModel<UserEntity>;
-
+@EntityRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
   $onInit() {}
 
-  async findById(id: string): Promise<any> {
-    try {
-      new WinstonLogger().logger().info(`Search a user with id ${id}`);
-      const user = await this.user.findById(id);
-      return user;
-    } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .warn(`Search a user with id ${id} request failed`, { error: err });
-    }
-  }
-
-  async findByEmail(email: string): Promise<any> {
-    try {
-      new WinstonLogger().logger().info(`Search a user with id ${email}`);
-      const user = await this.user.findOne({ email }).exec();
-      return user;
-    } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .warn(`Search a user with id ${email} request failed`, { error: err });
-    }
-  }
-
-  async findByUserId(userId: string): Promise<any> {
+  async findById(userId: number): Promise<UserEntity | undefined> {
     try {
       new WinstonLogger().logger().info(`Search a user with id ${userId}`);
-      const user = await this.user.findOne({ userId }).exec();
+      const user = await this.findOne({
+        where: { id: userId },
+        relations: ['address', 'userOrder']
+      });
       return user;
     } catch (err) {
       new WinstonLogger()
@@ -48,37 +24,48 @@ export class UserRepository {
     }
   }
 
-  async save(user: UserEntity): Promise<any> {
+  async findByEmail(userEmail: string): Promise<UserEntity | undefined> {
     try {
-      const model = new this.user(user);
-      new WinstonLogger().logger().info(`Save user`, { user });
-      await model.save();
-      new WinstonLogger().logger().info(`Save user succeed`, { user });
+      new WinstonLogger().logger().info(`Search a user with id ${userEmail}`);
+      const user = await this.findOne({
+        where: { email: userEmail }
+      });
+      return user;
+    } catch (err) {
+      new WinstonLogger()
+        .logger()
+        .warn(`Search a user with id ${userEmail} request failed`, { error: err });
+    }
+  }
 
-      return model;
+  async saveUser(user: UserEntity): Promise<void> {
+    try {
+      new WinstonLogger().logger().info(`Save user`, { user });
+      await this.save(user);
+      new WinstonLogger().logger().info(`Save user succeed`, { user });
     } catch (err) {
       new WinstonLogger().logger().warn(`Save a user with id request failed`, { error: err });
     }
   }
 
   async updateOne(
-    filter: FilterQuery<UserEntity>,
-    updateQuery: UpdateQuery<UserEntity>,
-    user: UserEntity
+    filter: FindConditions<UserEntity>,
+    updateQuery: QueryDeepPartialEntity<UserEntity>,
+    user: IUser
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update user`, { user });
-      await this.user.updateOne(filter, updateQuery);
+      await this.update(filter, updateQuery);
       new WinstonLogger().logger().info(`Update user succeed`, { user });
     } catch (err) {
       new WinstonLogger().logger().warn(`Update a user with id request failed`, { error: err });
     }
   }
 
-  async delete(userId: string): Promise<any> {
+  async deleteUser(userId: number): Promise<any> {
     try {
       new WinstonLogger().logger().info(`try to delete user`, { userId });
-      await this.user.deleteOne({ __id: userId });
+      await this.delete({ id: userId });
       new WinstonLogger().logger().info(`Delete user succeed`, { userId });
       return;
     } catch (err) {

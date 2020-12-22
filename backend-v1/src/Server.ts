@@ -43,7 +43,7 @@ dotenv.config();
       database: process.env.POSTGRES_DB,
       synchronize: true,
       logging: false,
-      entities: [`${rootDir}/**/entity/**/*.ts`]
+      entities: [`${rootDir}/**/entities/**/*.ts`]
     }
   ],
   exclude: ['**/*.spec.ts']

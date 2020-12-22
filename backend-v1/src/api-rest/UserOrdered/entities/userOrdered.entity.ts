@@ -1,11 +1,23 @@
 import { Required } from '@tsed/schema';
-import { BeforeInsert, BeforeUpdate, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 
-import { UserEntity } from '../../User/entity/user.entity';
+import { UserEntity } from '../../User/entities/user.entity';
+
+import { UserOrderedProductsEntity } from './userOrderedProducts.entity';
 
 // Use save in place of update to apply hook middleware
 
-export class UserOrderedEntity {
+@Entity()
+export class UserOrderedEntity extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,7 +34,10 @@ export class UserOrderedEntity {
   @Column({ type: 'varchar', length: '255' })
   dateUpdate: string;
 
-  @Column({ type: 'int' })
+  @OneToMany(() => UserOrderedProductsEntity, userOrderedProduct => userOrderedProduct.userOrder, {
+    cascade: true
+  })
+  product: UserOrderedProductsEntity[];
   @ManyToOne(() => UserEntity, user => user.userOrder)
   user: UserEntity;
   @BeforeInsert()

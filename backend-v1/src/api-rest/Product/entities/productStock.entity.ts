@@ -18,7 +18,6 @@ export class ProductStockEntity extends BaseEntity{
   @Enum(UNITY)
   unityMeasure: UNITY;
 
-  @Column({ type: 'int' })
   @OneToOne(() => ProductEntity, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
   @JoinColumn()
   product: ProductEntity;

@@ -1,34 +1,33 @@
-import { Inject, Service } from '@tsed/common';
-import { MongooseModel } from '@tsed/mongoose';
-import { FilterQuery, UpdateQuery } from 'mongoose';
+import { EntityRepository, FindConditions, Repository } from 'typeorm';
 
 import { WinstonLogger } from '../../../core/services/winston-logger';
-import { UserOrderedEntity } from '../entity/userOrdered.entity';
+import { UserOrderedEntity } from '../entities/userOrdered.entity';
+import { UserEntity } from '../../User/entities/user.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-@Service()
-export class UserCommandRepository {
-  @Inject(UserOrderedEntity)
-  private userOrdered: MongooseModel<UserOrderedEntity>;
-
-  async findById(id: string): Promise<any> {
+@EntityRepository(UserOrderedEntity)
+export class UserCommandRepository extends Repository<UserOrderedEntity> {
+  async findById(userOrderId: number): Promise<any> {
     try {
-      new WinstonLogger().logger().info(`Search a userOrdered with id ${id}`);
-      const userOrdered = await this.userOrdered.findById(id).exec();
+      new WinstonLogger().logger().info(`Search a userOrdered with id ${userOrderId}`);
+      const userOrdered = await this.findOne({
+        where: { id: userOrderId },
+        relations: ['product', 'user']
+      });
       return userOrdered;
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Search a userOrdered with id ${id} request failed`, { error: err });
+        .warn(`Search a userOrdered with id ${userOrderId} request failed`, { error: err });
     }
   }
 
-  async save(userOrdered: UserOrderedEntity): Promise<any> {
+  async saveUserOrder(userOrdered: UserOrderedEntity): Promise<any> {
     try {
-      const model = new this.userOrdered(userOrdered);
       new WinstonLogger().logger().info(`Save userOrdered`, { userOrdered });
-      await model.save();
+      await this.save(userOrdered);
+
       new WinstonLogger().logger().info(`Save userOrdered succeed`, { userOrdered });
-      return model;
     } catch (err) {
       new WinstonLogger()
         .logger()
@@ -37,13 +36,13 @@ export class UserCommandRepository {
   }
 
   async updateOne(
-    filter: FilterQuery<UserOrderedEntity>,
-    updateQuery: UpdateQuery<UserOrderedEntity>,
+    filter: FindConditions<UserEntity>,
+    updateQuery: QueryDeepPartialEntity<UserEntity>,
     userOrdered: UserOrderedEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update userOrdered`, { userOrdered });
-      await this.userOrdered.updateOne(filter, updateQuery);
+      await this.update(filter, updateQuery);
       new WinstonLogger().logger().info(`Update userOrdered succeed`, { userOrdered });
     } catch (err) {
       new WinstonLogger()
@@ -52,10 +51,10 @@ export class UserCommandRepository {
     }
   }
 
-  async delete(userId: string): Promise<any> {
+  async deleteUser(userId: number): Promise<any> {
     try {
       new WinstonLogger().logger().info(`try todelete userOrdered`, { userId });
-      await this.userOrdered.deleteOne({ __id: userId });
+      await this.delete({ id: userId });
       new WinstonLogger().logger().info(`Delete userOrdered succeed`, { userId });
       return;
     } catch (err) {
