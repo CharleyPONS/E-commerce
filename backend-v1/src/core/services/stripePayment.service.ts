@@ -78,6 +78,7 @@ export class StripePaymentService {
         price: amount
       });
 
+    //TODO update userOrdered pass a new property status with enum pending or succeed
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount.price * 100,
       receipt_email: process.env.EMAIL,

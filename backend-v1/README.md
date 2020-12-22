@@ -4,12 +4,15 @@
 
 > Build in TSED bringing typeorm plugin for interaction with PostgreSQL
 > Using stripes with custom payments flow validate in server side
+> Using stripes CLI and webhook
 > Using JWT token for authentication and bcrypt for password security
 > Using nodemailer and express-handlebars
 
 See [Ts.ED](https://tsed.io) project for more information.
 
 See [Strips](https://stripe.com/docs/api) for more information.
+
+See [StripsCLI](https://github.com/stripe/stripe-cli.git) for more information
 
 See [TypeORM](https://typeorm.io/) for more information.
 
@@ -62,6 +65,8 @@ AUTH_PASSWORD= your host password
 SECRET_KEY_DEVELOPMENT= your SK
 SECRET_KEY_PRODUCTION= your SK
 PROTOCOL_HTTP= http | https
+EMAIL= your email for receipt payment
+STATEMENT_DESCRIPTOR= Statement for bank transfer
 
 ```
 
