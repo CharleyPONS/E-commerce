@@ -14,6 +14,12 @@ import { IStripeConfigInterface } from '../models/interface/stripeConfig.interfa
 
 import { WinstonLogger } from './winston-logger';
 
+/**
+ * Ce service est une validation côté serveur du prix de la commande pour éviter toute manipulation côté client du prix
+ * Nous appliquons aussi la promotion côté serveur
+ * Une fois que le paiement est effectué nous envoyons au client l'intention de paiement généré par stripe avec le secret client
+ * La partie de modification des données côté serveur ce fera dans un autre service avec un webhook et une transaction globale.
+ */
 @Service()
 export class StripePaymentService {
   constructor(
