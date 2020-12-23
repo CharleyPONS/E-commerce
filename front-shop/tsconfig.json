@@ -1,33 +1,29 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "dist",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2016",
-    "alwaysStrict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "strictNullChecks": false,
-    "removeComments": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "isolatedModules": false,
-    "suppressImplicitAnyIndexErrors": false,
-    "noUnusedParameters": false,
+    "moduleResolution": "node",
     "importHelpers": true,
-    "newLine": "LF",
-    "noEmit": true,
-    "typeRoots": ["./node_modules/@types", "reflect-metadata"],
-    "lib": ["es2016", "es7", "dom", "esnext.asynciterable"]
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
   },
-  "compileOnSave": true,
-  "include": ["src/**/*.ts", "src/core/json/**/*.json"],
-  "files": ["node_modules/typescript/lib/lib.es6.d.ts"],
-  "exclude": ["node_modules", "src/**/*.test.ts", "dist"]
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
 }
