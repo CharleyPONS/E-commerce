@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
@@ -6,7 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
+  public form: FormGroup;
+  public hide: boolean;
+  constructor(private _formBuilder: FormBuilder) {}
+  ngOnInit(): void {
+    this.hide = true;
+    this.form = this._formBuilder.group({
+      email: ['', Validators.required, Validators.email],
+      password: ['', Validators.required, Validators.min(6)],
+    });
+  }
+}
 }

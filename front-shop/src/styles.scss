@@ -99,6 +99,53 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.shop-uppercase {
+  text-transform: uppercase;
+}
+.shop-capitalize {
+  text-transform: capitalize;
+}
+.shop-font-thin {
+  font-weight: 300;
+}
+.shop-align-center {
+  text-align: center !important;
+}
+.shop-align-right {
+  text-align: right !important;
+}
+.shop-align-left {
+  text-align: left !important;
+}
+.shop-bold {
+  font-weight: bold;
+}
+.shop-cursor-pointer {
+  cursor: pointer;
+}
+.shop-cursor-default {
+  cursor: default;
+}
+.shop-margin-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.shop-full-width {
+  width: 100%;
+}
+.shop-full-height {
+  min-height: 100%;
+}
+.shop-float-right {
+  float: right;
+}
+.shop-no-border {
+  border: none;
+}
+.shop-no-display {
+  display: none !important;
+}
+
 // Here we set the global css for all the cart component to avoid any conflict with the library
 .add-to-cart {
   .add-to-cart-button {

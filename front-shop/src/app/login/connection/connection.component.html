@@ -1,1 +1,51 @@
-<p>connection works!</p>
+<h2>Connectez-vous</h2>
+<p>Bienvenue sur This is CBD, votre compagnon CBD.</p>
+<form [formGroup]="form">
+  <div
+    fxFlexAlign.gt-xs="column"
+    fxLayoutGap="24px"
+    fxLayoutGap.sm="12px"
+    fxLayoutGap.xs="8px"
+  >
+    <mat-form-field>
+      <mat-label>Adresse e-mail</mat-label>
+      <input
+        matInput
+        [placeholder]="'Adresse e-mail'"
+        formControlName="email"
+        required
+      />
+      <mat-error *ngIf="form.get('email').errors && form.get('email').touched"
+        >Votre email n'est pas valide</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Mot de passe</mat-label>
+      <input
+        matInput
+        placeholder="Password"
+        [type]="hide ? 'password' : 'text'"
+        formControlName="password"
+        required
+      />
+      <mat-icon matSuffix (click)="hide = !hide">{{
+        hide ? "visibility_off" : "visibility"
+      }}</mat-icon>
+      <mat-error
+        *ngIf="form.get('password').errors && form.get('email').touched"
+        >Votre mot de passe doit comporter au moins 6 caractères</mat-error
+      >
+    </mat-form-field>
+  </div>
+  <div class="shop-align-right">
+    <button
+      type="submit"
+      mat-raised-button
+      color="accent"
+      (click)="save()"
+      [disabled]="form.invalid || form.disabled"
+    >
+      Se connecter
+    </button>
+  </div>
+</form>

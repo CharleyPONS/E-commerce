@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MaterialModule } from '../shared/material.module';
-import { MainWrapperComponent } from './main-wrapper/main-wrapper.component';
 import { ConnectionComponent } from './connection/connection.component';
+import { MainWrapperComponent } from './main-wrapper/main-wrapper.component';
 import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({

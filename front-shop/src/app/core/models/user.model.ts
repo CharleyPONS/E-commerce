@@ -1,17 +1,18 @@
 import { UserAddress } from './userAddress.model';
 
 export class User {
-  public id: number;
-  public userId: string;
-  public address: UserAddress;
-  public name: string;
-  public surname: string;
-  public password: string;
-  public email: string;
-  public numberOrder: number;
-  public dateUpdate: string;
-  public token: string | null;
-  constructor(data: User){
+  public id?: number;
+  public userId?: string;
+  public address?: UserAddress;
+  public name?: string;
+  public surname?: string;
+  public password?: string;
+  public email?: string;
+  public numberOrder?: number;
+  public dateUpdate?: string;
+  public token?: string | null;
+  public expiresIn?: number;
+  constructor(data?: User) {
     this.id = data.id;
     this.userId = data.userId;
     this.address = new UserAddress(data.address as UserAddress);
@@ -22,6 +23,6 @@ export class User {
     this.numberOrder = data.numberOrder;
     this.dateUpdate = data.dateUpdate;
     this.token = data.token;
+    this.expiresIn = data.expiresIn;
   }
-
 }
