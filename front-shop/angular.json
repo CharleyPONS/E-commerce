@@ -31,7 +31,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "../node_modules/ng-shopping-cart/styles/css/ng-shopping-cart.css",
               "src/styles.scss"
             ],
             "scripts": []

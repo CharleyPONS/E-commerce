@@ -1,0 +1,56 @@
+<div class="size-toolbar" STYLE="height: 100%">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <div fxFlex="30">
+        <button
+          mat-icon-button
+          (click)="sidenav.toggle()"
+          fxShow="true"
+          fxHide.gt-sm
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="50">
+        <div fxShow="true" fxHide.lt-md>
+          <a [routerLink]="['/fleurs']" mat-button>Fleurs CBD</a>
+          <a [routerLink]="['/resines']" mat-button>Résines CBD</a>
+          <a [routerLink]="['/moon-rocks']" mat-button>Moon Rocks CBD</a>
+          <a [routerLink]="['/oil']" mat-button>Huiles CBD</a>
+        </div>
+      </div>
+      <div fxFlex.gt-sm="5" fxFlex.lt-sm="20">
+        <div class="bloc-button-custom">
+          <button mat-mini-fab class="button-custom" aria-label="Inscription">
+            <a [routerLink]="['/login']">
+              <mat-icon color="warn">perm_identity</mat-icon>
+            </a>
+          </button>
+        </div>
+      </div>
+      <div fxFlex.gt-sm="10" fxFlex.lt-sm="20">
+        <app-cart-summary></app-cart-summary>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-sidenav-container fxFlexFill>
+    <mat-sidenav #sidenav>
+      <mat-nav-list>
+        <a (click)="sidenav.toggle()" mat-list-item>Fermer</a>
+        <a [routerLink]="['/fleurs']" mat-list-item>Fleurs CBD</a>
+        <a [routerLink]="['/resines']" mat-list-item>Résines CBD</a>
+        <a [routerLink]="['/moon-rocks']" mat-list-item>Moon Rocks CBD</a>
+        <a [routerLink]="['/oil']" mat-list-item>Huiles CBD</a>
+        <div mat-list-item>
+          <button [routerLink]="['/login']" mat-button color="primary">
+            Connexion/S'inscrire
+          </button>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
