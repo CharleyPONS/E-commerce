@@ -1,1 +1,1 @@
-export { default as database } from './services/db-connect.service';
+export { default as database } from './services/dbConnect.service';

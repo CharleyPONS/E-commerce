@@ -6,6 +6,7 @@ import { ProductEntity } from '../entities/product.entity';
 import { ProductRepository } from '../services/product.repository';
 
 import { OfferCtrl } from './offerCtrl';
+import { CATEGORIES } from '../entities/product.enum';
 
 @Controller({
   path: '/product',
@@ -21,11 +22,11 @@ export class ProductCtrl {
     return this._productRepository.findAll();
   }
 
-  @Get('/:id')
+  @Get('/:category')
   @Summary('Return a Product from his ID')
   @(Returns(200).Description('Success'))
-  async getProduct(@PathParams('id') id: number): Promise<ProductEntity[]> {
-    const product = await this._productRepository.findById(id);
+  async getProduct(@PathParams('id') category: CATEGORIES): Promise<ProductEntity[]> {
+    const product = await this._productRepository.findByCategories(category);
     if (product) {
       return product;
     }

@@ -1,7 +1,7 @@
 import { EntityRepository, FindConditions, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-import { WinstonLogger } from '../../../core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../entities/user.entity';
 import { IUser } from '../models/user.interface';
 

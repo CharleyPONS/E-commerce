@@ -3,9 +3,8 @@ import { NotFound } from '@tsed/exceptions';
 import { compareSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
-import { WinstonLogger } from '../../../core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../entities/user.entity';
-import { IUser } from '../models/user.interface';
 
 import { UserRepository } from './user.repository';
 
@@ -34,6 +33,6 @@ export class UserLogInService {
     });
     await this._userRepository.updateOne({ id: user.id }, { token: getToken }, user);
     new WinstonLogger().logger().info(`Token create for user`, { user, getToken });
-    return { ...user, token: getToken };
+    return { ...user, token: getToken, expiresIn: process.env.JWT_EXPIRES_MS };
   }
 }

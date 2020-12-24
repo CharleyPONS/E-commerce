@@ -12,7 +12,7 @@ import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
-import { WinstonLogger } from './winston-logger';
+import { WinstonLogger } from './winstonLogger';
 import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrdered.entity';
 import { UserOrderedProductsEntity } from '../../api-rest/UserOrdered/entities/userOrderedProducts.entity';
 import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';

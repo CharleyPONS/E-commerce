@@ -12,8 +12,6 @@ import * as dotenv from 'dotenv';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 
-import { WinstonLogger } from './core/services/winston-logger';
-
 export const rootDir = __dirname;
 dotenv.config();
 

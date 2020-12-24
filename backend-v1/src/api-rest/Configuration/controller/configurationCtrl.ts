@@ -1,7 +1,7 @@
 import { Context, Controller, Get } from '@tsed/common';
 import { Returns, Summary } from '@tsed/schema';
 
-import { WinstonLogger } from '../../../core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { ConfigurationType } from '../entities/configurationType.enum';
 import { ConfigurationRepository } from '../service/configuration.repository';
 

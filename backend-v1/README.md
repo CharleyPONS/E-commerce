@@ -64,6 +64,7 @@ AUTH_PASSWORD= your host password
 #Stripe
 SECRET_KEY_DEVELOPMENT= your SK
 SECRET_KEY_PRODUCTION= your SK
+SECRET_KEY_WEBHOOK= secret key for webhook
 PROTOCOL_HTTP= http | https
 EMAIL= your email for receipt payment
 STATEMENT_DESCRIPTOR= Statement for bank transfer
@@ -71,9 +72,8 @@ STATEMENT_DESCRIPTOR= Statement for bank transfer
 ```
 
 ```bash
-npm run watch
 npm run docs
-npm run start
+npm run watch
 ```
 ## Usages
 

@@ -5,10 +5,10 @@ import * as node_mailer from 'nodemailer';
 
 import { UserEntity } from '../../api-rest/User/entities/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
-import { MailProcess } from '../models/enum/mail-process.enum';
+import { MailProcess } from '../models/enum/mailProcess.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';
 
-import { WinstonLogger } from './winston-logger';
+import { WinstonLogger } from './winstonLogger';
 
 @Service()
 export class EmailSenderService {

@@ -1,7 +1,7 @@
 import { Context, IMiddleware, Middleware } from '@tsed/common';
 import { verify } from 'jsonwebtoken';
 
-import { WinstonLogger } from '../services/winston-logger';
+import { WinstonLogger } from '../services/winstonLogger';
 
 @Middleware()
 export class AuthJWTMiddleware implements IMiddleware {

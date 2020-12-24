@@ -2,7 +2,7 @@ import { Context, Service } from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
 import { isEqual, merge } from 'lodash';
 
-import { WinstonLogger } from '../../../core/services/winston-logger';
+import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserRepository } from '../../User/services/user.repository';
 import { UserOrderedEntity } from '../entities/userOrdered.entity';
 

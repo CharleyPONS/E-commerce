@@ -9,23 +9,23 @@ export class UserAddressEntity extends BaseEntity {
   id: number;
 
   @Required()
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   town: string;
 
   @Required()
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   street: string;
 
   @Required()
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   numberStreet: number;
 
   @Required()
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   postalCode: number;
 
   @Required()
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   country: string;
 
   @OneToOne(() => UserEntity, { onDelete: 'CASCADE' })

@@ -10,8 +10,6 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 
-import { UserOrderedEntity } from '../../UserOrdered/entities/userOrdered.entity';
-
 import { UserAddressEntity } from './userAddress.entity';
 
 // Use save in place of update to apply hook middleware
@@ -24,14 +22,14 @@ export class UserEntity extends BaseEntity {
   @Generated('uuid')
   userId: string;
 
-  @OneToOne(() => UserAddressEntity, { cascade: true})
+  @OneToOne(() => UserAddressEntity, { cascade: true })
   address: UserAddressEntity;
 
   @Required()
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   name: string;
 
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   surname: string;
 
   @Required()
@@ -51,8 +49,12 @@ export class UserEntity extends BaseEntity {
   dateUpdate: string;
 
   @Allow(null)
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   token: string | null;
+
+  @Allow(null)
+  @Column({ type: 'int', nullable: true })
+  expiresIn: number;
 
   @BeforeInsert()
   @BeforeUpdate()

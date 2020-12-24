@@ -17,6 +17,6 @@ export class ProductStockEntity extends BaseEntity{
   @Enum(UNITY)
   unityMeasure: UNITY;
 
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   product: string;
 }

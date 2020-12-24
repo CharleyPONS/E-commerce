@@ -1,7 +1,7 @@
 import { Context, IMiddleware, Middleware } from '@tsed/common';
 
 import { UserRepository } from '../../api-rest/User/services/user.repository';
-import { WinstonLogger } from '../services/winston-logger';
+import { WinstonLogger } from '../services/winstonLogger';
 
 @Middleware()
 export class RegisterMiddleware implements IMiddleware {
