@@ -16,7 +16,7 @@ export class RequestInterceptor implements HttpInterceptor {
     const userToken = localStorage.getItem('id_token');
     if (userToken) {
       const modifiedReq = req.clone({
-        headers: req.headers.set('x-access-token', `Bearer ${userToken}`),
+        headers: req.headers.set('x-access-token', `${userToken}`),
       });
       return next.handle(modifiedReq);
     }
