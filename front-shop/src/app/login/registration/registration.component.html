@@ -36,5 +36,19 @@
         >Votre mot de passe doit comporter au moins 6 caractères</mat-error
       >
     </mat-form-field>
+    <div *ngIf="!authenticateSucceed">
+      <p>Votre authentification a échoué</p>
+    </div>
+  </div>
+  <div class="shop-align-right">
+    <button
+      type="submit"
+      mat-raised-button
+      color="accent"
+      (click)="save()"
+      [disabled]="form.invalid || form.disabled"
+    >
+      Se connecter
+    </button>
   </div>
 </form>

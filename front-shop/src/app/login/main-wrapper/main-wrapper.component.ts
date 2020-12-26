@@ -10,3 +10,4 @@ export class MainWrapperComponent implements OnInit {
 
   ngOnInit(): void {}
 }
+//todo idée si on est connecté il faut que ce lien affiche une page mon compte je sais c'est un peu long a faire cette page et chiant mais pas le choix

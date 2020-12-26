@@ -13,7 +13,7 @@
       </div>
       <div fxFlex="50">
         <div fxShow="true" fxHide.lt-md>
-          <a [routerLink]="['/fleurs']" mat-button>Fleurs CBD</a>
+          <a [routerLink]="['product/flower']" mat-button>Fleurs CBD</a>
           <a [routerLink]="['/resines']" mat-button>Résines CBD</a>
           <a [routerLink]="['/moon-rocks']" mat-button>Moon Rocks CBD</a>
           <a [routerLink]="['/oil']" mat-button>Huiles CBD</a>
@@ -22,7 +22,7 @@
       <div fxFlex.gt-sm="5" fxFlex.lt-sm="20">
         <div class="bloc-button-custom">
           <button mat-mini-fab class="button-custom" aria-label="Inscription">
-            <a [routerLink]="['/login']">
+            <a [routerLink]="['login']">
               <mat-icon color="warn">perm_identity</mat-icon>
             </a>
           </button>
@@ -50,6 +50,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
+      <p>ghvjvv</p>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

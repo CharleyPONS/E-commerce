@@ -31,7 +31,7 @@
               "src/assets"
             ],
             "styles": [
-              "../node_modules/ng-shopping-cart/styles/css/ng-shopping-cart.css",
+              "./node_modules/ng-shopping-cart/styles/css/ng-shopping-cart.css",
               "src/styles.scss"
             ],
             "scripts": []

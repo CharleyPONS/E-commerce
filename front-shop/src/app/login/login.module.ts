@@ -1,11 +1,20 @@
 import { NgModule } from '@angular/core';
-import { MaterialModule } from '../shared/material.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 import { ConnectionComponent } from './connection/connection.component';
+import { routing } from './login.routing';
 import { MainWrapperComponent } from './main-wrapper/main-wrapper.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  imports: [MaterialModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    routing,
+  ],
 
   exports: [],
   providers: [],
@@ -15,4 +24,4 @@ import { RegistrationComponent } from './registration/registration.component';
     RegistrationComponent,
   ],
 })
-export class SharedModule {}
+export class LoginModule {}
