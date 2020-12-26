@@ -1,4 +1,4 @@
-import { Controller, Get, PathParams } from '@tsed/common';
+import { Context, Controller, Get, PathParams } from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
 import { Returns, Summary } from '@tsed/schema';
 
@@ -17,9 +17,9 @@ export class ProductCtrl {
 
   @Get('/')
   @Summary('Return all Product')
-  @(Returns(200, Array).Of(ProductEntity))
-  async getAllProduct(): Promise<ProductEntity[]> {
-    return this._productRepository.findAll();
+  async getAllProduct(@Context() ctx: Context): Promise<ProductEntity[]> {
+    const product: ProductEntity[] = await this._productRepository.findAll();
+    return ctx.getResponse().status(200).send(product);
   }
 
   @Get('/:category')

@@ -34,13 +34,13 @@ export class ProductEntity {
 
   @Minimum(0)
   @Maximum(80)
-  @Allow(null)
   @Column({ type: 'int', nullable: true })
   cbdRate?: number;
 
+  @Column({ type: 'varchar', length: '255' })
+  imagePath: string;
   @Minimum(0)
   @Maximum(1)
-  @Allow(null)
   @Column({ type: 'int', nullable: true })
   thcRate?: number;
 
@@ -51,7 +51,7 @@ export class ProductEntity {
   @Description('Depending on the product in stock we add the right unity of measure')
   @OneToOne(() => ProductStockEntity, { cascade: true })
   @JoinColumn()
-  stock?: ProductStockEntity;
+  stock: ProductStockEntity;
   @BeforeInsert()
   @BeforeUpdate()
   private updateDates() {
