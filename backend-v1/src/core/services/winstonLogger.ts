@@ -4,7 +4,7 @@ import * as winston from 'winston';
 
 export class WinstonLogger {
   public options: any;
-
+  //TODO pas urgent mais faut changer la gestion du fichier parce que la meme si c'est provisoire ca me soule
   constructor() {
     this.options = {
       file: {

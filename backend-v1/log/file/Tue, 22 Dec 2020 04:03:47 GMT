@@ -1,2 +1,0 @@
-{"product":{"categories":"flower","name":"bubblegum","price":{"basePrice":10,"priceForFiveGramme":38},"stock":{"unityMeasure":"gramme","quantity":40}},"level":"info","message":"Save product"}
-{"product":{"categories":"flower","name":"bubblegum","price":{"basePrice":10,"priceForFiveGramme":38,"priceForThreeGramme":null,"priceForTenGramme":null,"id":8},"stock":{"unityMeasure":"gramme","quantity":40,"id":5},"dateUpdate":"Tue, 22 Dec 2020 04:03:47 GMT","cbdRate":null,"thcRate":null,"id":10},"level":"info","message":"Save product succeed"}

@@ -7,8 +7,8 @@ import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { MailProcess } from '../models/enum/mailProcess.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';
 
-import { WinstonLogger } from './winstonLogger';
 import { rootDir } from '../../Server';
+import { WinstonLogger } from './winstonLogger';
 // tslint:disable-next-line: no-var-requires
 const hbs = require('nodemailer-express-handlebars');
 
