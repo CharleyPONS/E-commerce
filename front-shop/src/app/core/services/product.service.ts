@@ -7,27 +7,27 @@ import { Categories } from '../enum/categories.enum';
 import { Product } from '../models/product.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {}
 
   async getProductByCategory(category: Categories): Promise<Product> {
     return this._http
-      .get<Product>(`${environment.apiUrl}${environment.apiPath}/product/${category}`)
-      .pipe(map(
-        (res) => new Product(res),
-      )).toPromise();
+      .get<Product>(
+        `${environment.apiUrl}${environment.apiPath}/product/${category}`
+      )
+      .pipe(map((res) => new Product(res)))
+      .toPromise();
   }
 
-  async getAllProduct():Promise<Product[]> {
+  async getAllProduct(): Promise<Product[]> {
     const product = await this._http
-      .get<Product>(`${environment.apiUrl}${environment.apiPath}/product`)
+      .get<any>(`${environment.apiUrl}${environment.apiPath}/product`)
       .toPromise();
 
-      return Array.isArray(product) ? (product || []).map(v => new Product(v)) : [];
-
-
+    return Array.isArray(product)
+      ? (product || []).map((v) => new Product(v))
+      : [];
   }
 }

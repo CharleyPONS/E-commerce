@@ -23,7 +23,7 @@ export class Product {
     this.thcRate = data?.thcRate;
     this.dateUpdate = data?.dateUpdate;
     this.stock = new ProductStock(data?.stock as ProductStock);
-    this.imagePath = data?.imagePath;
+    this.imagePath = `../assets/product/${data?.imagePath}`;
   }
 
   public clone() {

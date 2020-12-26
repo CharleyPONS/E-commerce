@@ -95,7 +95,10 @@ body {
   line-height: 1.2em;
   font-family: roboto
 }
-
+h1, h2, h3 {
+  font-family: Oswald;
+  font-size: 30px;
+}
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

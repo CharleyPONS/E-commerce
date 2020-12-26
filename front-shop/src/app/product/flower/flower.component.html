@@ -1,1 +1,12 @@
-<p>flower works!</p>
+<h2 style="text-align: center">Fleurs de CBD</h2>
+<app-product-sort-by
+  [product]="products"
+  (productSort)="productOrder($event)"
+></app-product-sort-by>
+<div fxLayout.gt-xs="row" fxLayoutAlign="space-evenly center">
+  <div *ngFor="let product of products">
+    <mat-card>
+      <app-product-wrapper [product]="product"></app-product-wrapper>
+    </mat-card>
+  </div>
+</div>

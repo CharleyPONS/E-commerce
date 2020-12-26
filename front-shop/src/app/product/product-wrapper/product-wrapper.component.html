@@ -1,28 +1,26 @@
-<mat-card>
-  <div fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="5px">
-    <div>
-      <img [src]="product?.imagePath" alt="Ceci est l'image du produit" />
-    </div>
-    <div>
-      <span>{{ product?.name }}</span>
-    </div>
-    <div>
-      <span>{{ product?.cbdRate }}</span>
-    </div>
-    <div>
-      <span>à partir de {{ product?.price }} le gramme</span>
-    </div>
-    <div>
-      <button mat-stroked-button class="product-display-button">
-        <a
-          [routerLink]="
-            'product/' +
-            product?.categories?.toString()?.toLowerCase() +
-            product.name
-          "
-          >Voir le produit</a
-        >
-      </button>
-    </div>
+<div fxLayout="column" fxLayoutAlign="space-around center" fxLayoutGap="5px">
+  <div>
+    <img [src]="product?.imagePath" alt="Ceci est l'image du produit" />
   </div>
-</mat-card>
+  <div>
+    <span>{{ product?.name }}</span>
+  </div>
+  <div>
+    <span>{{ product?.cbdRate }}</span>
+  </div>
+  <div>
+    <span>à partir de {{ product?.price }} le gramme</span>
+  </div>
+  <div>
+    <button mat-stroked-button class="product-display-button">
+      <a
+        [routerLink]="
+          'product/' +
+          product?.categories?.toString()?.toLowerCase() +
+          product.name
+        "
+        >Voir le produit</a
+      >
+    </button>
+  </div>
+</div>
