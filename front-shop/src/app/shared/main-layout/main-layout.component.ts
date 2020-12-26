@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService, CartItem } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../core/models/cartItemCustom.model';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -8,7 +9,13 @@ import { CartItemCustom } from '../../core/models/cartItemCustom.model';
   styleUrls: ['./main-layout.component.scss'],
 })
 export class MainLayoutComponent implements OnInit {
-  constructor(private cartService: CartService<CartItemCustom>) {}
+  public isConnected: boolean = false;
+  constructor(
+    private cartService: CartService<CartItemCustom>,
+    private _userService: UserService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isConnected = this._userService.isLoggedIn();
+  }
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
+import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 
 @Component({
   selector: 'app-registration',
@@ -14,7 +15,8 @@ export class RegistrationComponent implements OnInit {
   public form: FormGroup;
   public hide: boolean;
   public isConnected: boolean;
-  public authenticateSucceed: boolean;
+  public authenticateSucceed: boolean = true;
+  public emailAlreadyUse: boolean = false;
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
@@ -24,8 +26,8 @@ export class RegistrationComponent implements OnInit {
     this.isConnected = this._userService.isLoggedIn();
     this.hide = true;
     this.form = this._formBuilder.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required, Validators.min(6)],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.min(6)]],
     });
   }
 
@@ -34,7 +36,16 @@ export class RegistrationComponent implements OnInit {
       email: this.form.get('email').value,
       password: this.form.get('password').value,
     });
-    this.authenticateSucceed = await this._userService.registerUser(user);
+    try {
+      this.authenticateSucceed = await this._userService.registerUser(
+        RemoveNullUndefined.removeNullOrUndefined(user)
+      );
+    } catch (err) {
+      if (err.status === 401 && err?.error?.message === 'email already use') {
+        this.emailAlreadyUse = true;
+        return;
+      }
+    }
     if (!this.isOnOrder) {
       return this._router.navigateByUrl('/');
     }

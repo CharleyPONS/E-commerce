@@ -1,4 +1,4 @@
-import {Unity} from '../enum/unity.enum';
+import { Unity } from '../enum/unity.enum';
 
 export class ProductStock {
   public id: number;
@@ -7,9 +7,9 @@ export class ProductStock {
   public product: string;
 
   constructor(data: ProductStock) {
-    this.id = data.id;
-    this.quantity = data.quantity;
-    this.unityMeasure = data.unityMeasure;
-    this.product = data.product;
+    this.id = data?.id;
+    this.quantity = data?.quantity;
+    this.unityMeasure = data?.unityMeasure;
+    this.product = data?.product;
   }
 }

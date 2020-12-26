@@ -9,12 +9,10 @@ export class UserOrderedProducts {
   public unityMeasure: Unity;
 
   constructor(data: UserOrderedProducts) {
-    this.id = data.id;
-    this.type = data.type;
-    this.productName = data.productName;
-    this.quantity = data.quantity;
-    this.unityMeasure = data.unityMeasure;
-
+    this.id = data?.id;
+    this.type = data?.type;
+    this.productName = data?.productName;
+    this.quantity = data?.quantity;
+    this.unityMeasure = data?.unityMeasure;
   }
-
 }

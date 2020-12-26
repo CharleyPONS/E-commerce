@@ -1,9 +1,15 @@
 <div
-  fxFlexAlign.gt-xs="row"
+  fxLayoutAlign="space-around center"
+  fxLayout.gt-xs="row"
   fxLayoutGap="24px"
   fxLayoutGap.sm="12px"
   fxLayoutGap.xs="8px"
+  *ngIf="!isConnected"
 >
-  <app-connection></app-connection>
-  <app-registration></app-registration>
+  <mat-card>
+    <app-connection></app-connection>
+  </mat-card>
+  <mat-card>
+    <app-registration></app-registration>
+  </mat-card>
 </div>

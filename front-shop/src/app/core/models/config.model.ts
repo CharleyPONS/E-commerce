@@ -1,5 +1,5 @@
-import {AuthMethod} from '../enum/authMethod.enum';
-import {Transporter} from '../enum/transporter.enum';
+import { AuthMethod } from '../enum/authMethod.enum';
+import { Transporter } from '../enum/transporter.enum';
 
 export class Config {
   public id: number;
@@ -13,14 +13,14 @@ export class Config {
   public dueDateSponsorship?: string;
 
   constructor(data?: any) {
-    this.id = data.id;
-    this.auth = data.auth;
-    this.configurationType = data.configurationType;
-    this.transporter = data.transporter;
-    this.isPromotion = data.isPromotion;
-    this.promotionReduction = data.promotionReduction;
-    this.sponsorship = data.sponsorship;
-    this.dueDatePromotion = data.dueDatePromotion;
-    this.dueDateSponsorship = data.dueDateSponsorship;
+    this.id = data?.id;
+    this.auth = data?.auth;
+    this.configurationType = data?.configurationType;
+    this.transporter = data?.transporter;
+    this.isPromotion = data?.isPromotion;
+    this.promotionReduction = data?.promotionReduction;
+    this.sponsorship = data?.sponsorship;
+    this.dueDatePromotion = data?.dueDatePromotion;
+    this.dueDateSponsorship = data?.dueDateSponsorship;
   }
 }

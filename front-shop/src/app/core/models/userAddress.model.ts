@@ -7,12 +7,11 @@ export class UserAddress {
   public country: string;
 
   constructor(data: UserAddress) {
-    this.id = data.id;
-    this.town = data.town;
-    this.street = data.street;
-    this.numberStreet = data.numberStreet;
-    this.postalCode = data.postalCode;
-    this.country = data.country;
+    this.id = data?.id;
+    this.town = data?.town;
+    this.street = data?.street;
+    this.numberStreet = data?.numberStreet;
+    this.postalCode = data?.postalCode;
+    this.country = data?.country;
   }
-
 }

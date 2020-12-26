@@ -48,7 +48,7 @@ $accent: (
   )
 );
 $warn: (
-  500: #f3fff3,
+  500: #694f19,
   contrast: (
     50: $black-87-opacity,
     100: $black-87-opacity,
@@ -92,6 +92,8 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.2em;
+  font-family: roboto
 }
 
 * {
@@ -157,8 +159,7 @@ body {
   display: flex;
   margin-top: 2px;
   .cart-summary-icon{
-    margin-top: 2px;
-    fill: #f3fff3;
+    color: #88bf8a;
 
   }
   .cart-summary-contents{

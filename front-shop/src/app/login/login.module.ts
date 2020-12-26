@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../shared/material.module';
 import { SharedModule } from '../shared/shared.module';
 import { ConnectionComponent } from './connection/connection.component';
 import { routing } from './login.routing';
@@ -14,6 +15,7 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     routing,
+    MaterialModule,
   ],
 
   exports: [],
