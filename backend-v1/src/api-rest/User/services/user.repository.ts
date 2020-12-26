@@ -26,7 +26,7 @@ export class UserRepository extends Repository<UserEntity> {
 
   async findByEmail(userEmail: string): Promise<UserEntity | undefined> {
     try {
-      new WinstonLogger().logger().info(`Search a user with id ${userEmail}`);
+      new WinstonLogger().logger().info(`Search a user with email ${userEmail}`);
       const user = await this.findOne({
         where: { email: userEmail }
       });

@@ -1,0 +1,4 @@
+{"user":{"email":"charleypons@live.fr","password":"$2b$10$p9t/y5wQWcX4gvdF501FVOABgSlJLOiBg2QC.NX96BwD7xenO3n66"},"level":"info","message":"Save user"}
+{"user":{"email":"charleypons@live.fr","password":"$2b$10$p9t/y5wQWcX4gvdF501FVOABgSlJLOiBg2QC.NX96BwD7xenO3n66","dateUpdate":"Sat, 26 Dec 2020 05:02:34 GMT","name":null,"surname":null,"numberOrder":null,"token":null,"expiresIn":null,"id":17,"userId":"479c80cf-2d42-4875-b4cb-0d82b89888ab"},"level":"info","message":"Save user succeed"}
+{"message":"Search a user with email charleypons@live.fr","level":"info"}
+{"message":"Search a user with email charleypons@live.fr","level":"info"}

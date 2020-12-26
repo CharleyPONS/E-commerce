@@ -25,7 +25,6 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => UserAddressEntity, { cascade: true })
   address: UserAddressEntity;
 
-  @Required()
   @Column({ type: 'varchar', length: '255', nullable: true })
   name: string;
 
@@ -41,18 +40,16 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: '255' })
   email: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   numberOrder: number;
 
   @Column({ type: 'varchar', length: '255' })
   @Description('Last modification date')
   dateUpdate: string;
 
-  @Allow(null)
   @Column({ type: 'varchar', length: '255', nullable: true })
   token: string | null;
 
-  @Allow(null)
   @Column({ type: 'int', nullable: true })
   expiresIn: number;
 

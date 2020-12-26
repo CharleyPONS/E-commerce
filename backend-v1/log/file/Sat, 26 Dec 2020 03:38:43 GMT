@@ -1,0 +1,3 @@
+{"user":{"email":"charley@artips.fr","password":"$2b$10$qkTKH12C/.xCIK.oCqtc1eN56q3PTxxr1K8AJOXdlmI1VcLmiL2RK","dateUpdate":"Sat, 26 Dec 2020 03:38:43 GMT","name":null,"surname":null,"numberOrder":null,"token":null,"expiresIn":null,"id":4,"userId":"e0cd0636-9407-494b-bfd6-45c82362d9e8"},"level":"info","message":"Save user succeed"}
+{"message":"Search a user with email charley@artips.fr","level":"info"}
+{"message":"Search a user with email charley@artips.fr","level":"info"}

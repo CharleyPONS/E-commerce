@@ -16,10 +16,9 @@ export class RegistrationService {
 
   async main(registerUser: UserEntity) {
     const registerUserToSaved: UserEntity = new UserEntity();
-    registerUserToSaved.name = registerUser.name;
     registerUserToSaved.email = registerUser.email;
     registerUserToSaved.password = hashSync(registerUser.password, 10);
-    await this._userService.save(registerUserToSaved);
+    await this._userService.saveUser(registerUserToSaved);
     const user = this._userService.findByEmail(registerUserToSaved.email);
     if (!user) {
       new WinstonLogger().logger().info(`user not found`, { user });

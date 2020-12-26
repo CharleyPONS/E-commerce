@@ -10,7 +10,7 @@ export class RegisterMiddleware implements IMiddleware {
     const result = await this._userService.findByEmail(ctx.request.body.email);
     if (result) {
       new WinstonLogger().logger().warn('email already use', { email: ctx.request.body.email });
-      return ctx.getResponse().status(500).send({ message: 'email already use' });
+      return ctx.getResponse().status(401).send({ message: 'email already use' });
     }
     return;
   }

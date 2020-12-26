@@ -1,0 +1,3 @@
+{"message":"Search a user with email charleypons@live.fr","level":"info"}
+{"user":{"email":"charleypons@live.fr","password":"$2b$10$1AcRXzDOaGPFXidMxXiBVOdJAGpyMI0za6OedmstDs9sMAxrGuqh6","dateUpdate":"Sat, 26 Dec 2020 04:47:38 GMT","name":null,"surname":null,"numberOrder":null,"token":null,"expiresIn":null,"id":13,"userId":"28e918a5-ccb1-41fd-9776-003c0914a53c"},"level":"info","message":"Save user succeed"}
+{"message":"Search a user with email charleypons@live.fr","level":"info"}
