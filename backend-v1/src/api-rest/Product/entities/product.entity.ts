@@ -23,6 +23,14 @@ export class ProductEntity {
   @Column({ type: 'varchar', length: '255' })
   name: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  title: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  mainDescription: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  optionalDescription: string;
   @Required()
   @Column({ type: 'varchar', length: '255' })
   @Enum(CATEGORIES)
