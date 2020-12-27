@@ -1,0 +1,77 @@
+<div fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+  <div fxFlex="50">
+    <img
+      class="product-image"
+      [src]="product?.imagePath"
+      alt="Ceci est l'image du produit"
+    />
+  </div>
+  <div fxLayout="column" fxFlex="50">
+    <div>
+      <h2>{{ product?.name }}</h2>
+      <div class="custom-line"></div>
+    </div>
+    <div *ngIf="product?.stock?.quantity > 1">
+      <p class="stock-available">Il y'a du stock pour ce produit</p>
+    </div>
+    <div *ngIf="product?.stock?.quantity < 1">
+      <p class="stock-unavailable">Rupture de stock pour ce produit</p>
+    </div>
+    <div>
+      <p>{{ product?.title }}</p>
+    </div>
+    <div>
+      <p>Taux de CBD: {{ product?.cbdRate }}%</p>
+    </div>
+    <div>
+      <p>Taux de THC: {{ product?.thcRate }}%</p>
+    </div>
+    <div [formGroup]="form">
+      <div
+        *ngIf="
+          product?.categories === Categories.RESINE ||
+          product?.categories === Categories.FLOWER
+        "
+      >
+        <mat-radio-group aria-label="Choisissez une quantité" fxLayout="column">
+          <div fxLayout="row">
+            <mat-radio-button
+              fxFlex="40"
+              value="1"
+              *ngIf="product?.price?.basePrice"
+              >1 gramme {{ product?.price?.basePrice }}€</mat-radio-button
+            >
+            <mat-radio-button
+              fxFlex="40"
+              value="3"
+              *ngIf="product?.price?.priceForThreeGramme"
+              >3 grammes {{ product?.price?.priceForThreeGramme }}€
+            </mat-radio-button>
+          </div>
+          <div fxLayout="row">
+            <mat-radio-button
+              fxFlex="40"
+              value="5"
+              *ngIf="product?.price?.priceForFiveGramme"
+              >5 grammes
+              {{ product?.price?.priceForFiveGramme }}€</mat-radio-button
+            >
+            <mat-radio-button
+              fxFlex="40"
+              value="10"
+              *ngIf="product?.price?.priceForTenGramme"
+              >10 grammes
+              {{ product?.price?.priceForTenGramme }}€</mat-radio-button
+            >
+          </div>
+        </mat-radio-group>
+      </div>
+      <div>
+        <input type="number" value="1" />
+      </div>
+    </div>
+    <div>
+      <app-add-to-cart [positionButton]="'right'"></app-add-to-cart>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
@@ -10,7 +19,7 @@ import { cloneDeep } from 'lodash';
   templateUrl: './product-sort-by.component.html',
   styleUrls: ['./product-sort-by.component.scss'],
 })
-export class ProductSortByComponent implements OnInit {
+export class ProductSortByComponent implements OnChanges, OnInit, OnDestroy {
   @Input() product: Product[];
   private cloneProduct: Product[];
   public form: FormGroup;
@@ -18,6 +27,9 @@ export class ProductSortByComponent implements OnInit {
   @Output() productSort = new EventEmitter();
   constructor(private _formBuilder: FormBuilder) {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.cloneProduct = cloneDeep(this.product);
+  }
   ngOnInit(): void {
     this.cloneProduct = cloneDeep(this.product);
     this.form = this._formBuilder.group({
@@ -25,18 +37,18 @@ export class ProductSortByComponent implements OnInit {
     });
 
     this.form.valueChanges.pipe(takeUntil(this._onDestroy$)).subscribe(() => {
-      switch (this.form.value) {
-        case '1':
+      switch (this.form.value.sortBy) {
+        case 1:
           this.sortByPriceIncreasing();
           break;
-        case '2':
+        case 2:
           this.sortByPriceDescending();
           break;
-        case '3':
+        case 3:
           this.sortByCBDDescending();
           break;
 
-        case '4':
+        case 4:
           this.sortByCBDIncreasing();
           break;
       }

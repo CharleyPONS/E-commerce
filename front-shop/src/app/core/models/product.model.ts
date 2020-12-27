@@ -13,6 +13,9 @@ export class Product {
   public dateUpdate: string;
   public stock?: ProductStock;
   public imagePath?: string;
+  public mainDescription?: string;
+  public optionalDescription?: string;
+  public title?: string;
 
   constructor(data: Product) {
     this.id = data?.id;
@@ -24,6 +27,9 @@ export class Product {
     this.dateUpdate = data?.dateUpdate;
     this.stock = new ProductStock(data?.stock as ProductStock);
     this.imagePath = `../assets/product/${data?.imagePath}`;
+    this.mainDescription = data?.mainDescription;
+    this.optionalDescription = data?.optionalDescription;
+    this.title = data?.title;
   }
 
   public clone() {

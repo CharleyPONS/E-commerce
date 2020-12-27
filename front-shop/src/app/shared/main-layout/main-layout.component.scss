@@ -1,3 +1,8 @@
+@import "~src/styles";
 .main-content{
   margin-top: 25px;
+  @include mq($from: desktopAd){
+    margin-left: 10%;
+    margin-right: 10%;
+  }
 }
