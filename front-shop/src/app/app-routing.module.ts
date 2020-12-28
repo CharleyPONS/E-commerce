@@ -19,6 +19,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./product/product.module').then((m) => m.ProductModule),
       },
+      {
+        path: 'order',
+        loadChildren: () =>
+          import('./order/order.module').then((m) => m.OrderModule),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

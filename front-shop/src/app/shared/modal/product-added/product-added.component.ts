@@ -14,7 +14,7 @@ export class ProductAddedComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ProductAddedComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ProductAdded,
-    private _cartService: CartService
+    private _cartService: CartService<CartItemCustom>
   ) {}
 
   ngOnInit(): void {
@@ -22,10 +22,10 @@ export class ProductAddedComponent implements OnInit {
   }
 
   public close() {
-    this.dialogRef.close({ goCart: true });
+    this.dialogRef.close({ close: true });
   }
 
   public goCart() {
-    this.dialogRef.close({ close: true });
+    this.dialogRef.close({ goCart: true });
   }
 }

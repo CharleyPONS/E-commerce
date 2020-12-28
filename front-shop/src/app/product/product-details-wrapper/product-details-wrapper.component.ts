@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
 import { Categories } from '../../core/enum/categories.enum';
@@ -34,7 +35,8 @@ export class ProductDetailsWrapperComponent
 
   constructor(
     private _formBuilder: FormBuilder,
-    private readonly _matDialog: MatDialog
+    private readonly _matDialog: MatDialog,
+    private _router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -68,14 +70,17 @@ export class ProductDetailsWrapperComponent
         .open(ProductAddedComponent, { data: productAdded })
         .afterClosed()
         .pipe(takeUntil(this._onDestroy$))
-        .subscribe((res: any) => {
-          if (res?.goCart) {
-            //TODO ROUTER LINK TO CART
-          }
-          if (res?.close) {
+        .subscribe(
+          async (res: any): Promise<any> => {
+            if (res?.goCart) {
+              return this._router.navigateByUrl('/order/panier');
+            }
+            if (!res?.close) {
+              return;
+            }
             return;
           }
-        });
+        );
     }
   }
 }
