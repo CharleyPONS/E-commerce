@@ -15,8 +15,8 @@ export class CartSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.icon = '../../../assets/shopping_bag.svg';
-    this.itemsText = 'Panier';
+    this.itemsText = '1 produit';
     this.noItemsText = '';
-    this.manyItemsText = '';
+    this.manyItemsText = '# produits';
   }
 }

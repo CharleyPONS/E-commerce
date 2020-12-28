@@ -1,5 +1,9 @@
+import { MatInputCounterModule } from '@angular-material-extensions/input-counter';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ShoppingCartModule } from 'ng-shopping-cart';
+import { ProductAdded } from '../core/models/productAdded.model';
+import { ProductAddedComponent } from '../shared/modal/product-added/product-added.component';
 import { SharedModule } from '../shared/shared.module';
 import { FlowerComponent } from './flower/flower.component';
 import { routing } from './product.routing';
@@ -24,8 +28,16 @@ import { ProductDetailsWrapperComponent } from './product-details-wrapper/produc
     LiquidDetailsComponent,
     ProductDetailsWrapperComponent,
   ],
-  imports: [CommonModule, routing, CommonModule, SharedModule],
+  imports: [
+    CommonModule,
+    routing,
+    CommonModule,
+    SharedModule,
+    MatInputCounterModule,
+    ShoppingCartModule,
+  ],
   exports: [],
   providers: [],
+  entryComponents: [ProductAddedComponent],
 })
 export class ProductModule {}

@@ -33,45 +33,62 @@
           product?.categories === Categories.FLOWER
         "
       >
-        <mat-radio-group aria-label="Choisissez une quantité" fxLayout="column">
-          <div fxLayout="row">
-            <mat-radio-button
-              fxFlex="40"
-              value="1"
-              *ngIf="product?.price?.basePrice"
-              >1 gramme {{ product?.price?.basePrice }}€</mat-radio-button
-            >
-            <mat-radio-button
-              fxFlex="40"
-              value="3"
-              *ngIf="product?.price?.priceForThreeGramme"
-              >3 grammes {{ product?.price?.priceForThreeGramme }}€
-            </mat-radio-button>
-          </div>
-          <div fxLayout="row">
-            <mat-radio-button
-              fxFlex="40"
-              value="5"
-              *ngIf="product?.price?.priceForFiveGramme"
-              >5 grammes
-              {{ product?.price?.priceForFiveGramme }}€</mat-radio-button
-            >
-            <mat-radio-button
-              fxFlex="40"
-              value="10"
-              *ngIf="product?.price?.priceForTenGramme"
-              >10 grammes
-              {{ product?.price?.priceForTenGramme }}€</mat-radio-button
-            >
-          </div>
-        </mat-radio-group>
+        <mat-form-field
+          class="app-margin-tp-8"
+          appearance="fill"
+          style="width: 37%"
+        >
+          <mat-label>Nombre de gramme</mat-label>
+          <mat-select
+            disableRipple
+            formControlName="grammeQuantity"
+            [value]="1"
+          >
+            <mat-option *ngIf="product?.price?.basePrice" [value]="1">
+              1 gramme {{ product?.price?.basePrice }}€ ({{
+                product?.price?.basePrice
+              }}€/g)
+            </mat-option>
+            <mat-option *ngIf="product?.price?.priceForThreeGramme" [value]="3">
+              3 grammes {{ product?.price?.priceForThreeGramme }}€ ({{
+                priceForThree
+              }}€/g)
+            </mat-option>
+            <mat-option *ngIf="product?.price?.priceForFiveGramme" [value]="5">
+              5 grammes {{ product?.price?.priceForFiveGramme }}€ ({{
+                priceForFive
+              }}€/g)
+            </mat-option>
+            <mat-option *ngIf="product?.price?.priceForTenGramme" [value]="10">
+              10 grammes {{ product?.price?.priceForTenGramme }}€ ({{
+                priceForTen
+              }}€/g)
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <div>
-        <input type="number" value="1" />
+      <div class="quantity-custom">
+        <mat-input-counter
+          class="quantity-custom"
+          formControlName="inputCounter"
+          [_value]="1"
+          [min]="1"
+          [max]="100"
+          [step]="1"
+          [label]="'Quantité'"
+          [placeholder]="'Quantité'"
+        >
+        </mat-input-counter>
       </div>
     </div>
-    <div>
-      <app-add-to-cart [positionButton]="'right'"></app-add-to-cart>
+    <div class="app-margin-tp-8">
+      <app-add-to-cart
+        [positionButton]="'right'"
+        [product]="product"
+        [form]="form"
+        (productAdded)="displayModalAddProduct($event)"
+      ></app-add-to-cart>
     </div>
+    <p *ngIf="setGrammeQuantity">Vous devez sélectionner un nombre de gramme</p>
   </div>
 </div>

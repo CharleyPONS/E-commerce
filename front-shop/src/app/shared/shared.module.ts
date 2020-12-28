@@ -9,6 +9,7 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { MaterialModule } from './material.module';
 import { CartSummaryComponent } from './cart-wrapper/cart-summary/cart-summary.component';
 import { AddToCartComponent } from './cart-wrapper/add-to-cart/add-to-cart.component';
+import { ProductAddedComponent } from './modal/product-added/product-added.component';
 
 @NgModule({
   imports: [
@@ -32,8 +33,14 @@ import { AddToCartComponent } from './cart-wrapper/add-to-cart/add-to-cart.compo
     RouterModule,
     AddToCartComponent,
     CartSummaryComponent,
+    ShoppingCartModule,
   ],
   providers: [],
-  declarations: [MainLayoutComponent, CartSummaryComponent, AddToCartComponent],
+  declarations: [
+    MainLayoutComponent,
+    CartSummaryComponent,
+    AddToCartComponent,
+    ProductAddedComponent,
+  ],
 })
 export class SharedModule {}

@@ -1,10 +1,11 @@
 <add-to-cart
   (added)="addToCart($event)"
-  [item]="cartItem"
+  [item]="items"
   [custom]="custom"
   [type]="type"
   [position]="position"
   [buttonText]="buttonText || 'Add to cart'"
+  [quantity]="quantity"
 >
   <button type="button" class="custom-button">Click to add</button>
 </add-to-cart>

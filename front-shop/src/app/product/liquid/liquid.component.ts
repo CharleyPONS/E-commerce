@@ -15,7 +15,9 @@ export class LiquidComponent implements OnInit {
   async ngOnInit(): Promise<any> {
     this.products = await this._productService.getAllProduct();
     console.log(this.products);
-    (this.products || []).map((v) => v.categories === Categories.ELIQUID);
+    this.products = (this.products || []).filter(
+      (v) => v.categories === Categories.ELIQUID
+    );
   }
 
   public productOrder(product: Product[]) {

@@ -82,6 +82,7 @@ $shop-app-theme: mat-light-theme((
   )
 ));
 
+
 html,
 body {
   margin: 0;
@@ -99,6 +100,11 @@ h1, h2, h3 {
   font-family: Oswald;
   font-size: 30px;
 }
+
+//p{
+//  margin: 0!important;
+//  padding: 0!important;
+//}
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -154,7 +160,7 @@ h1, h2, h3 {
 // Here we set the global css for all the cart component to avoid any conflict with the library
 .add-to-cart {
   .add-to-cart-button {
-    background-color: red;
+    background-color: #598e5d;
   }
 }
 
@@ -170,6 +176,20 @@ h1, h2, h3 {
   }
 }
 
+@for $i from 0 through 15 {
+  .app-margin-lt-#{4 * $i} {
+    margin-left: 4px * $i;
+  }
+  .app-margin-rt-#{4 * $i} {
+    margin-right: 4px * $i;
+  }
+  .app-margin-tp-#{4 * $i} {
+    margin-top: 4px * $i;
+  }
+  .app-margin-bt-#{4 * $i} {
+    margin-bottom: 4px * $i;
+  }
+}
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

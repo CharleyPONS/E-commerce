@@ -16,3 +16,12 @@
   height:1px;
   width: 50%;
 }
+
+.radio-custom{
+  margin-bottom: 15px;
+}
+
+::ng-deep mat-input-counter.quantity-custom > div{
+  place-content: flex-start !important;
+
+}

@@ -1,0 +1,16 @@
+<h2>Le produit a bien été ajouté</h2>
+<div fxLayout="column">
+  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+    <div>
+      <img [src]="productSelected?.photo" alt="photo du produit" />
+    </div>
+    <div fxLayout="column">
+      <p>{{ productSelected?.label }}</p>
+      <p>{{ productSelected?.cost }}</p>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutAlign="space-between center">
+    <button mat-button mat-stroked-button (click)="close()">Fermer</button>
+    <button mat-button mat-raised-button (click)="goCart()">Panier</button>
+  </div>
+</div>
