@@ -36,8 +36,8 @@ export class AddToCartComponent implements OnInit {
   }
 
   public addToCart(item) {
-    if (!item.identifier) {
-      this._cartService.clear();
+    if (item.identifier === 0) {
+      this._cartService.removeItem(item.identifier);
     }
     console.log('added', item);
     this.setProductOrdered();
@@ -55,11 +55,11 @@ export class AddToCartComponent implements OnInit {
     this.items.identifier = new Date().toString();
     this.items.label = this.product?.name;
     this.items.description = this.product?.mainDescription;
-    this.items.cost =
-      this._retrievePriceByBasePriceOrGramme(this.form?.value?.grammeQuantity) *
-        this.form?.value?.inputCounter || 1;
+    this.items.cost = this._retrievePriceByBasePriceOrGramme(
+      this.form?.value?.grammeQuantity
+    );
     this.items.photo = this.product?.imagePath;
-    this.items.quantity = this.form?.value?.inputCounter || 1;
+    this.items.amount = this.form?.value?.inputCounter || 1;
     this.quantity = this.form?.value?.inputCounter || 1;
     this.items.grammeNumber = this.form?.value?.grammeQuantity || false;
   }

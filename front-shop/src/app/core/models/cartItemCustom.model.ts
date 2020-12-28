@@ -52,7 +52,7 @@ export class CartItemCustom extends CartItem {
   }
 
   setQuantity(quantity: number): void {
-    this.quantity = quantity;
+    this.amount = quantity;
   }
 
   getImage(): string {

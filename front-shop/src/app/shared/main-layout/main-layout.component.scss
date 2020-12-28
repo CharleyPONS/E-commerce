@@ -1,8 +1,16 @@
 @import "~src/styles";
 .main-content{
   margin-top: 25px;
-  @include mq($from: desktopAd){
-    margin-left: 10%;
-    margin-right: 10%;
+  @include mq($from: wide){
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+  @include mq($until: wide){
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+  @include mq($until: desktop){
+    margin-left: 2%;
+    margin-right: 2%;
   }
 }

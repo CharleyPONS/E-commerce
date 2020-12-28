@@ -17,10 +17,12 @@ export class FlowerDetailsComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<any> {
-    const products: Product[] = await this._productService.getAllProduct();
-    (products || []).map((v) => v.categories === Categories.FLOWER);
-    const productIdFromRoute = this.route.snapshot.paramMap.get('productId');
-    products.filter((v) => v.name === productIdFromRoute);
+    const productIdFromRoute = this.route.snapshot.paramMap.get('flowerId');
+    const products: Product[] = (
+      (await this._productService.getAllProduct()) || []
+    )
+      .filter((v) => v.categories === Categories.FLOWER)
+      .filter((v) => v.name === productIdFromRoute);
     this.product = products[0];
   }
 }

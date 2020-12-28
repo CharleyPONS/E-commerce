@@ -5,7 +5,8 @@
 ></app-product-sort-by>
 <div
   fxLayout="row wrap"
-  fxLayoutAlign="space-between center"
+  fxLayoutAlign.gt-md="space-between center"
+  fxLayoutAlign.lt-md="space-around center"
   fxLayoutGap="15px grid"
 >
   <div *ngFor="let product of products">

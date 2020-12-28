@@ -1,3 +1,4 @@
+//TODO REFLECHIR A SPLI LE MENU EN DEUX AVEC ICONE PANIER ET MENU NAV
 import { Component, OnInit } from '@angular/core';
 import { CartService, CartItem } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../core/models/cartItemCustom.model';

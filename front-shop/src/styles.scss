@@ -175,6 +175,25 @@ h1, h2, h3 {
     font-size: 16px;
   }
 }
+.cart-list-view{
+  .cart-list-footer .cart-list-summary .cart-tax-summary {
+    display: none !important;
+  }
+  .cart-list-item .cart-list-value{
+    .cart-increase-button{
+      margin-right: 6px;
+      color: #598e5d;
+      border-color: #598e5d;
+    }
+    .cart-decrease-button{
+      margin-left: 6px;
+      color: #598e5d;
+      border-color: #598e5d;
+
+    }
+  }
+
+}
 
 @for $i from 0 through 15 {
   .app-margin-lt-#{4 * $i} {

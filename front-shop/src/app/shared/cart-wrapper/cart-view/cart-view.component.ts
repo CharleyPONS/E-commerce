@@ -13,6 +13,13 @@ export class CartViewComponent implements OnInit {
   public shipping = 0;
   public showImages = true;
   public useCustom = false;
+  public nameHeaderText = 'Nom du produit';
+  public priceHeaderText = 'Prix';
+  public quantityHeaderText = 'Quantité';
+  public totalFooterText = 'Total';
+  public shippingFooterText = 'Frais de livraison';
+  public emptyText = 'Votre panier est vide';
+
   constructor(private _cartService: CartService<CartItemCustom>) {}
 
   ngOnInit(): void {
