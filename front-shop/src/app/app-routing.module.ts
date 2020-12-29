@@ -26,7 +26,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./product/product.module').then((m) => m.ProductModule),
         data: {
-          title: 'Acceuil',
+          title: 'Produit',
         },
       },
       {
@@ -34,7 +34,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('./order/order.module').then((m) => m.OrderModule),
         data: {
-          title: 'Acceuil',
+          title: 'Commande',
         },
       },
     ],
