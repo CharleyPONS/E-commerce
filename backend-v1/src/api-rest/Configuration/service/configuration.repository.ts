@@ -8,7 +8,10 @@ import { ConfigurationType } from '../entities/configurationType.enum';
 export class ConfigurationRepository extends Repository<ConfigurationEntity> {
   async findByType(type: ConfigurationType): Promise<any> {
     try {
-      return this.find({ where: { configurationType: type } });
+      return this.find({
+        where: { configurationType: type },
+        relations: ['promotion', 'transporter']
+      });
     } catch (err) {
       new WinstonLogger().logger().warn(`Error retrieve configuration`, { error: err });
     }

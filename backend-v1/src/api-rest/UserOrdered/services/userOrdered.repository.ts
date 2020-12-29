@@ -1,9 +1,9 @@
 import { EntityRepository, FindConditions, Repository } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { WinstonLogger } from '../../../core/services/winstonLogger';
-import { UserOrderedEntity } from '../entities/userOrdered.entity';
 import { UserEntity } from '../../User/entities/user.entity';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { UserOrderedEntity } from '../entities/userOrdered.entity';
 
 @EntityRepository(UserOrderedEntity)
 export class UserOrderedRepository extends Repository<UserOrderedEntity> {

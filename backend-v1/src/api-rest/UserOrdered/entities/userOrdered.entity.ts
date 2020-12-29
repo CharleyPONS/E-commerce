@@ -40,7 +40,6 @@ export class UserOrderedEntity extends BaseEntity {
   @OneToMany(() => UserOrderedProductsEntity, userOrderedProduct => userOrderedProduct.userOrder, {
     cascade: true
   })
-  @JoinColumn()
   product: UserOrderedProductsEntity[];
 
   @Column()

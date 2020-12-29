@@ -9,13 +9,13 @@ import { ProductEntity } from '../../api-rest/Product/entities/product.entity';
 import { CATEGORIES, UNITY } from '../../api-rest/Product/entities/product.enum';
 import { ProductRepository } from '../../api-rest/Product/services/product.repository';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
+import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrdered.entity';
+import { UserOrderedProductsEntity } from '../../api-rest/UserOrdered/entities/userOrderedProducts.entity';
+import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
 import { WinstonLogger } from './winstonLogger';
-import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrdered.entity';
-import { UserOrderedProductsEntity } from '../../api-rest/UserOrdered/entities/userOrderedProducts.entity';
-import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';
 
 /**
  * Ce service est une validation côté serveur du prix de la commande pour éviter toute manipulation côté client du prix
@@ -185,18 +185,22 @@ export class StripePaymentService {
     const configuration: ConfigurationEntity = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
-    if (listOrder.reduction && configuration.isPromotion && configuration.promotionReduction) {
-      const beforePrice: number = amount;
-      amount = amount - amount * (configuration.promotionReduction / 100);
-      new WinstonLogger().logger().info('reduction have been apply for user', {
-        userId,
-        priceBefore: beforePrice,
-        newPrice: amount,
-        reduction: configuration.promotionReduction
-      });
-    }
+    // if (
+    //   listOrder.reduction &&
+    //   configuration?.promotion?.isPromotion &&
+    //   configuration?.promotion?.promotionReduction
+    // ) {
+    //   const beforePrice: number = amount;
+    //   amount = amount - amount * (configuration?.promotion?.promotionReduction / 100);
+    //   new WinstonLogger().logger().info('reduction have been apply for user', {
+    //     userId,
+    //     priceBefore: beforePrice,
+    //     newPrice: amount,
+    //     reduction: configuration?.promotion?.promotionReduction
+    //   });
+    // }
     new WinstonLogger().logger().info('price have been set for user', { userId, price: amount });
-
+    //TODO ajouter le cout de la livraison
     return { price: amount };
   }
 }

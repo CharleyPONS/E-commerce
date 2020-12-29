@@ -28,7 +28,6 @@ export class UserAddressEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   country: string;
 
-  @OneToOne(() => UserEntity, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  userId: UserEntity;
+  @Column({ type: 'uuid' })
+  userId: string;
 }

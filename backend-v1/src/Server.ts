@@ -1,3 +1,4 @@
+//TODO une fois que la base sera définitive et clean refaire une passe sur les nullable a true souvent mis pour cause de pas cassage de couille erreur compilation
 import '@tsed/ajv';
 import { PlatformApplication } from '@tsed/common';
 import { Configuration, Inject } from '@tsed/di';

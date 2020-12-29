@@ -3,14 +3,11 @@ import { NotFound } from '@tsed/exceptions';
 import { Returns, Summary } from '@tsed/schema';
 
 import { ProductEntity } from '../entities/product.entity';
+import { CATEGORIES } from '../entities/product.enum';
 import { ProductRepository } from '../services/product.repository';
 
-import { OfferCtrl } from './offerCtrl';
-import { CATEGORIES } from '../entities/product.enum';
-
 @Controller({
-  path: '/product',
-  children: [OfferCtrl]
+  path: '/product'
 })
 export class ProductCtrl {
   constructor(private _productRepository: ProductRepository) {}

@@ -16,7 +16,7 @@ export class UserOrderedProductsEntity extends BaseEntity {
   type: CATEGORIES;
 
   @Required()
-  @Column({ type: 'varchar', length: '255'})
+  @Column({ type: 'varchar', length: '255' })
   productName: string;
 
   @Required()
@@ -29,7 +29,6 @@ export class UserOrderedProductsEntity extends BaseEntity {
   @Enum(UNITY)
   unityMeasure: UNITY;
 
-  @Allow(null)
   @ManyToOne(() => UserOrderedEntity, userOrdered => userOrdered.product)
   userOrder: UserOrderedEntity;
 }

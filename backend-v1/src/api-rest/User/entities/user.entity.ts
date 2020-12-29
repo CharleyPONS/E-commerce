@@ -6,6 +6,7 @@ import {
   Column,
   Entity,
   Generated,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -23,6 +24,7 @@ export class UserEntity extends BaseEntity {
   userId: string;
 
   @OneToOne(() => UserAddressEntity, { cascade: true })
+  @JoinColumn()
   address: UserAddressEntity;
 
   @Column({ type: 'varchar', length: '255', nullable: true })
