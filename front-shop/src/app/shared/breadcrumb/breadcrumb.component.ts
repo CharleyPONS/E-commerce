@@ -33,6 +33,8 @@ export class BreadcrumbComponent implements OnInit {
     url: string = '',
     breadcrumbs: IBreadCrumb[] = []
   ): IBreadCrumb[] {
+    console.log(route.snapshot);
+    console.log(route);
     if (!route?.routeConfig?.data?.breadcrumb && !route?.routeConfig?.data) {
       if (route.firstChild) {
         return this.buildBreadCrumb(route.firstChild);
@@ -57,10 +59,13 @@ export class BreadcrumbComponent implements OnInit {
       if (route?.routeConfig?.data?.firstBreadcrumb && !isDynamicRoute) {
         label = route?.routeConfig?.data?.firstBreadcrumb;
       }
-      if (isDynamicRoute && !!route.snapshot) {
+      if (isDynamicRoute) {
         const paramName = v.split(':')[1];
-        path = path.replace(v, route.snapshot.params[paramName]);
-        label = route.snapshot.params[paramName];
+        path = path.replace(
+          v,
+          route?.snapshot?.params[paramName] || route?.params
+        );
+        label = route?.snapshot?.params[paramName] || route?.params;
       }
       nextUrl = v ? `${url}/${isDynamicRoute ? path : v}` : url;
 
