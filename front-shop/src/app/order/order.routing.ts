@@ -7,6 +7,9 @@ const routes: Routes = [
   {
     path: 'panier',
     component: OrderCartWrapperComponent,
+    data: {
+      breadcrumb: 'Votre panier',
+    },
   },
 ];
 

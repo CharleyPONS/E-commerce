@@ -1,27 +1,26 @@
-.product-image{
-  width: 70% ;
+.product-image {
+  width: 70%;
   height: auto;
-  border: 1px solid #598e5d;
+  border: 1px solid #bae2c2;
 }
 
-.stock-available{
+.stock-available {
   color: #88bf8a;
 }
-.stock-unavailable{
+.stock-unavailable {
   color: red;
 }
 
-.custom-line{
+.custom-line {
   background-color: #598e5d;
-  height:1px;
+  height: 1px;
   width: 50%;
 }
 
-.radio-custom{
+.radio-custom {
   margin-bottom: 15px;
 }
 
-::ng-deep mat-input-counter.quantity-custom > div{
+::ng-deep mat-input-counter.quantity-custom > div {
   place-content: flex-start !important;
-
 }

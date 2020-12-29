@@ -50,9 +50,6 @@ export class AddToCartComponent implements OnInit {
       this.productAdded.emit(
         new ProductAdded({ isAdded: true, identifier: this.items?.identifier })
       );
-      this._snackBar.open('Produit ajouté au panier', 'Ajout', {
-        duration: 2000,
-      });
     }
     console.log('cart items', this._cartService.getItems());
   }

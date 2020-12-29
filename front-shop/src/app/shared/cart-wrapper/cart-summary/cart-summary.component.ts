@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
@@ -26,6 +32,9 @@ export class CartSummaryComponent implements OnInit {
     this.noItemsText = '';
     this.manyItemsText = '';
     this.product = this._cartService.getItems()?.length;
+    this._cartService.onChange.subscribe(() => {
+      this.product = this._cartService.getItems()?.length;
+    });
   }
 
   public async goCart(): Promise<any> {

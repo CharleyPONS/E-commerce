@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CartViewDisplay, CartService } from 'ng-shopping-cart';
+import { CartService } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
 
 @Component({
@@ -8,7 +8,7 @@ import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
   styleUrls: ['./cart-view.component.scss'],
 })
 export class CartViewComponent implements OnInit {
-  public display: CartViewDisplay = 'table';
+  public display = 'responsive';
   public tax = 0;
   public shipping = 0;
   public showImages = true;

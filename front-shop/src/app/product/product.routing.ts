@@ -10,27 +10,48 @@ const routes: Routes = [
   {
     path: 'flower',
     component: FlowerComponent,
+    data: {
+      breadcrumb: 'Nos fleurs',
+    },
   },
   {
     path: 'flower/:flowerId',
     component: FlowerDetailsComponent,
+    data: {
+      firstBreadcrumb: 'Nos fleurs',
+      breadcrumb: '',
+    },
   },
   {
     path: 'hash',
     component: HashComponent,
+    data: {
+      breadcrumb: 'Nos Hash',
+    },
   },
   {
     path: 'hash/:hashId',
     component: FlowerDetailsComponent,
+    data: {
+      firstBreadcrumb: 'Nos Hash',
+      breadcrumb: '',
+    },
   },
 
   {
     path: 'e-liquides',
     component: LiquidComponent,
+    data: {
+      breadcrumb: 'Nos e-liquides',
+    },
   },
   {
     path: 'e-liquides/:e-liquidesId',
     component: FlowerDetailsComponent,
+    data: {
+      firstBreadcrumb: 'Nos e-liquides',
+      breadcrumb: '',
+    },
   },
 ];
 

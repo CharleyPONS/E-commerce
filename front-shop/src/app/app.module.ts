@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ShoppingCartModule } from 'ng-shopping-cart';
+import { PpBreadcrumbsModule } from 'pp-breadcrumbs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
     FormsModule,
     LoginModule,
     ReactiveFormsModule,
+    PpBreadcrumbsModule,
     ShoppingCartModule.forRoot({
       itemType: CartItemCustom,
       serviceType: 'localStorage',

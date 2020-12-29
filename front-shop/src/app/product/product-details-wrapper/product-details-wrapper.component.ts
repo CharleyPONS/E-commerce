@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
@@ -36,7 +37,8 @@ export class ProductDetailsWrapperComponent
   constructor(
     private _formBuilder: FormBuilder,
     private readonly _matDialog: MatDialog,
-    private _router: Router
+    private _router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
@@ -66,8 +68,13 @@ export class ProductDetailsWrapperComponent
 
   public displayModalAddProduct(productAdded: ProductAdded) {
     if (productAdded.isAdded) {
+      this._snackBar.open('Produit ajouté au panier', 'Ajout', {
+        duration: 2000,
+      });
       this._matDialog
-        .open(ProductAddedComponent, { data: productAdded })
+        .open(ProductAddedComponent, {
+          data: productAdded,
+        })
         .afterClosed()
         .pipe(takeUntil(this._onDestroy$))
         .subscribe(

@@ -7,22 +7,35 @@ const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-
+    data: {
+      title: 'Acceuil',
+      breadcrumb: 'Acceuil',
+    },
     children: [
       {
         path: 'login',
         loadChildren: () =>
           import('./login/login.module').then((m) => m.LoginModule),
+        data: {
+          title: 'Connexion',
+          breadcrumb: 'Connexion',
+        },
       },
       {
         path: 'product',
         loadChildren: () =>
           import('./product/product.module').then((m) => m.ProductModule),
+        data: {
+          title: 'Acceuil',
+        },
       },
       {
         path: 'order',
         loadChildren: () =>
           import('./order/order.module').then((m) => m.OrderModule),
+        data: {
+          title: 'Acceuil',
+        },
       },
     ],
   },

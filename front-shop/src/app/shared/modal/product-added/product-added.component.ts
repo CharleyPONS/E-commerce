@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CartService } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
-import { ProductAdded } from '../../../core/models/productAdded.model';
 
 @Component({
   selector: 'app-product-added',
@@ -13,7 +12,7 @@ export class ProductAddedComponent implements OnInit {
   public productSelected: CartItemCustom;
   constructor(
     public dialogRef: MatDialogRef<ProductAddedComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ProductAdded,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private _cartService: CartService<CartItemCustom>
   ) {}
 
