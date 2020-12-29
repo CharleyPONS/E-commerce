@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartService } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
 import { Product } from '../../../core/models/product.model';
@@ -21,7 +22,10 @@ export class AddToCartComponent implements OnInit {
   public position: string;
   public buttonText: string = 'Ajouter au panier';
   public quantity: number;
-  constructor(private _cartService: CartService<CartItemCustom>) {
+  constructor(
+    private _cartService: CartService<CartItemCustom>,
+    private _snackBar: MatSnackBar
+  ) {
     this.items = new CartItemCustom();
   }
 
@@ -46,6 +50,9 @@ export class AddToCartComponent implements OnInit {
       this.productAdded.emit(
         new ProductAdded({ isAdded: true, identifier: this.items?.identifier })
       );
+      this._snackBar.open('Produit ajouté au panier', 'Ajout', {
+        duration: 2000,
+      });
     }
     console.log('cart items', this._cartService.getItems());
   }

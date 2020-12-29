@@ -1,4 +1,37 @@
-<div class="size-toolbar" STYLE="height: 100%">
+<div *ngIf="promotion" class="toolbar">
+  <span
+    >Profiter de {{ promotion.promotionReduction }}% de réduction sur tout le
+    site avec le code
+    <span class="code">"{{ promotion.codePromotion }}"</span></span
+  >
+</div>
+<div fxLayout="row">
+  <div fxFlex="88" class="app-margin-lt-6">
+    <img
+      fxHide.gt-sm
+      class="logo-site"
+      src="../../../assets/logo.jpg"
+      alt="logo du site"
+    />
+  </div>
+  <div
+    fxFlex="12"
+    fxShow="true"
+    fxHide.gt-sm
+    fxFlex.gt-sm="5"
+    fxFlex.lt-sm="20"
+    class="app-margin-tp-6"
+  >
+    <div class="bloc-button-custom">
+      <button mat-mini-fab class="button-custom" aria-label="Inscription">
+        <a [routerLink]="['login']">
+          <mat-icon color="warn">perm_identity</mat-icon>
+        </a>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="size-toolbar" style="height: 100%">
   <mat-toolbar color="primary">
     <mat-toolbar-row>
       <div fxFlex="30">
@@ -10,6 +43,14 @@
         >
           <mat-icon>menu</mat-icon>
         </button>
+        <div>
+          <img
+            fxHide.lt-md
+            class="logo-site"
+            src="../../../assets/logo.jpg"
+            alt="logo du site"
+          />
+        </div>
       </div>
       <div fxFlex="50">
         <div fxShow="true" fxHide.lt-md>
@@ -21,7 +62,7 @@
           >
         </div>
       </div>
-      <div fxFlex.gt-sm="5" fxFlex.lt-sm="20">
+      <div fxShow="true" fxHide.lt-md fxFlex.gt-sm="5" fxFlex.lt-sm="20">
         <div class="bloc-button-custom">
           <button mat-mini-fab class="button-custom" aria-label="Inscription">
             <a [routerLink]="['login']">
@@ -30,7 +71,7 @@
           </button>
         </div>
       </div>
-      <div fxFlex.gt-sm="10" fxFlex.lt-sm="20">
+      <div fxFlex.gt-sm="10" fxFlex.lt-sm="50">
         <app-cart-summary></app-cart-summary>
       </div>
     </mat-toolbar-row>

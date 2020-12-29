@@ -1,26 +1,34 @@
 import { AuthMethod } from '../enum/authMethod.enum';
-import { Transporter } from '../enum/transporter.enum';
+import { ConfigPromotion } from './configPromotion.model';
+import { ConfigTransporter } from './configTransporter.model';
 
 export class Config {
   public id: number;
   public auth: AuthMethod[];
   public configurationType: string;
-  public transporter: Transporter[];
-  public isPromotion?: boolean;
-  public promotionReduction?: number;
+  public transporter: ConfigTransporter[];
+  public minPriceFreeShipment: number;
+  public baseShipmentPrice: number;
+  public promotion?: ConfigPromotion[];
   public sponsorship?: boolean;
-  public dueDatePromotion?: string;
   public dueDateSponsorship?: string;
 
-  constructor(data?: any) {
+  constructor(data?: Config) {
     this.id = data?.id;
     this.auth = data?.auth;
     this.configurationType = data?.configurationType;
-    this.transporter = data?.transporter;
-    this.isPromotion = data?.isPromotion;
-    this.promotionReduction = data?.promotionReduction;
     this.sponsorship = data?.sponsorship;
-    this.dueDatePromotion = data?.dueDatePromotion;
+    this.minPriceFreeShipment = data?.minPriceFreeShipment;
     this.dueDateSponsorship = data?.dueDateSponsorship;
+    const transporter: ConfigTransporter[] = [];
+    (data?.transporter || []).forEach((v) => {
+      transporter.push(new ConfigTransporter(v));
+    });
+    this.transporter = transporter;
+    const promotion: ConfigTransporter[] = [];
+    (data?.promotion || []).forEach((v) => {
+      promotion.push(new ConfigPromotion(v));
+    });
+    this.promotion = promotion;
   }
 }

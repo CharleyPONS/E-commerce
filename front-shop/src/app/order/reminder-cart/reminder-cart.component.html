@@ -1,0 +1,44 @@
+<mat-card>
+  <div fxLayout="column">
+    <h2>Récapitulatif</h2>
+    <form [formGroup]="form" *ngIf="configuration?.promotion">
+      <mat-form-field class="field">
+        <mat-label>Code de réduction</mat-label>
+        <input matInput placeholder="Mon code" formControlName="reduction"
+      /></mat-form-field>
+      <mat-error *ngIf="codeInvalid"> Votre code n'est pas valide </mat-error>
+      <button
+        mat-button
+        mat-raised-button
+        [disabled]="this.form.invalid"
+        (click)="validateForm()"
+        class="button-field"
+      >
+        Valider
+      </button>
+    </form>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <p>Total des produits:</p>
+      <p>{{ totalWithoutShipping }}€</p>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <p>Réduction:</p>
+      <p>{{ reduction || 0 }}€</p>
+    </div>
+    <mat-card
+      class="card-order"
+      *ngIf="total < configuration?.minPriceFreeShipment"
+    >
+      Plus que {{ configuration?.minPriceFreeShipment - total }}€ d'achat pour
+      profiter de la livraison gratuite
+    </mat-card>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <p>Frais de livraison:</p>
+      <p>{{ baseShipment }}€</p>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <p>Total Panier:</p>
+      <p>{{ total }}€</p>
+    </div>
+  </div>
+</mat-card>

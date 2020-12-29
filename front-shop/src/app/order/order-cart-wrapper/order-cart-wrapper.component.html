@@ -1,5 +1,15 @@
-<div fxLayout="row wrap" fxLayoutAlign="center">
-  <div fxFlex="50">
-    <app-cart-view></app-cart-view>
+<div
+  fxLayout.gt-md="row"
+  fxLayout.lt-md="column"
+  fxLayoutAlign="center"
+  fxLayoutGap="10px"
+>
+  <div fxFlex.gt-md="50" class="size-container">
+    <mat-card>
+      <app-cart-view></app-cart-view>
+    </mat-card>
+  </div>
+  <div fxFlex.gt-md="50" class="size-container">
+    <app-reminder-cart></app-reminder-cart>
   </div>
 </div>

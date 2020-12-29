@@ -1,6 +1,7 @@
-//TODO  JARTER L'ICONE AVEC UN DISPLAY NONE FOUTRE UNE ICONE
-// MAISON ET UN ROUTER AU CLICK SUR LE APNIER FOUTRE UNE CHIPS AVEC LE NOMBRE DE TRUC COMMANDER
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CartService } from 'ng-shopping-cart';
+import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
 
 @Component({
   selector: 'app-cart-summary',
@@ -12,13 +13,22 @@ export class CartSummaryComponent implements OnInit {
   public itemsText: string;
   public noItemsText: string;
   public manyItemsText: string;
+  public product: number = 0;
 
-  constructor() {}
+  constructor(
+    private _router: Router,
+    private _cartService: CartService<CartItemCustom>
+  ) {}
 
   ngOnInit(): void {
     this.icon = '../../../assets/shopping_bag.svg';
-    this.itemsText = '1 produit';
+    this.itemsText = '';
     this.noItemsText = '';
-    this.manyItemsText = '# produits';
+    this.manyItemsText = '';
+    this.product = this._cartService.getItems()?.length;
+  }
+
+  public async goCart(): Promise<any> {
+    await this._router.navigateByUrl('/order/panier');
   }
 }

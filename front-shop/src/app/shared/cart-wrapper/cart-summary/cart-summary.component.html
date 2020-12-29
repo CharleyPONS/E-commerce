@@ -1,7 +1,22 @@
-<cart-summary
-  [icon]="icon"
-  [oneItemText]="itemsText"
-  [noItemsText]="noItemsText"
-  [manyItemsText]="manyItemsText"
->
-</cart-summary>
+<div fxLayout="row" class="container-position">
+  <cart-summary
+    [icon]="icon"
+    [oneItemText]="itemsText"
+    [noItemsText]="noItemsText"
+    [manyItemsText]="manyItemsText"
+  >
+  </cart-summary>
+  <a
+    (click)="goCart()"
+    matBadge="{{ product }}"
+    matBadgePosition="after"
+    matBadgeColor="warn"
+    ><img
+      matBadge="8"
+      matBadgePosition="before"
+      matBadgeColor="warn"
+      src="../../../../assets/shopping-cart.svg"
+      alt="cart-icon"
+      class="cart-image"
+  /></a>
+</div>

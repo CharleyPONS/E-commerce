@@ -19,7 +19,7 @@ export class UserOrdered {
     this.dateUpdate = data?.dateUpdate;
     const product: UserOrderedProducts[] = [];
     (data?.product || []).forEach((v) => {
-      product.concat(new UserOrderedProducts(v));
+      product.push(new UserOrderedProducts(v));
     });
     this.product = product;
     this.product = data?.product;

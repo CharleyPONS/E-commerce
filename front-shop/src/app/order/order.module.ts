@@ -5,9 +5,10 @@ import { ShoppingCartModule } from 'ng-shopping-cart';
 import { SharedModule } from '../shared/shared.module';
 import { routing } from './order.routing';
 import { OrderCartWrapperComponent } from './order-cart-wrapper/order-cart-wrapper.component';
+import { ReminderCartComponent } from './reminder-cart/reminder-cart.component';
 
 @NgModule({
-  declarations: [OrderCartWrapperComponent],
+  declarations: [OrderCartWrapperComponent, ReminderCartComponent],
   imports: [
     CommonModule,
     routing,

@@ -6,6 +6,7 @@ export const environment = {
   apiPath: '/api/rest',
   apiUrl: 'http://0.0.0.0:5000',
   production: false,
+  activePromotion: 'nouveau client',
 };
 
 /*

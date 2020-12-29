@@ -8,7 +8,7 @@ import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
   styleUrls: ['./cart-view.component.scss'],
 })
 export class CartViewComponent implements OnInit {
-  public display: CartViewDisplay = 'responsive-table';
+  public display: CartViewDisplay = 'table';
   public tax = 0;
   public shipping = 0;
   public showImages = true;
@@ -19,11 +19,16 @@ export class CartViewComponent implements OnInit {
   public totalFooterText = 'Total';
   public shippingFooterText = 'Frais de livraison';
   public emptyText = 'Votre panier est vide';
+  public numberItem: number = 0;
+  public total: number = 0;
 
   constructor(private _cartService: CartService<CartItemCustom>) {}
 
   ngOnInit(): void {
     this.tax = this._cartService.getTaxRate();
     this.shipping = this._cartService.getShipping();
+    this.numberItem = this._cartService.getItems()?.length;
+    this.total =
+      this._cartService.totalCost() - this._cartService.getShipping() || 0;
   }
 }

@@ -1,16 +1,38 @@
 @import "~src/styles";
-.main-content{
+.main-content {
   margin-top: 25px;
-  @include mq($from: wide){
+  @include mq($from: wide) {
     margin-left: 8%;
     margin-right: 8%;
   }
-  @include mq($until: wide){
+  @include mq($until: wide) {
     margin-left: 4%;
     margin-right: 4%;
   }
-  @include mq($until: desktop){
+  @include mq($until: desktop) {
     margin-left: 2%;
     margin-right: 2%;
   }
+}
+.toolbar {
+  width: 100%;
+  background-color: #88bf8a;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.1em;
+  font-family: Avenir;
+  span {
+    width: 100%;
+
+    text-align: center;
+    margin: auto;
+    word-wrap: break-word;
+  }
+  .code {
+    font-weight: bold;
+  }
+}
+.logo-site {
+  width: 50px;
+  margin-top: 6px;
 }
