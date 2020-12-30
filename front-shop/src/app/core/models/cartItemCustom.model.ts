@@ -10,6 +10,8 @@ export class CartItemCustom extends CartItem {
   public photo: string;
   public quantity: number;
   public grammeNumber: number | boolean;
+  public totalWithReduction: number;
+  public reduction: number;
 
   constructor(itemData: any = {}) {
     super();
@@ -23,6 +25,8 @@ export class CartItemCustom extends CartItem {
       photo,
       quantity,
       grammeNumber,
+      totalWithReduction,
+      reduction,
     } = itemData;
     this.identifier = identifier || 0;
     this.label = label || '';
@@ -33,6 +37,8 @@ export class CartItemCustom extends CartItem {
     this.photo = photo || '';
     this.quantity = quantity || 1;
     this.grammeNumber = grammeNumber || 0;
+    this.totalWithReduction = totalWithReduction || 0;
+    this.reduction = reduction || 0;
   }
 
   getId(): any {
@@ -64,5 +70,21 @@ export class CartItemCustom extends CartItem {
   }
   setAmount(quantity: number): void {
     this.amount = this.cost * quantity;
+  }
+
+  getReduction() {
+    return this.reduction;
+  }
+
+  setReduction(reduction: number) {
+    return (this.reduction = reduction);
+  }
+
+  getTotalWithReduction() {
+    return this.totalWithReduction;
+  }
+
+  setTotalWithReduction(total: number) {
+    return (this.totalWithReduction = total);
   }
 }

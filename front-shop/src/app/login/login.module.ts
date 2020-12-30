@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
     MaterialModule,
   ],
 
-  exports: [],
+  exports: [MainWrapperComponent, ConnectionComponent, RegistrationComponent],
   providers: [],
   declarations: [
     MainWrapperComponent,

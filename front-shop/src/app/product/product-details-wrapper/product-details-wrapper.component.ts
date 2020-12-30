@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
 import { Categories } from '../../core/enum/categories.enum';
-import { CartItemCustom } from '../../core/models/cartItemCustom.model';
 import { Product } from '../../core/models/product.model';
 import { ProductAdded } from '../../core/models/productAdded.model';
 import { ProductAddedComponent } from '../../shared/modal/product-added/product-added.component';

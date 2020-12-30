@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CartService } from 'ng-shopping-cart';
 import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
 
@@ -8,6 +8,7 @@ import { CartItemCustom } from '../../../core/models/cartItemCustom.model';
   styleUrls: ['./cart-view.component.scss'],
 })
 export class CartViewComponent implements OnInit {
+  @Input() isOnProcessPayment: boolean = false;
   public display = 'responsive';
   public tax = 0;
   public shipping = 0;

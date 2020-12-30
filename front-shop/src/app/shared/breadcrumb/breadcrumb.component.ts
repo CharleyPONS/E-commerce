@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { distinctUntilChanged, filter } from 'rxjs/internal/operators';
+import { Subject } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  takeUntil,
+} from 'rxjs/internal/operators';
 export interface IBreadCrumb {
   label: string;
   url: string;
@@ -10,8 +15,9 @@ export interface IBreadCrumb {
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss'],
 })
-export class BreadcrumbComponent implements OnInit {
+export class BreadcrumbComponent implements OnDestroy, OnInit {
   public breadcrumbs: IBreadCrumb[];
+  private _onDestroy$ = new Subject();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.breadcrumbs = this.buildBreadCrumb(this.activatedRoute.root);
@@ -28,13 +34,15 @@ export class BreadcrumbComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this._onDestroy$.next();
+  }
+
   buildBreadCrumb(
     route: ActivatedRoute,
     url: string = '',
     breadcrumbs: IBreadCrumb[] = []
   ): IBreadCrumb[] {
-    console.log(route.snapshot);
-    console.log(route);
     if (!route?.routeConfig?.data?.breadcrumb && !route?.routeConfig?.data) {
       if (route.firstChild) {
         return this.buildBreadCrumb(route.firstChild);
@@ -53,6 +61,10 @@ export class BreadcrumbComponent implements OnInit {
     let newBreadcrumbs = breadcrumbs;
     let breadcrumb: IBreadCrumb;
     let nextUrl: string;
+    let params;
+    route.params.pipe(takeUntil(this._onDestroy$)).subscribe((v) => {
+      params = v;
+    });
     const lastRoutePart = path.split('/');
     (lastRoutePart || []).forEach((v) => {
       const isDynamicRoute = v.startsWith(':');
@@ -63,9 +75,9 @@ export class BreadcrumbComponent implements OnInit {
         const paramName = v.split(':')[1];
         path = path.replace(
           v,
-          route?.snapshot?.params[paramName] || route?.params
+          route?.snapshot?.params[paramName] || params[paramName]
         );
-        label = route?.snapshot?.params[paramName] || route?.params;
+        label = route?.snapshot?.params[paramName] || params[paramName];
       }
       nextUrl = v ? `${url}/${isDynamicRoute ? path : v}` : url;
 

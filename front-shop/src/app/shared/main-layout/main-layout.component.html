@@ -44,12 +44,14 @@
           <mat-icon>menu</mat-icon>
         </button>
         <div>
-          <img
-            fxHide.lt-md
-            class="logo-site"
-            src="../../../assets/logo.jpg"
-            alt="logo du site"
-          />
+          <a [routerLink]="['/']">
+            <img
+              fxHide.lt-md
+              class="logo-site"
+              src="../../../assets/logo.jpg"
+              alt="logo du site"
+            />
+          </a>
         </div>
       </div>
       <div fxFlex="50">
@@ -76,9 +78,6 @@
       </div>
     </mat-toolbar-row>
   </mat-toolbar>
-  <div style="width: 100%; height: 10px; margin-left: 8%">
-    <app-breadcrumb></app-breadcrumb>
-  </div>
 
   <mat-sidenav-container fxFlexFill>
     <mat-sidenav #sidenav>
@@ -96,6 +95,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="main-content">
+      <app-breadcrumb fxHide.lt-sm></app-breadcrumb>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { isString } from 'lodash';
 
 import { environment } from '../../../environments/environment';
@@ -26,7 +25,7 @@ export class ConfigService {
     const codeValid = await this._http
       .post<any>(
         `${environment.apiUrl}${environment.apiPath}/configuration/reduction`,
-        promotionCode
+        { code: promotionCode }
       )
       .toPromise();
     return codeValid;

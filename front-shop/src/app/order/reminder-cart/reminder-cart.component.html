@@ -1,12 +1,15 @@
-<mat-card>
+<mat-card class="card-container">
   <div fxLayout="column">
     <h2>Récapitulatif</h2>
-    <form [formGroup]="form" *ngIf="configuration?.promotion">
+    <span class="line"></span>
+    <form
+      [formGroup]="form"
+      *ngIf="configuration?.promotion && !isOnProcessPayment"
+    >
       <mat-form-field class="field">
         <mat-label>Code de réduction</mat-label>
         <input matInput placeholder="Mon code" formControlName="reduction"
       /></mat-form-field>
-      <mat-error *ngIf="codeInvalid"> Votre code n'est pas valide </mat-error>
       <button
         mat-button
         mat-raised-button
@@ -17,29 +20,72 @@
       >
         Valider
       </button>
+      <mat-card *ngIf="codeInvalid" class="card-error">
+        Votre code n'est pas valide
+      </mat-card>
+      <mat-card *ngIf="codeAlreadyApply" class="card-order">
+        Votre code est déjà appliqué
+      </mat-card>
     </form>
     <div fxLayout="row" fxLayoutAlign="space-between">
       <p>Total des produits:</p>
       <p>{{ totalWithoutShipping }}€</p>
     </div>
+    <div *ngIf="isOnProcessPayment" fxLayout="column">
+      <h2>Produit</h2>
+      <div *ngFor="let product of products">
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span
+            ><strong>{{ product?.label }}</strong> *{{ product?.amount }}</span
+          >
+          <span
+            ><strong>{{ product?.cost * product?.amount }}€</strong></span
+          >
+        </div>
+      </div>
+    </div>
+    <span class="line app-margin-tp-8"></span>
     <div fxLayout="row" fxLayoutAlign="space-between">
       <p>Réduction:</p>
       <p>{{ reduction || 0 }}€</p>
     </div>
+    <span class="line"></span>
     <mat-card
       class="card-order"
-      *ngIf="total < configuration?.minPriceFreeShipment"
+      *ngIf="total < configuration?.minPriceFreeShipment && !isOnProcessPayment"
     >
-      Plus que {{ configuration?.minPriceFreeShipment - total }}€ d'achat pour
-      profiter de la livraison gratuite
+      Plus que {{ minPriceFreeShipment }}€ d'achat pour profiter de la livraison
+      gratuite
     </mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between">
       <p>Frais de livraison:</p>
-      <p>{{ baseShipment }}€</p>
+      <p>
+        {{ total > configuration?.minPriceFreeShipment ? 0 : baseShipment }}€
+      </p>
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between">
+    <span class="line"></span>
+    <div fxLayout="row" fxLayoutAlign="space-between" class="total">
       <p>Total Panier:</p>
       <p>{{ total }}€</p>
     </div>
+    <button
+      *ngIf="!isOnProcessPayment"
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="validateCart()"
+      [routerLink]="'/order/validation'"
+    >
+      Valider le panier
+    </button>
+    <button
+      *ngIf="isOnProcessPayment"
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="showCart()"
+    >
+      Consulter de nouveau mon panier
+    </button>
   </div>
 </mat-card>

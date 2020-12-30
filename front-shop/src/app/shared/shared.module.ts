@@ -12,6 +12,8 @@ import { AddToCartComponent } from './cart-wrapper/add-to-cart/add-to-cart.compo
 import { ProductAddedComponent } from './modal/product-added/product-added.component';
 import { CartViewComponent } from './cart-wrapper/cart-view/cart-view.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { FloatButtonCartComponent } from './float-button-cart/float-button-cart.component';
+import { DisplayCartComponent } from './modal/display-cart/display-cart.component';
 
 @NgModule({
   imports: [
@@ -47,6 +49,8 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     ProductAddedComponent,
     CartViewComponent,
     BreadcrumbComponent,
+    FloatButtonCartComponent,
+    DisplayCartComponent,
   ],
 })
 export class SharedModule {}

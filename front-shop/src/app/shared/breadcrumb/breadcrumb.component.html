@@ -1,7 +1,7 @@
-<ol class="breadcrumb">
+<div class="breadcrumb" fxLayout="row">
   <li *ngFor="let breadcrumb of breadcrumbs">
     <span [routerLink]="breadcrumb.url" routerLinkActive="router-link-active">
       {{ breadcrumb.label }}
     </span>
   </li>
-</ol>
+</div>

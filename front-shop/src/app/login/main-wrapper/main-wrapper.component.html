@@ -1,15 +1,15 @@
 <div
-  fxLayoutAlign="space-around center"
-  fxLayout.gt-xs="row"
-  fxLayoutGap="24px"
-  fxLayoutGap.sm="12px"
-  fxLayoutGap.xs="8px"
+  fxLayoutAlign.gt-sm="space-around center"
+  fxLayout.gt-sm="row"
+  fxLayout.lt-sm="column"
+  fxLayoutGap.lt-sm="12px"
   *ngIf="!isConnected"
+  class="app-margin-tp-8"
 >
   <mat-card>
-    <app-connection></app-connection>
+    <app-connection [isOnOrder]="isOrder"></app-connection>
   </mat-card>
   <mat-card>
-    <app-registration></app-registration>
+    <app-registration [isOnOrder]="isOrder"></app-registration>
   </mat-card>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 
@@ -8,6 +8,7 @@ import { UserService } from '../../core/services/user.service';
   styleUrls: ['./main-wrapper.component.scss'],
 })
 export class MainWrapperComponent implements OnInit {
+  @Input() isOrder: boolean = false;
   public isConnected: boolean = false;
   constructor(private _userService: UserService, private _router: Router) {}
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
@@ -20,7 +21,8 @@ export class ConnectionComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -37,9 +39,19 @@ export class ConnectionComponent implements OnInit {
       email: this.form.get('email').value,
       password: this.form.get('password').value,
     });
-    this.authenticateSucceed = await this._userService.connectUser(
-      RemoveNullUndefined.removeNullOrUndefined(user)
-    );
+    try {
+      this.authenticateSucceed = await this._userService.connectUser(
+        RemoveNullUndefined.removeNullOrUndefined(user)
+      );
+      this._snackBar.open('Vous êtes connecté', 'Succès', {
+        duration: 2000,
+      });
+    } catch (err) {
+      this._snackBar.open('Votre authentification a échoué', 'Erreur', {
+        duration: 2000,
+      });
+    }
+
     if (!this.isOnOrder) {
       return this._router.navigateByUrl('/');
     }

@@ -1,29 +1,30 @@
 .breadcrumb {
-  background: none;
-  font-size: 0.8em;
-  margin: 0;
+  font-size: 1.1em;
+  font-family: "Arial Hebrew";
   a,
-  span {
-    color: darkgrey;
-  }
   a:hover,
   span:hover {
-    color: dimgrey;
+    color: #598e5d;
     text-decoration: none;
+    cursor: pointer;
+    margin-left: 1px;
   }
   li {
     list-style: none;
-    float: left;
-    margin: 5px;
-  }
-  li:last-child {
-    margin-right: 20px;
   }
   li::after {
     content: "->";
-    color: darkgrey;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #598e5d;
   }
   li:last-child::after {
     content: "";
+  }
+  span {
+    text-decoration: underline !important;
+  }
+  li:last-child span {
+    text-decoration: none !important;
   }
 }

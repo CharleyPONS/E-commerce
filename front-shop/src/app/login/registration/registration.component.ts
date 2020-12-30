@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
@@ -20,7 +21,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private _snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
     this.isConnected = this._userService.isLoggedIn();
@@ -40,6 +42,9 @@ export class RegistrationComponent implements OnInit {
       this.authenticateSucceed = await this._userService.registerUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
+      this._snackBar.open('Vous êtes inscrit', 'Succès', {
+        duration: 2000,
+      });
     } catch (err) {
       if (err.status === 401 && err?.error?.message === 'email already use') {
         this.emailAlreadyUse = true;
