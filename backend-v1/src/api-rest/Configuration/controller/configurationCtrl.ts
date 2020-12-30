@@ -23,15 +23,18 @@ export class ConfigurationCtrl {
   }
   @Post('/reduction')
   @Summary('Verify offer of client')
-  async checkReduction(@Context() ctx: Context, @BodyParams() offerCode: string): Promise<any> {
-    const config: ConfigurationEntity = await this._configurationRepository.findByType(
+  async checkReduction(
+    @Context() ctx: Context,
+    @BodyParams() offerCode: { code: string }
+  ): Promise<any> {
+    const config: ConfigurationEntity[] = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
     if (
-      offerCode &&
-      config.promotion &&
-      Array.isArray(config.promotion) &&
-      config.promotion.find(v => v.codePromotion === offerCode && v.isPromotion)
+      offerCode.code &&
+      config[0].promotion &&
+      Array.isArray(config[0].promotion) &&
+      config[0].promotion.find(v => v.codePromotion === offerCode.code && v.isPromotion)
     ) {
       new WinstonLogger().logger().info(`Code offer match`, { code: offerCode });
 
@@ -40,11 +43,11 @@ export class ConfigurationCtrl {
         .status(200)
         .send({
           isPromotion: true,
-          promotionReduction: config.promotion.find(v => v.codePromotion === offerCode)
+          promotionReduction: config[0].promotion.find(v => v.codePromotion === offerCode.code)
             ?.promotionReduction
         });
     }
-    new WinstonLogger().logger().info(`Code offer not match`, { code: offerCode });
+    new WinstonLogger().logger().info(`Code offer not match`, { code: offerCode.code });
     return ctx.getResponse().status(404).send('Promotion not found');
   }
 }

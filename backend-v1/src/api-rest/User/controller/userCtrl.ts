@@ -7,6 +7,8 @@ import { UserRepository } from '../services/user.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';
 import { IUser } from '../models/user.interface';
+import { UserAddressEntity } from '../entities/userAddress.entity';
+import { WinstonLogger } from '../../../core/services/winstonLogger';
 
 @Controller({
   path: '/user'
@@ -59,5 +61,38 @@ export class UserCtrl {
   async logOut(@Context() ctx: Context, @BodyParams('user') userBody: UserEntity): Promise<void> {
     await this._userDeleteTokenService.main(userBody);
     return;
+  }
+
+  @Post('/save')
+  @Summary('Return JWT token if sign in succeed')
+  @(Status(200, UserEntity).Description('Success'))
+  async saveUser(
+    @Context() ctx: Context,
+    @BodyParams('user') userBody: UserEntity
+  ): Promise<UserEntity> {
+    const user = await this._userRepository.findByEmail(userBody.email);
+    const userToSave: UserEntity = new UserEntity();
+    const addressUser: UserAddressEntity = new UserAddressEntity();
+    userToSave.name = userBody?.name;
+    userToSave.surname = userBody?.surname;
+    addressUser.country = userBody?.address?.country;
+    addressUser.postalCode = userBody?.address?.postalCode;
+    addressUser.street = userBody?.address?.street;
+    addressUser.town = userBody?.address?.town;
+    userToSave.address = addressUser;
+    const updateUser = await this._userRepository.updateOne(
+      { email: userBody.email },
+      userToSave,
+      userBody
+    );
+    if (updateUser) {
+      new WinstonLogger().logger().info(`Update user done`, { user });
+
+      return ctx.getResponse().status(200).send(user);
+    } else {
+      new WinstonLogger().logger().warn(`Update user failed`, { user });
+
+      return ctx.getResponse().status(404).send('user not save');
+    }
   }
 }
