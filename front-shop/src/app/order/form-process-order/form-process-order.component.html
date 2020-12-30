@@ -1,1 +1,164 @@
-<p>form-process-order works!</p>
+<mat-vertical-stepper [linear]="true" #stepper>
+  <mat-step *ngIf="!isConnected" [stepControl]="connectionForm">
+    <div fxLayout="row">
+      <div>
+        <p>Vous avez déjà un compte?</p>
+      </div>
+      <div class="app-margin-lt-8 app-margin-tp-8">
+        <button
+          mat-button
+          mat-raised-button
+          color="primary"
+          (click)="connectModal()"
+        >
+          Connectez-vous
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div class="app-margin-tp-12"><mat-icon>arrow_circle_down</mat-icon></div>
+
+      <div>
+        <p>Sinon Inscrivez vous directement ci-dessous</p>
+      </div>
+      <div class="app-margin-tp-12"><mat-icon>arrow_circle_down</mat-icon></div>
+    </div>
+    <form [formGroup]="connectionForm">
+      <ng-template matStepLabel>Connexion/Inscription</ng-template>
+      <div
+        fxFlexAlign.gt-xs="column"
+        fxLayoutGap="24px"
+        fxLayoutGap.sm="12px"
+        fxLayoutGap.xs="8px"
+      >
+        <mat-form-field>
+          <mat-label>Adresse e-mail</mat-label>
+          <input
+            matInput
+            [placeholder]="'Adresse e-mail'"
+            formControlName="email"
+            required
+          />
+          <mat-error
+            *ngIf="
+              connectionForm.get('email').errors &&
+              connectionForm.get('email').touched
+            "
+            >Votre email n'est pas valide</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Mot de passe</mat-label>
+          <input
+            matInput
+            placeholder="Password"
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          <mat-icon matSuffix class="icon-selector" (click)="hide = !hide">{{
+            hide ? "visibility_off" : "visibility"
+          }}</mat-icon>
+          <mat-error
+            *ngIf="
+              connectionForm.get('password').errors &&
+              connectionForm.get('email').touched
+            "
+            >Votre mot de passe doit comporter au moins 6 caractères</mat-error
+          >
+        </mat-form-field>
+        <mat-card *ngIf="emailAlreadyUse" style="background-color: #ff8d79" ;>
+          Cette adresse e-mail est déjà utilisé, veuillez vous inscrire avec une
+          nouvelle adresse.
+        </mat-card>
+      </div>
+    </form>
+    <div>
+      <button
+        mat-button
+        matStepperNext
+        (click)="validateConnectionForm()"
+        color="primary"
+      >
+        Suivant
+      </button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <form [formGroup]="addressForm">
+      <ng-template matStepLabel>Votre adresse</ng-template>
+      <div
+        fxFlexAlign.gt-xs="column"
+        fxLayoutGap="24px"
+        fxLayoutGap.sm="12px"
+        fxLayoutGap.xs="8px"
+      >
+        <div fxLayout.gt-sm="row" fxLayout="column">
+          <mat-form-field>
+            <mat-label>Prénom</mat-label>
+            <input
+              matInput
+              [placeholder]="'Votre prénom'"
+              formControlName="surname"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nom</mat-label>
+            <input
+              matInput
+              [placeholder]="'Votre nom'"
+              formControlName="name"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout.gt-sm="row" fxLayout="column">
+          <mat-form-field>
+            <mat-label>Adresse</mat-label>
+            <input
+              matInput
+              [placeholder]="'40 rue des champs'"
+              formControlName="address"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Code postal</mat-label>
+            <input
+              matInput
+              [placeholder]="'49200'"
+              formControlName="postalCode"
+              required
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout.gt-sm="row" fxLayout="column">
+          <mat-form-field>
+            <mat-label>Ville</mat-label>
+            <input
+              matInput
+              [placeholder]="'Lille'"
+              formControlName="town"
+              required
+            />
+          </mat-form-field>
+          <mat-select-country
+            appearance="outline"
+            label="Pays"
+            formControlName="country"
+          >
+          </mat-select-country>
+        </div>
+      </div>
+    </form>
+    <button
+      mat-button
+      matStepperNext
+      (click)="validateAddressForm()"
+      color="primary"
+    >
+      Suivant
+    </button>
+  </mat-step>
+</mat-vertical-stepper>

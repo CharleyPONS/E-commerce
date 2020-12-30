@@ -1,8 +1,8 @@
 export class UserAddress {
-  public id: number;
+  public id?: number;
   public town: string;
   public street: string;
-  public numberStreet: number;
+  public numberStreet?: number;
   public postalCode: number;
   public country: string;
 

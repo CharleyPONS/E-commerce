@@ -1,1 +1,6 @@
-<p>connect-modal works!</p>
+<mat-card>
+  <app-connection
+    [isOnOrder]="true"
+    (connect)="isConnected($event)"
+  ></app-connection>
+</mat-card>

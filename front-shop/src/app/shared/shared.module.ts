@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ShoppingCartModule } from 'ng-shopping-cart';
+import { LoginModule } from '../login/login.module';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { MaterialModule } from './material.module';
 import { CartSummaryComponent } from './cart-wrapper/cart-summary/cart-summary.component';
@@ -14,6 +15,7 @@ import { CartViewComponent } from './cart-wrapper/cart-view/cart-view.component'
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { FloatButtonCartComponent } from './float-button-cart/float-button-cart.component';
 import { DisplayCartComponent } from './modal/display-cart/display-cart.component';
+import { ConnectModalComponent } from './modal/connect-modal/connect-modal.component';
 
 @NgModule({
   imports: [
@@ -26,6 +28,7 @@ import { DisplayCartComponent } from './modal/display-cart/display-cart.componen
     ReactiveFormsModule,
     CommonModule,
     FlexLayoutModule,
+    LoginModule,
   ],
 
   exports: [
@@ -51,6 +54,7 @@ import { DisplayCartComponent } from './modal/display-cart/display-cart.componen
     BreadcrumbComponent,
     FloatButtonCartComponent,
     DisplayCartComponent,
+    ConnectModalComponent,
   ],
 })
 export class SharedModule {}

@@ -36,13 +36,13 @@
         >Votre mot de passe doit comporter au moins 6 caractères</mat-error
       >
     </mat-form-field>
-    <div *ngIf="!authenticateSucceed">
+    <mat-card *ngIf="!authenticateSucceed" style="background-color: #ff8d79">
       <p>Votre authentification a échoué</p>
-    </div>
-    <div *ngIf="emailAlreadyUse" style="color: red">
+    </mat-card>
+    <mat-card *ngIf="emailAlreadyUse" style="background-color: #ff8d79" ;>
       Cette adresse e-mail est déjà utilisé, veuillez vous inscrire avec une
       nouvelle adresse.
-    </div>
+    </mat-card>
   </div>
   <div class="shop-align-right">
     <button

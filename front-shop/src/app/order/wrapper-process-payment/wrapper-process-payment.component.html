@@ -5,7 +5,11 @@
   fxLayoutGap.lt-sm="12px"
   class="app-margin-tp-8"
 >
-  <div fxFlex="70"></div>
+  <div fxFlex="60">
+    <mat-card>
+      <app-form-process-order></app-form-process-order>
+    </mat-card>
+  </div>
   <div fxLayout="column" fxFlex="30">
     <app-reminder-cart [isOnProcessPayment]="true"></app-reminder-cart>
   </div>

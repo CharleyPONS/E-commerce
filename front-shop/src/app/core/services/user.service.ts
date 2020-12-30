@@ -13,7 +13,7 @@ export class UserService {
   async connectUser(userBody: User): Promise<boolean> {
     const user: User = await this._http
       .post<User>(
-        `${environment.apiUrl}${environment.apiPath}/signIn`,
+        `${environment.apiUrl}${environment.apiPath}/user/signIn`,
         userBody
       )
       .pipe(map((res) => new User(res)))
@@ -25,13 +25,24 @@ export class UserService {
   async registerUser(userBody: User): Promise<boolean> {
     const user: User = await this._http
       .post<User>(
-        `${environment.apiUrl}${environment.apiPath}/signUp`,
+        `${environment.apiUrl}${environment.apiPath}/user/signUp`,
         userBody
       )
       .pipe(map((res) => new User(res)))
       .toPromise();
     this.setSession(user);
     return this.isLoggedIn();
+  }
+
+  async saveUser(userBody: User): Promise<User> {
+    const user: User = await this._http
+      .post<User>(
+        `${environment.apiUrl}${environment.apiPath}/user/save`,
+        userBody
+      )
+      .pipe(map((res) => new User(res)))
+      .toPromise();
+    return user;
   }
 
   private setSession(user: User) {

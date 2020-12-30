@@ -16,6 +16,7 @@
   "private": true,
   "dependencies": {
     "@angular-material-extensions/input-counter": "^0.1.1",
+    "@angular-material-extensions/select-country": "^4.0.1",
     "@angular/animations": "~11.0.5",
     "@angular/cdk": "^11.0.3",
     "@angular/common": "~11.0.5",
@@ -35,6 +36,7 @@
     "ng-shopping-cart": "^1.0.0",
     "rxjs": "~6.6.0",
     "sass-mq": "^5.0.1",
+    "svg-country-flags": "^1.2.9",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

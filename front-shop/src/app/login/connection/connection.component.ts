@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 })
 export class ConnectionComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
+  @Output() connect = new EventEmitter<boolean>();
   public form: FormGroup;
   public hide: boolean;
   public authenticateSucceed: boolean = true;
@@ -43,6 +44,9 @@ export class ConnectionComponent implements OnInit {
       this.authenticateSucceed = await this._userService.connectUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
+      if (this.isOnOrder) {
+        this.connect.emit(true);
+      }
       this._snackBar.open('Vous êtes connecté', 'Succès', {
         duration: 2000,
       });
