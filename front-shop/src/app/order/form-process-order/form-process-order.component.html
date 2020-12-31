@@ -1,5 +1,5 @@
-<mat-vertical-stepper [linear]="true" #stepper>
-  <mat-step [stepControl]="connectionForm">
+<mat-vertical-stepper [linear]="false" #stepper>
+  <mat-step [stepControl]="connectionForm" color="primary">
     <div fxLayout="row">
       <div>
         <p>Vous avez déjà un compte?</p>
@@ -86,7 +86,10 @@
       </button>
     </div>
   </mat-step>
-  <mat-step>
+  <mat-step
+    [stepControl]="addressForm"
+    [errorMessage]="'Veuillez remplir le formulaire avec votre adress'"
+  >
     <form [formGroup]="addressForm">
       <ng-template matStepLabel>Votre adresse</ng-template>
       <div
@@ -226,28 +229,36 @@
       </button>
     </div>
   </mat-step>
-  <mat-step>
+  <mat-step [stepControl]="transporterForm">
     <ng-template matStepLabel>Mode de livraison</ng-template>
     <form [formGroup]="transporterForm">
       <mat-radio-group formControlName="transporter">
         <div fxLayout="column" fxLayoutGap="10px">
           <mat-card *ngFor="let transporter of transporter">
-            <div fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between">
+            <div
+              fxLayout.gt-sm="row"
+              fxLayoutAlign.gt-sm="space-between center"
+            >
               <mat-radio-button value="{{ transporter.type }}"
-                ><img
-                  style="width: 50px; height: auto"
-                  *ngIf="transporter.type === 'LAPOSTE'"
-                  src="../../../assets/Logo-laposte.png"
-                  alt=""
-                /><img
-                  style="width: 70px; height: auto"
-                  *ngIf="transporter.type === 'CHRONOPOST'"
-                  src="../../../assets/3314px-Colissimo_Logo.svg.png"
-                  alt=""
-                />
-                Livraison avec {{ transporter.type }} en lettre suivie ({{
-                  transporter.delay
-                }})</mat-radio-button
+                ><div
+                  fxLayout.gt-sm="row"
+                  fxLayoutAlign.gt-sm="space-between center"
+                >
+                  <img
+                    style="width: 50px; height: auto"
+                    *ngIf="transporter.type === 'LAPOSTE'"
+                    src="../../../assets/Logo-laposte.png"
+                    alt=""
+                  /><img
+                    style="width: 70px; height: auto; margin-right: 4px"
+                    *ngIf="transporter.type === 'CHRONOPOST'"
+                    src="../../../assets/3314px-Colissimo_Logo.svg.png"
+                    alt=""
+                  />
+                  Livraison avec {{ transporter.type }} en lettre suivie ({{
+                    transporter.delay
+                  }})
+                </div></mat-radio-button
               >
               <span
                 >Prix:
@@ -279,11 +290,72 @@
         mat-button
         mat-raised-button
         matStepperNext
-        [disabled]="addressForm.invalid || addressForm.disabled"
+        (click)="transporterValidate()"
+        [disabled]="transporterForm.invalid || transporterForm.disabled"
         color="primary"
       >
         Suivant
       </button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Paiement</ng-template>
+    <p class="title">Paiement par carte bancaire</p>
+    <div fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="center">
+      <img
+        src="../../../assets/cb.png"
+        alt=""
+        style="width: 60px; height: auto"
+      />
+      <img
+        src="../../../assets/mastercard-6.svg"
+        alt=""
+        style="width: 60px; height: auto"
+      />
+      <img
+        src="../../../assets/visa-4.svg"
+        alt=""
+        style="width: 60px; height: auto"
+      />
+    </div>
+    <p class="title">Veuillez vérifier vos informations de livraison</p>
+    <div fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-around center">
+      <mat-card>
+        <div fxLayout.gt-sm="column" fxLayoutAlign.gt-sm="space-around">
+          <p class="title">Votre adresse de livraison</p>
+          <span
+            >{{ addressForm.get("surname")?.value }}
+            {{ addressForm.get("name")?.value }}</span
+          >
+          <span class="app-margin-tp-4">{{
+            addressForm.get("address")?.value
+          }}</span>
+          <span class="app-margin-tp-4"
+            >{{ addressForm.get("postalCode")?.value }}
+            {{ addressForm.get("town")?.value }}</span
+          >
+          <span class="app-margin-tp-4">{{
+            addressForm.get("country")?.value?.name
+          }}</span>
+        </div>
+      </mat-card>
+      <mat-card>
+        <div fxLayout.gt-sm="column" fxLayoutAlign.gt-sm="space-around">
+          <p class="title">Votre adresse de Facturation</p>
+          <span class="app-margin-tp-4"
+            >{{ addressForm.get("surname")?.value }}
+            {{ addressForm.get("name")?.value }}</span
+          >
+          <span class="app-margin-tp-4">{{
+            addressForm.get("address")?.value
+          }}</span>
+          <span class="app-margin-tp-4"
+            >{{ addressForm.get("postalCode")?.value }}
+            {{ addressForm.get("town")?.value }}</span
+          >
+          <span>{{ addressForm.get("country")?.value?.name }}</span>
+        </div>
+      </mat-card>
     </div>
   </mat-step>
 </mat-vertical-stepper>

@@ -3,18 +3,34 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CartService } from 'ng-shopping-cart';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
+import { Transporter } from '../../core/enum/transporter.enum';
+import { CartItemCustom } from '../../core/models/cartItemCustom.model';
 import { Config } from '../../core/models/config.model';
 import { ConfigTransporter } from '../../core/models/configTransporter.model';
 import { User } from '../../core/models/user.model';
 import { ConfigService } from '../../core/services/config.service';
+import { UserOrderedService } from '../../core/services/user-ordered.service';
 import { UserService } from '../../core/services/user.service';
 import { roundToTwoDigitsAfterComma } from '../../core/utils/number.utils';
 import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 import { ConnectModalComponent } from '../../shared/modal/connect-modal/connect-modal.component';
 import { MatStepper } from '@angular/material/stepper';
 import { IReminderReduction } from '../reminder-cart/reminder-cart.component';
+
+export interface IListOrderInterface {
+  userId: string;
+  userEmail: string;
+  product: Array<{
+    productName: string;
+    quantity: number;
+    grammeNumber: number | boolean;
+  }>;
+  reduction: { isReduction: boolean; type: string };
+  shipment: Transporter;
+}
 
 @Component({
   selector: 'app-form-process-order',
@@ -34,6 +50,9 @@ export class FormProcessOrderComponent implements OnInit {
   public transporter: ConfigTransporter[];
   public configuration: Config;
   public reduction: number;
+  public secretStrip: {
+    clientSecret: string | null;
+  };
   public predefinedCountries: Country[] = [
     {
       name: 'Allemagne',
@@ -80,7 +99,9 @@ export class FormProcessOrderComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _userService: UserService,
     private _snackBar: MatSnackBar,
-    private _configurationService: ConfigService
+    private _configurationService: ConfigService,
+    private _cartService: CartService<CartItemCustom>,
+    private _userOrderedService: UserOrderedService
   ) {}
 
   async ngOnInit(): Promise<any> {
@@ -187,7 +208,7 @@ export class FormProcessOrderComponent implements OnInit {
       },
     });
     try {
-      await this._userService.saveUser(
+      this.user = await this._userService.saveUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
       this._snackBar.open('Votre adresse est enregistré', 'Succès', {
@@ -201,6 +222,34 @@ export class FormProcessOrderComponent implements OnInit {
           duration: 2000,
         }
       );
+    }
+  }
+
+  public async transporterValidate() {
+    const reduction = this._getSessionReduction();
+    const order: IListOrderInterface = {
+      userId: this.user.userId,
+      userEmail: this.user.email,
+      product: [],
+      reduction: {
+        isReduction: reduction?.promotionActive
+          ? reduction?.promotionActive
+          : false,
+        type: reduction?.reductionCode ? reduction?.reductionCode : '',
+      },
+      shipment: this.transporterForm?.value?.transporter,
+    };
+    this._cartService.getItems().forEach((v) => {
+      order.product.push({
+        productName: v.label,
+        quantity: v.amount,
+        grammeNumber: v.grammeNumber,
+      });
+    });
+    try {
+      this.secretStrip = await this._userOrderedService.intentPayment(order);
+    } catch (err) {
+      console.log(err);
     }
   }
 

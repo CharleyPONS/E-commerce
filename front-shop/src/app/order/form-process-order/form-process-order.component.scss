@@ -2,9 +2,15 @@
   cursor: pointer;
   color: #88bf8a;
 }
-::ng-deep #mat-input-7 {
+::ng-deep .cdk-text-field-autofill-monitored {
   border: 0 !important;
 }
 .button-transporter {
   margin-top: 25px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 1.1em;
+  font-family: avenir;
 }

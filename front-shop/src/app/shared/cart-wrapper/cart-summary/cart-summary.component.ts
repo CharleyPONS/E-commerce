@@ -32,7 +32,7 @@ export class CartSummaryComponent implements OnInit {
     this.noItemsText = '';
     this.manyItemsText = '';
     this.product = this._cartService.getItems()?.length;
-    this._cartService.onChange.subscribe(() => {
+    this._cartService.onItemsChanged.subscribe(() => {
       this.product = this._cartService.getItems()?.length;
     });
   }

@@ -15,7 +15,7 @@ import { ProductAddedComponent } from '../../shared/modal/product-added/product-
 
 export interface IReminderReduction {
   reduction: number;
-  reductionCode: number;
+  reductionCode: string;
   promotionActive: boolean;
 }
 @Component({
@@ -47,7 +47,7 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
   ) {}
 
   async ngOnInit(): Promise<any> {
-    this._cartService.onChange.subscribe(async () => {
+    this._cartService.onItemsChanged.subscribe(async (v) => {
       await this.onInit();
     });
     await this.onInit();
