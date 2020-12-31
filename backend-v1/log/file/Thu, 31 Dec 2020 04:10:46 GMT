@@ -1,0 +1,2 @@
+{"message":"Search a user with email juliaa@artips.fr","level":"info"}
+{"user":{"email":"juliaa@artips.fr","password":"$2b$10$EAY6Wf04YC5IlTSJY1Kdz.1X9zmqG2NdVnqq0tF46sHDDeJfUHz7m","dateUpdate":"Thu, 31 Dec 2020 04:10:41 GMT","name":null,"surname":null,"numberOrder":null,"token":null,"expiresIn":null,"id":26,"userId":"b7e27fa6-6923-4219-b0e9-b28dc1d853c6"},"mailProcess":"NEW_CLIENT","level":"info","message":"email sent"}

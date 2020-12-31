@@ -28,6 +28,6 @@ export class UserAddressEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   country: string;
 
-  @Column({ type: 'uuid' })
-  userId: string;
+  @Column({ type: 'uuid', nullable: true })
+  userId: string | null;
 }

@@ -1,4 +1,4 @@
-import { Allow, Description, Email, Required } from '@tsed/schema';
+import { Allow, Description, Email, Property, Required } from '@tsed/schema';
 import {
   BaseEntity,
   BeforeInsert,
@@ -23,7 +23,7 @@ export class UserEntity extends BaseEntity {
   @Generated('uuid')
   userId: string;
 
-  @OneToOne(() => UserAddressEntity, { cascade: true })
+  @OneToOne(() => UserAddressEntity, { cascade: true, onUpdate: 'CASCADE' })
   @JoinColumn()
   address: UserAddressEntity;
 
@@ -33,7 +33,6 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: '255', nullable: true })
   surname: string;
 
-  @Required()
   @Column({ type: 'varchar', length: '255' })
   password: string;
 
@@ -49,7 +48,8 @@ export class UserEntity extends BaseEntity {
   @Description('Last modification date')
   dateUpdate: string;
 
-  @Column({ type: 'varchar', length: '255', nullable: true })
+  @Property()
+  @Column({ type: 'varchar', nullable: true })
   token: string | null;
 
   @Column({ type: 'int', nullable: true })

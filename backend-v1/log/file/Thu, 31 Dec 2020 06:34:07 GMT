@@ -1,0 +1,2 @@
+{"userAdress":{"country":"France","postalCode":"78230","street":"77 route de sartrouville","town":"pairs","userId":"a6bdc45f-f792-402e-89ab-8d4610d347da"},"level":"info","message":"Save user"}
+{"userAdress":{"country":"France","postalCode":"78230","street":"77 route de sartrouville","town":"pairs","userId":"a6bdc45f-f792-402e-89ab-8d4610d347da","numberStreet":null,"id":3},"level":"info","message":"Save user succeed"}

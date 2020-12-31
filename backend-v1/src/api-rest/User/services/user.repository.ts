@@ -34,7 +34,21 @@ export class UserRepository extends Repository<UserEntity> {
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Search a user with id ${userEmail} request failed`, { error: err });
+        .warn(`Search a user with email ${userEmail} request failed`, { error: err });
+    }
+  }
+
+  async findByToken(tokenId: string): Promise<UserEntity | undefined> {
+    try {
+      new WinstonLogger().logger().info(`Search a user with token ${tokenId}`);
+      const user = await this.findOne({
+        where: { token: tokenId }
+      });
+      return user;
+    } catch (err) {
+      new WinstonLogger()
+        .logger()
+        .warn(`Search a user with token ${tokenId} request failed`, { error: err });
     }
   }
 
@@ -51,12 +65,13 @@ export class UserRepository extends Repository<UserEntity> {
   async updateOne(
     filter: FindConditions<UserEntity>,
     updateQuery: QueryDeepPartialEntity<UserEntity>,
-    user: UserEntity
+    user: IUser | UserEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update user`, { user });
-      await this.update(filter, updateQuery);
+      const updateUser = await this.update(filter, updateQuery);
       new WinstonLogger().logger().info(`Update user succeed`, { user });
+      return updateUser;
     } catch (err) {
       new WinstonLogger().logger().warn(`Update a user with id request failed`, { error: err });
     }
