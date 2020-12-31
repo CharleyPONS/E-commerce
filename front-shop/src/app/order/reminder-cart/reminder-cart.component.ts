@@ -31,6 +31,7 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
   public reduction: number;
   public totalWithoutShipping: number = 0;
   public total: number = 0;
+  public initTotal: number = 0;
   public baseShipment: number = 0;
   public codeAlreadyApply: boolean = false;
   public minPriceFreeShipment: number;
@@ -46,6 +47,13 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
   ) {}
 
   async ngOnInit(): Promise<any> {
+    this._cartService.onChange.subscribe(async () => {
+      await this.onInit();
+    });
+    await this.onInit();
+  }
+
+  public async onInit() {
     this.products = this._cartService.getItems();
     console.log(this.products);
     this.configuration = await this._configurationService.getConfig();
@@ -56,6 +64,9 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
     this.baseShipment = baseShipment;
     this.totalWithoutShipping = roundToTwoDigitsAfterComma(
       this._cartService.totalCost() - this._cartService.getShipping()
+    );
+    this.initTotal = roundToTwoDigitsAfterComma(
+      this._cartService.totalCost() - baseShipment
     );
     this.total = roundToTwoDigitsAfterComma(this._cartService.totalCost());
     const reduction = this._getSessionReduction();

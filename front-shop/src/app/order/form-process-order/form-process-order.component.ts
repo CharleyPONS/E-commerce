@@ -5,11 +5,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
+import { Config } from '../../core/models/config.model';
+import { ConfigTransporter } from '../../core/models/configTransporter.model';
 import { User } from '../../core/models/user.model';
+import { ConfigService } from '../../core/services/config.service';
 import { UserService } from '../../core/services/user.service';
+import { roundToTwoDigitsAfterComma } from '../../core/utils/number.utils';
 import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 import { ConnectModalComponent } from '../../shared/modal/connect-modal/connect-modal.component';
 import { MatStepper } from '@angular/material/stepper';
+import { IReminderReduction } from '../reminder-cart/reminder-cart.component';
 
 @Component({
   selector: 'app-form-process-order',
@@ -20,10 +25,15 @@ export class FormProcessOrderComponent implements OnInit {
   private _onDestroy$ = new Subject();
   public connectionForm: FormGroup;
   public addressForm: FormGroup;
+  public transporterForm: FormGroup;
   public hide: boolean;
   public emailAlreadyUse: boolean = false;
   public isConnected: boolean;
   public user: User;
+  public total: number = 0;
+  public transporter: ConfigTransporter[];
+  public configuration: Config;
+  public reduction: number;
   public predefinedCountries: Country[] = [
     {
       name: 'Allemagne',
@@ -69,12 +79,11 @@ export class FormProcessOrderComponent implements OnInit {
     private readonly _matDialog: MatDialog,
     private _formBuilder: FormBuilder,
     private _userService: UserService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _configurationService: ConfigService
   ) {}
 
-  ngOnInit(): void {
-    this.hide = true;
-    this.isConnected = this._userService.isLoggedIn();
+  async ngOnInit(): Promise<any> {
     this.connectionForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -102,6 +111,20 @@ export class FormProcessOrderComponent implements OnInit {
         Validators.required,
       ],
     });
+    this.transporterForm = this._formBuilder.group({
+      transporter: ['', Validators.required],
+    });
+    const reduction = this._getSessionReduction();
+    if (reduction) {
+      this.reduction = roundToTwoDigitsAfterComma(
+        this.total * (reduction.reduction / 100)
+      );
+      this.total = roundToTwoDigitsAfterComma(this.total - this.reduction);
+    }
+    this.configuration = await this._configurationService.getConfig();
+    this.transporter = this.configuration?.transporter;
+    this.hide = true;
+    this.isConnected = this._userService.isLoggedIn();
   }
   public connectModal() {
     this._matDialog
@@ -179,5 +202,10 @@ export class FormProcessOrderComponent implements OnInit {
         }
       );
     }
+  }
+
+  private _getSessionReduction(): IReminderReduction {
+    const reduction = localStorage.getItem('reduction');
+    return JSON.parse(reduction);
   }
 }

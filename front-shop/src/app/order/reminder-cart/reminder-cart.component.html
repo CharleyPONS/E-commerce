@@ -28,8 +28,8 @@
       </mat-card>
     </form>
     <div fxLayout="row" fxLayoutAlign="space-between">
-      <p>Total des produits:</p>
-      <p>{{ totalWithoutShipping }}€</p>
+      <p>Total des produits (hors frais de livraison):</p>
+      <p>{{ initTotal }}€</p>
     </div>
     <div *ngIf="isOnProcessPayment" fxLayout="column">
       <h2>Produit</h2>
