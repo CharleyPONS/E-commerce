@@ -146,6 +146,10 @@ export class FormProcessOrderComponent implements OnInit {
     this.transporter = this.configuration?.transporter;
     this.hide = true;
     this.isConnected = this._userService.isLoggedIn();
+    if (this._userService.getToken()) {
+      this.user = await this._userService.findByToken();
+      console.log(this.user);
+    }
   }
   public connectModal() {
     this._matDialog
@@ -184,10 +188,14 @@ export class FormProcessOrderComponent implements OnInit {
       await this._userService.registerUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
-      this._snackBar.open('Vous êtes connecté', 'Succès', {
+      this._snackBar.open('Vous êtes Inscrit', 'Succès', {
         duration: 2000,
       });
     } catch (err) {
+      if (err.status === 401 && err?.error?.message === 'email already use') {
+        this.emailAlreadyUse = true;
+        return;
+      }
       this._snackBar.open('Votre authentification a échoué', 'Erreur', {
         duration: 2000,
       });
@@ -195,6 +203,9 @@ export class FormProcessOrderComponent implements OnInit {
   }
 
   public async validateAddressForm() {
+    if (this._userService.getToken()) {
+      this.user = await this._userService.findByToken();
+    }
     const user: User = new User({
       email: this.connectionForm.get('email').value || this.user.email,
       token: this._userService.getToken(),
@@ -227,6 +238,9 @@ export class FormProcessOrderComponent implements OnInit {
 
   public async transporterValidate() {
     const reduction = this._getSessionReduction();
+    if (this._userService.getToken()) {
+      this.user = await this._userService.findByToken();
+    }
     const order: IListOrderInterface = {
       userId: this.user.userId,
       userEmail: this.user.email,

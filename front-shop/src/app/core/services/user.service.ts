@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
 import { User } from '../models/user.model';
@@ -9,8 +10,14 @@ import * as moment from 'moment';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private _http: HttpClient) {}
-  async connectUser(userBody: User): Promise<User> {
+  constructor(private _http: HttpClient, private _snackBar: MatSnackBar) {}
+  async connectUser(userBody: User): Promise<any> {
+    if (this.isLoggedIn()) {
+      this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
+        duration: 2000,
+      });
+      return;
+    }
     const user: User = await this._http
       .post<User>(
         `${environment.apiUrl}${environment.apiPath}/user/signIn`,
@@ -23,6 +30,12 @@ export class UserService {
   }
 
   async registerUser(userBody: User): Promise<boolean> {
+    if (this.isLoggedIn()) {
+      this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
+        duration: 2000,
+      });
+      return true;
+    }
     const user: User = await this._http
       .post<User>(
         `${environment.apiUrl}${environment.apiPath}/signUp`,
@@ -39,6 +52,16 @@ export class UserService {
       .post<User>(
         `${environment.apiUrl}${environment.apiPath}/user/save`,
         userBody
+      )
+      .pipe(map((res) => new User(res)))
+      .toPromise();
+    return user;
+  }
+
+  async findByToken(): Promise<User> {
+    const user: User = await this._http
+      .get<User>(
+        `${environment.apiUrl}${environment.apiPath}/user/${this.getToken()}`
       )
       .pipe(map((res) => new User(res)))
       .toPromise();

@@ -15,6 +15,9 @@
       <p>
         Prix du produit: <strong>{{ productSelected?.cost }}€</strong>
       </p>
+      <p *ngIf="productSelected?.amount">
+        Quantité: <strong>{{ productSelected?.amount }}</strong>
+      </p>
     </div>
   </div>
   <div fxLayout="row wrap" fxLayoutAlign="space-between center">

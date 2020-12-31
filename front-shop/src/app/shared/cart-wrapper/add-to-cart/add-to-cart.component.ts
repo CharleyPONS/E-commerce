@@ -46,6 +46,8 @@ export class AddToCartComponent implements OnInit {
     console.log('added', item);
     this.setProductOrdered();
     this._cartService.addItem(this.items);
+    this._cartService.setShipping(0);
+    console.log(this._cartService.getShipping());
     if (this._cartService.getItem(this.items.identifier)) {
       this.productAdded.emit(
         new ProductAdded({ isAdded: true, identifier: this.items?.identifier })

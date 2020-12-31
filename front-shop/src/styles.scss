@@ -185,6 +185,12 @@ mat-error {
   .cart-list-footer .cart-list-summary .cart-tax-summary {
     display: none !important;
   }
+  .cart-list-footer .cart-list-summary .cart-shipping-summary {
+    display: none !important;
+  }
+  .cart-list-footer .cart-list-summary .cart-total-summary {
+    font-weight: 500 !important;
+  }
 }
 
 .cart-view .cart-increase-button {

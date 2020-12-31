@@ -55,12 +55,16 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
 
   public async onInit() {
     this.products = this._cartService.getItems();
-    console.log(this.products);
     this.configuration = await this._configurationService.getConfig();
     const baseShipment: number = this.configuration?.transporter.find(
       (v) => v.type === Transporter.LAPOSTE
     )?.basePrice;
-    this._cartService.setShipping(baseShipment);
+    this.total = roundToTwoDigitsAfterComma(this._cartService.totalCost());
+    if (this.total < this.configuration?.minPriceFreeShipment) {
+      this._cartService.setShipping(baseShipment);
+    } else {
+      this._cartService.setShipping(0);
+    }
     this.baseShipment = baseShipment;
     this.totalWithoutShipping = roundToTwoDigitsAfterComma(
       this._cartService.totalCost() - this._cartService.getShipping()
@@ -68,7 +72,6 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
     this.initTotal = roundToTwoDigitsAfterComma(
       this._cartService.totalCost() - baseShipment
     );
-    this.total = roundToTwoDigitsAfterComma(this._cartService.totalCost());
     const reduction = this._getSessionReduction();
     this.minPriceFreeShipment = roundToTwoDigitsAfterComma(
       this.configuration?.minPriceFreeShipment - this.total

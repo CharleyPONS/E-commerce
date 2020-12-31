@@ -57,6 +57,13 @@
       Plus que {{ minPriceFreeShipment }}€ d'achat pour profiter de la livraison
       gratuite
     </mat-card>
+    <mat-card
+      class="card-order"
+      *ngIf="total > configuration?.minPriceFreeShipment && !isOnProcessPayment"
+    >
+      Votre livraison est gratuite vous avez plus de
+      {{ configuration?.minPriceFreeShipment }}€ d'achat.
+    </mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between">
       <p>Frais de livraison:</p>
       <p>
@@ -73,7 +80,6 @@
       mat-button
       mat-raised-button
       color="primary"
-      (click)="validateCart()"
       [routerLink]="'/order/validation'"
     >
       Valider le panier
