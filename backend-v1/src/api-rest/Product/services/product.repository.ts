@@ -38,7 +38,7 @@ export class ProductRepository extends Repository<ProductEntity> {
 
   async findManyProduct(product: string[]): Promise<ProductEntity[]> {
     new WinstonLogger().logger().info(`Search a list product ${product}`);
-    return this.find({ where: { name: In(product) } });
+    return this.find({ where: { name: In(product) }, relations: ['stock', 'price'] });
   }
 
   async saveProduct(product: ProductEntity): Promise<void> {

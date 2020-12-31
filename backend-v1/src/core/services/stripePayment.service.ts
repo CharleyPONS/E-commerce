@@ -63,7 +63,7 @@ export class StripePaymentService {
           ? process.env.SECRET_KEY_DEVELOPMENT
           : process.env.SECRET_KEY_PRODUCTION,
       apiVersion: '2020-08-27',
-      protocol: process.env.PROTOCOL_xHTTP as 'http' | 'https'
+      protocol: process.env.PROTOCOL_HTTP as 'http' | 'https'
     };
     const stripeConfigOptions: IStripeConfigInterface = { ...stripeConfig };
     delete stripeConfigOptions.apiKey;
@@ -137,7 +137,8 @@ export class StripePaymentService {
       });
     }
     let amount = 0;
-    const listOrderProduct: Array<{ productName: string; quantity: number }> = listOrder.product;
+    const listOrderProduct: Array<{ productName: string; quantity: number; grammeNumber: number }> =
+      listOrder.product;
     const product: ProductEntity[] = await this._productRepository.findManyProduct(
       listOrderProduct.map(v => v.productName)
     );
@@ -157,18 +158,21 @@ export class StripePaymentService {
           switch (productSelected.categories) {
             case CATEGORIES.FLOWER:
             case CATEGORIES.RESINE:
-              switch (productOrder.quantity) {
+              switch (productOrder.grammeNumber) {
                 case 3:
-                  amount = amount + productSelected?.price?.priceForThreeGramme;
+                  amount =
+                    amount + productSelected?.price?.priceForThreeGramme * productOrder.quantity;
                   break;
                 case 5:
-                  amount = amount + productSelected?.price?.priceForFiveGramme;
+                  amount =
+                    amount + productSelected?.price?.priceForFiveGramme * productOrder.quantity;
                   break;
                 case 10:
-                  amount = amount + productSelected?.price?.priceForTenGramme;
+                  amount =
+                    amount + productSelected?.price?.priceForTenGramme * productOrder.quantity;
                   break;
                 case 1:
-                  amount = amount + productSelected?.price?.basePrice;
+                  amount = amount + productSelected?.price?.basePrice * productOrder.quantity;
                   break;
               }
               break;
@@ -182,13 +186,13 @@ export class StripePaymentService {
         }
       }
     }
-    const configuration: ConfigurationEntity = await this._configurationRepository.findByType(
+    const configuration = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
-    if (listOrder.reduction && Array.isArray(configuration?.promotion)) {
+    if (listOrder.reduction && Array.isArray(configuration[0].promotion)) {
       const beforePrice: number = amount;
-      const promotionRetrieve: ConfigurationPromotionEntity[] = configuration.promotion.filter(
-        v => v.codePromotion === listOrder.reduction?.type
+      const promotionRetrieve: ConfigurationPromotionEntity[] = configuration[0].promotion.filter(
+        (v: any) => v.codePromotion === listOrder.reduction?.type
       );
       const priceReduction = promotionRetrieve ? promotionRetrieve[0]?.promotionReduction : 1;
       amount = amount - amount * (priceReduction / 100);
@@ -200,7 +204,8 @@ export class StripePaymentService {
       });
     }
     if (amount < configuration?.minPriceFreeShipment) {
-      const configurationTransporterEntity = configuration.transporter.find(
+      const configurationTransporterEntity = configuration[0].transporter.find(
+        // @ts-ignore
         v => v.type === listOrder.shipment
       );
       amount =
@@ -212,6 +217,10 @@ export class StripePaymentService {
       });
     }
     new WinstonLogger().logger().info('price have been set for user', { user, price: amount });
-    return { price: amount };
+    return { price: this._roundToTwoDigitsAfterComma(amount) };
+  }
+
+  private _roundToTwoDigitsAfterComma(floatNumber: number) {
+    return parseFloat((Math.round(floatNumber * 100) / 100).toFixed(2));
   }
 }
