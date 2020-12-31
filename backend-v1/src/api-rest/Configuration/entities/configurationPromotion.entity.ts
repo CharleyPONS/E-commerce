@@ -14,7 +14,7 @@ export class ConfigurationPromotionEntity {
   codePromotion?: string;
 
   @Column({ type: 'int', nullable: true, default: 0 })
-  promotionReduction?: number;
+  promotionReduction: number;
 
   @ManyToOne(() => ConfigurationEntity, configuration => configuration.promotion)
   configuration?: ConfigurationEntity;

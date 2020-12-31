@@ -9,10 +9,10 @@ export class ConfigurationTransporterEntity {
   id?: number;
 
   @Column({ type: 'varchar', nullable: true })
-  type?: Transporter;
+  type: Transporter;
 
   @Column({ type: 'int', nullable: true })
-  basePrice?: number;
+  basePrice: number;
 
   @Column({ type: 'varchar', nullable: true })
   delay?: string;

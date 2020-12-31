@@ -3,11 +3,13 @@ import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
 
 import { ConfigurationEntity } from '../../api-rest/Configuration/entities/configuration.entity';
+import { ConfigurationPromotionEntity } from '../../api-rest/Configuration/entities/configurationPromotion.entity';
 import { ConfigurationType } from '../../api-rest/Configuration/entities/configurationType.enum';
 import { ConfigurationRepository } from '../../api-rest/Configuration/service/configuration.repository';
 import { ProductEntity } from '../../api-rest/Product/entities/product.entity';
 import { CATEGORIES, UNITY } from '../../api-rest/Product/entities/product.enum';
 import { ProductRepository } from '../../api-rest/Product/services/product.repository';
+import { UserEntity } from '../../api-rest/User/entities/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrdered.entity';
 import { UserOrderedProductsEntity } from '../../api-rest/UserOrdered/entities/userOrderedProducts.entity';
@@ -32,28 +34,27 @@ export class StripePaymentService {
     private _userOrderedRepository: UserOrderedRepository
   ) {}
   async main(
-    userId: number,
     listOrder: IListOrderInterface
   ): Promise<{
     clientSecret: string | null;
   }> {
-    const user = await this._userRepository.findById(userId);
+    const user = await this._userRepository.findByEmail(listOrder?.userEmail);
     if (!user) {
       new WinstonLogger()
         .logger()
-        .crit('user trying to purchase payment is not in our base', { userId, listOrder });
+        .crit('user trying to purchase payment is not in our base', { user, listOrder });
       throw new NotFound('user trying to purchase payment is not in our base');
     }
     if (!listOrder) {
       new WinstonLogger()
         .logger()
-        .crit('user trying to purchase have not product in his own', { userId, listOrder });
+        .crit('user trying to purchase have not product in his own', { user, listOrder });
       throw new NotFound('user trying to purchase have not product in his own');
     }
     new WinstonLogger()
       .logger()
       .info('user is identified, listOrder is present payment process can start now', {
-        userId,
+        user,
         listOrder
       });
     const stripeConfig: IStripeConfigInterface = {
@@ -62,36 +63,35 @@ export class StripePaymentService {
           ? process.env.SECRET_KEY_DEVELOPMENT
           : process.env.SECRET_KEY_PRODUCTION,
       apiVersion: '2020-08-27',
-      protocol: process.env.PROTOCOL_HTTP as 'http' | 'https'
+      protocol: process.env.PROTOCOL_xHTTP as 'http' | 'https'
     };
     const stripeConfigOptions: IStripeConfigInterface = { ...stripeConfig };
     delete stripeConfigOptions.apiKey;
     const stripe = new Stripe(stripeConfig.apiKey as string, stripeConfigOptions);
-    const amount: { price: number } = await this.calculateOrderAmountLogic(userId, listOrder);
+    const amount: { price: number } = await this.calculateOrderAmountLogic(user, listOrder);
     if (!amount) {
       new WinstonLogger()
         .logger()
-        .crit('user trying to purchase have an amount at 0', { userId, amount });
+        .crit('user trying to purchase have an amount at 0', { user, amount });
       throw new NotFound('user trying to purchase have an amount at 0');
     }
 
     new WinstonLogger()
       .logger()
       .info('price have been set for user transaction and payment can begin now', {
-        userId,
+        user,
         price: amount
       });
 
     const userOrder: UserOrderedEntity = new UserOrderedEntity();
     userOrder.paid = false;
-    userOrder.amount = amount.price;
-    userOrder.userId = listOrder.userId;
+    userOrder.amount = amount?.price;
+    userOrder.userId = listOrder?.userId;
     const userOrderProduct: UserOrderedProductsEntity = new UserOrderedProductsEntity();
     const userProduct: any[] = [];
     (listOrder.product || []).forEach(v => {
       userOrderProduct.quantity = v.quantity;
       userOrderProduct.productName = v.productName;
-      userOrderProduct.type = v.categories;
       userOrderProduct.unityMeasure =
         v.categories === CATEGORIES.FLOWER || v.categories === CATEGORIES.RESINE
           ? UNITY.GRAMME
@@ -103,7 +103,7 @@ export class StripePaymentService {
     await this._userOrderedRepository.saveUserOrder(userOrder);
 
     new WinstonLogger().logger().info('user ordered have been save on stripe payment service', {
-      userId,
+      user,
       userOrder
     });
 
@@ -127,12 +127,12 @@ export class StripePaymentService {
   }
 
   private async calculateOrderAmountLogic(
-    userId: number,
+    user: UserEntity,
     listOrder: IListOrderInterface
   ): Promise<{ price: number }> {
     if (!Array.isArray(listOrder.product)) {
       new WinstonLogger().logger().info('list order contain no product', {
-        userId,
+        user,
         listOrder
       });
     }
@@ -146,7 +146,7 @@ export class StripePaymentService {
       new WinstonLogger()
         .logger()
         .crit('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE', {
-          userId,
+          user,
           listOrder
         });
       throw new NotFound('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE');
@@ -185,22 +185,33 @@ export class StripePaymentService {
     const configuration: ConfigurationEntity = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
-    // if (
-    //   listOrder.reduction &&
-    //   configuration?.promotion?.isPromotion &&
-    //   configuration?.promotion?.promotionReduction
-    // ) {
-    //   const beforePrice: number = amount;
-    //   amount = amount - amount * (configuration?.promotion?.promotionReduction / 100);
-    //   new WinstonLogger().logger().info('reduction have been apply for user', {
-    //     userId,
-    //     priceBefore: beforePrice,
-    //     newPrice: amount,
-    //     reduction: configuration?.promotion?.promotionReduction
-    //   });
-    // }
-    new WinstonLogger().logger().info('price have been set for user', { userId, price: amount });
-    //TODO ajouter le cout de la livraison
+    if (listOrder.reduction && Array.isArray(configuration?.promotion)) {
+      const beforePrice: number = amount;
+      const promotionRetrieve: ConfigurationPromotionEntity[] = configuration.promotion.filter(
+        v => v.codePromotion === listOrder.reduction?.type
+      );
+      const priceReduction = promotionRetrieve ? promotionRetrieve[0]?.promotionReduction : 1;
+      amount = amount - amount * (priceReduction / 100);
+      new WinstonLogger().logger().info('reduction have been apply for user', {
+        user,
+        priceBefore: beforePrice,
+        newPrice: amount,
+        reduction: promotionRetrieve
+      });
+    }
+    if (amount < configuration?.minPriceFreeShipment) {
+      const configurationTransporterEntity = configuration.transporter.find(
+        v => v.type === listOrder.shipment
+      );
+      amount =
+        amount + (configurationTransporterEntity ? configurationTransporterEntity.basePrice : 0);
+      new WinstonLogger().logger().info('price have been update with shipment tax for user', {
+        user,
+        price: amount,
+        transporter: configurationTransporterEntity
+      });
+    }
+    new WinstonLogger().logger().info('price have been set for user', { user, price: amount });
     return { price: amount };
   }
 }

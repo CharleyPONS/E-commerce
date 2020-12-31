@@ -16,7 +16,7 @@ export class UserCommandService {
     private _userCommandRepository: UserOrderedRepository
   ) {}
   async main(context: Context, userCommand: UserOrderedEntity): Promise<void> {
-    const user: UserEntity | undefined = await this._userRepository.findById(userCommand?.id);
+    const user: UserEntity | undefined = await this._userRepository.findById(userCommand?.userId);
     if (!user) {
       new WinstonLogger().logger().info(`User not found to login`, { userCommand });
       throw new NotFound('User not found to login ');

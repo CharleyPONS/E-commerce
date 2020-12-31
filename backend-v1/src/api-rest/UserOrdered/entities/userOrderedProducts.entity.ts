@@ -11,7 +11,7 @@ export class UserOrderedProductsEntity extends BaseEntity {
   id: number;
 
   @Required()
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   @Enum(CATEGORIES)
   type: CATEGORIES;
 

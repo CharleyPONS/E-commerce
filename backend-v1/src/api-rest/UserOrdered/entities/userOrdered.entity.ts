@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 
 import { UserOrderedProductsEntity } from './userOrderedProducts.entity';
+import { Transporter } from '../../Configuration/entities/transporter.enum';
 
 // Use save in place of update to apply hook middleware
 
@@ -33,6 +34,9 @@ export class UserOrderedEntity extends BaseEntity {
   @Required()
   @Column({ type: 'int' })
   amount: number;
+
+  @Column({ type: 'varchar', length: '255' })
+  transporter: Transporter;
 
   @Column({ type: 'varchar', length: '255' })
   dateUpdate: string;

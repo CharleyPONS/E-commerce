@@ -7,9 +7,9 @@ import { UserEntity } from '../entities/user.entity';
 import { UserAddressEntity } from '../entities/userAddress.entity';
 import { IUser } from '../models/user.interface';
 import { UserRepository } from '../services/user.repository';
+import { UserAddressRepository } from '../services/userAddress.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';
-import { UserAddressRepository } from '../services/userAddress.repository';
 
 @Controller({
   path: '/user'
@@ -22,11 +22,11 @@ export class UserCtrl {
     private _userDeleteTokenService: UserDeleteTokenService
   ) {}
 
-  @Get('/:id')
+  @Get('/:token')
   @Summary('Return a User from his ID')
   @(Status(200, UserEntity).Description('Success'))
-  async getUser(@PathParams('id') id: number): Promise<UserEntity> {
-    const user = await this._userRepository.findById(id);
+  async getUser(@PathParams('token') token: string): Promise<UserEntity> {
+    const user = await this._userRepository.findByToken(token);
 
     if (user) {
       return user;
@@ -49,10 +49,7 @@ export class UserCtrl {
   @Post('/signIn')
   @Summary('Return JWT token if sign in succeed')
   @(Status(200, UserEntity).Description('Success'))
-  async logInUser(
-    @Context() ctx: Context,
-    @BodyParams() userBody: UserEntity
-  ): Promise<UserEntity> {
+  async logInUser(@Context() ctx: Context, @BodyParams() userBody: IUser): Promise<UserEntity> {
     const user: IUser = await this._userLoginService.main(ctx, userBody);
     return ctx.getResponse().status(200).send(user);
   }
@@ -91,10 +88,11 @@ export class UserCtrl {
       userToSave,
       userBody
     );
+    const userSaved = await this._userRepository.findById(user?.userId as string);
     if (updateUser) {
-      new WinstonLogger().logger().info(`Update user done`, { updateUser });
+      new WinstonLogger().logger().info(`Update user done`, { userSaved });
 
-      return ctx.getResponse().status(200).send(updateUser);
+      return ctx.getResponse().status(200).send(userSaved);
     } else {
       new WinstonLogger().logger().warn(`Update user failed`, { updateUser });
 

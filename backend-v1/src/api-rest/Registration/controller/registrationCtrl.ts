@@ -22,7 +22,7 @@ export class RegistrationCtrl {
   @(Returns(200).Description('Register Ok'))
   async registerUser(
     @Context() ctx: Context,
-    @Required() @BodyParams() registrationInfo: UserEntity
+    @Required() @BodyParams() registrationInfo: IUser
   ): Promise<UserEntity | undefined> {
     await this._registrationService.main(registrationInfo);
     const user: IUser = await this._userLoginService.main(ctx, registrationInfo);

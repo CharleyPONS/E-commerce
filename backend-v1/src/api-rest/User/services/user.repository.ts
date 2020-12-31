@@ -9,12 +9,12 @@ import { IUser } from '../models/user.interface';
 export class UserRepository extends Repository<UserEntity> {
   $onInit() {}
 
-  async findById(userId: number): Promise<UserEntity | undefined> {
+  async findById(userId: string): Promise<UserEntity | undefined> {
     try {
       new WinstonLogger().logger().info(`Search a user with id ${userId}`);
       const user = await this.findOne({
         where: { id: userId },
-        relations: ['address', 'userOrder']
+        relations: ['address']
       });
       return user;
     } catch (err) {
@@ -28,7 +28,8 @@ export class UserRepository extends Repository<UserEntity> {
     try {
       new WinstonLogger().logger().info(`Search a user with email ${userEmail}`);
       const user = await this.findOne({
-        where: { email: userEmail }
+        where: { email: userEmail },
+        relations: ['address']
       });
       return user;
     } catch (err) {

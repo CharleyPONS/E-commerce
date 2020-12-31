@@ -19,13 +19,12 @@ export class UserPaymentCtrl {
   @UseBefore(AuthJWTMiddleware)
   async registerUser(
     @Context() ctx: Context,
-    @Required() @PathParams('userId') userId: number,
-    @BodyParams('listOrder')
+    @BodyParams()
     listOrder: IListOrderInterface
   ): Promise<void> {
     const secretClient: {
       clientSecret: string | null;
-    } = await this._stripePaymentService.main(userId, listOrder);
+    } = await this._stripePaymentService.main(listOrder);
     ctx.getResponse().status(200).send(secretClient);
   }
 

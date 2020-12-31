@@ -21,7 +21,7 @@ export class ConfigurationEntity {
     configurationTransporter => configurationTransporter.configuration,
     { cascade: true }
   )
-  transporter?: ConfigurationTransporterEntity[];
+  transporter: ConfigurationTransporterEntity[];
 
   @OneToMany(
     () => ConfigurationPromotionEntity,
@@ -31,7 +31,7 @@ export class ConfigurationEntity {
   promotion?: ConfigurationPromotionEntity[];
 
   @Column({ type: 'int', nullable: true })
-  minPriceFreeShipment?: number;
+  minPriceFreeShipment: number;
 
   @Column({ type: 'int', nullable: true })
   baseShipmentPrice?: number;
