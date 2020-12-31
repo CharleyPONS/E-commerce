@@ -92,11 +92,12 @@ export class StripePaymentService {
     (listOrder.product || []).forEach(v => {
       userOrderProduct.quantity = v.quantity;
       userOrderProduct.productName = v.productName;
+      userOrderProduct.grammeNumber = v.grammeNumber;
       userOrderProduct.unityMeasure =
         v.categories === CATEGORIES.FLOWER || v.categories === CATEGORIES.RESINE
           ? UNITY.GRAMME
           : UNITY.SIMPLE_UNITY;
-      userProduct.concat(userOrderProduct);
+      userProduct.push(userOrderProduct);
     });
     userOrder.product = userProduct;
 

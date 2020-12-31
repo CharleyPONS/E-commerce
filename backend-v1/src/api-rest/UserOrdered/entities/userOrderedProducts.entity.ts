@@ -26,8 +26,11 @@ export class UserOrderedProductsEntity extends BaseEntity {
 
   @Required()
   @Property()
-  @Enum(UNITY)
+  @Column({ type: 'varchar' })
   unityMeasure: UNITY;
+
+  @Column({ type: 'int', nullable: true })
+  grammeNumber: number;
 
   @ManyToOne(() => UserOrderedEntity, userOrdered => userOrdered.product)
   userOrder: UserOrderedEntity;
