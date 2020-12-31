@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { SharedModule } from '../shared/shared.module';
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     routing,
     MaterialModule,
+    FlexLayoutModule,
   ],
 
   exports: [MainWrapperComponent, ConnectionComponent, RegistrationComponent],

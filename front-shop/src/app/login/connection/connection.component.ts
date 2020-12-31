@@ -13,12 +13,13 @@ import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 })
 export class ConnectionComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
-  @Output() connect = new EventEmitter<boolean>();
+  @Output() connect = new EventEmitter<{ connect: boolean; user: User }>();
   public form: FormGroup;
   public hide: boolean;
   public authenticateSucceed: boolean = true;
   public isConnected: boolean;
   public matcher: any;
+  public userRetrieve: User;
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
@@ -41,11 +42,12 @@ export class ConnectionComponent implements OnInit {
       password: this.form.get('password').value,
     });
     try {
-      this.authenticateSucceed = await this._userService.connectUser(
+      this.userRetrieve = await this._userService.connectUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
+      this.authenticateSucceed = this._userService.isLoggedIn();
       if (this.isOnOrder) {
-        this.connect.emit(true);
+        this.connect.emit({ connect: true, user: this.userRetrieve });
       }
       this._snackBar.open('Vous êtes connecté', 'Succès', {
         duration: 2000,

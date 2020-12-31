@@ -1,5 +1,5 @@
 <mat-vertical-stepper [linear]="true" #stepper>
-  <mat-step *ngIf="!isConnected" [stepControl]="connectionForm">
+  <mat-step [stepControl]="connectionForm">
     <div fxLayout="row">
       <div>
         <p>Vous avez déjà un compte?</p>
@@ -31,7 +31,7 @@
         fxLayoutGap.sm="12px"
         fxLayoutGap.xs="8px"
       >
-        <mat-form-field>
+        <mat-form-field color="primary">
           <mat-label>Adresse e-mail</mat-label>
           <input
             matInput
@@ -62,7 +62,7 @@
           <mat-error
             *ngIf="
               connectionForm.get('password').errors &&
-              connectionForm.get('email').touched
+              connectionForm.get('password').touched
             "
             >Votre mot de passe doit comporter au moins 6 caractères</mat-error
           >
@@ -76,7 +76,9 @@
     <div>
       <button
         mat-button
+        mat-raised-button
         matStepperNext
+        [disabled]="connectionForm.invalid || connectionForm.disabled"
         (click)="validateConnectionForm()"
         color="primary"
       >
@@ -93,7 +95,11 @@
         fxLayoutGap.sm="12px"
         fxLayoutGap.xs="8px"
       >
-        <div fxLayout.gt-sm="row" fxLayout="column">
+        <div
+          fxLayout.gt-sm="row"
+          fxLayoutAlign.gt-sm="space-between"
+          fxLayout="column"
+        >
           <mat-form-field>
             <mat-label>Prénom</mat-label>
             <input
@@ -102,6 +108,13 @@
               formControlName="surname"
               required
             />
+            <mat-error
+              *ngIf="
+                addressForm.get('surname').errors &&
+                addressForm.get('surname').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-form-field>
           <mat-form-field>
             <mat-label>Nom</mat-label>
@@ -111,9 +124,20 @@
               formControlName="name"
               required
             />
+            <mat-error
+              *ngIf="
+                addressForm.get('name').errors &&
+                addressForm.get('name').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-form-field>
         </div>
-        <div fxLayout.gt-sm="row" fxLayout="column">
+        <div
+          fxLayout.gt-sm="row"
+          fxLayoutAlign.gt-sm="space-between"
+          fxLayout="column"
+        >
           <mat-form-field>
             <mat-label>Adresse</mat-label>
             <input
@@ -122,6 +146,13 @@
               formControlName="address"
               required
             />
+            <mat-error
+              *ngIf="
+                addressForm.get('address').errors &&
+                addressForm.get('address').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-form-field>
           <mat-form-field>
             <mat-label>Code postal</mat-label>
@@ -131,9 +162,20 @@
               formControlName="postalCode"
               required
             />
+            <mat-error
+              *ngIf="
+                addressForm.get('postalCode').errors &&
+                addressForm.get('postalCode').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-form-field>
         </div>
-        <div fxLayout.gt-sm="row" fxLayout="column">
+        <div
+          fxLayout.gt-sm="row"
+          fxLayoutAlign.gt-sm="space-between"
+          fxLayout="column"
+        >
           <mat-form-field>
             <mat-label>Ville</mat-label>
             <input
@@ -142,23 +184,49 @@
               formControlName="town"
               required
             />
+            <mat-error
+              *ngIf="
+                addressForm.get('town').errors &&
+                addressForm.get('town').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-form-field>
           <mat-select-country
+            formControlName="country"
             appearance="outline"
             label="Pays"
-            formControlName="country"
+            [countries]="predefinedCountries"
+            [itemsLoadSize]="5"
           >
+            <mat-error
+              *ngIf="
+                addressForm.get('country').errors &&
+                addressForm.get('country').touched
+              "
+              >Ce champ est requis</mat-error
+            >
           </mat-select-country>
         </div>
       </div>
     </form>
-    <button
-      mat-button
-      matStepperNext
-      (click)="validateAddressForm()"
-      color="primary"
-    >
-      Suivant
-    </button>
+    <div fxLayout="row" fxLayoutGap="20px">
+      <button mat-button mat-stroked-button matStepperPrevious color="warn">
+        Précédent
+      </button>
+      <button
+        mat-button
+        mat-raised-button
+        matStepperNext
+        [disabled]="addressForm.invalid || addressForm.disabled"
+        (click)="validateAddressForm()"
+        color="primary"
+      >
+        Suivant
+      </button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Mode de livraison</ng-template>
   </mat-step>
 </mat-vertical-stepper>

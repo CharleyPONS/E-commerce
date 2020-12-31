@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { User } from '../../../core/models/user.model';
 
 @Component({
   selector: 'app-connect-modal',
@@ -15,9 +16,9 @@ export class ConnectModalComponent implements OnInit {
     this.dialogRef.close({ close: true });
   }
 
-  public isConnected(connection: boolean) {
-    if (connection) {
-      this.dialogRef.close({ close: true });
+  public isConnected(connection: { connect: boolean; user: User }) {
+    if (connection?.connect) {
+      this.dialogRef.close({ user: connection?.user });
     }
   }
 }

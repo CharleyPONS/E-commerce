@@ -29,7 +29,7 @@ export class RegistrationComponent implements OnInit {
     this.hide = true;
     this.form = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.min(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 

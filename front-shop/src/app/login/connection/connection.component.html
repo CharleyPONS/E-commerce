@@ -38,7 +38,7 @@
         >{{ hide ? "visibility_off" : "visibility" }}</mat-icon
       >
       <mat-error
-        *ngIf="form.get('password').errors && form.get('email').touched"
+        *ngIf="form.get('password').errors && form.get('password').touched"
         >Votre mot de passe doit comporter au moins 6 caractères</mat-error
       >
     </mat-form-field>

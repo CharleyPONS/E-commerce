@@ -10,7 +10,7 @@ import * as moment from 'moment';
 })
 export class UserService {
   constructor(private _http: HttpClient) {}
-  async connectUser(userBody: User): Promise<boolean> {
+  async connectUser(userBody: User): Promise<User> {
     const user: User = await this._http
       .post<User>(
         `${environment.apiUrl}${environment.apiPath}/user/signIn`,
@@ -19,13 +19,13 @@ export class UserService {
       .pipe(map((res) => new User(res)))
       .toPromise();
     this.setSession(user);
-    return this.isLoggedIn();
+    return user;
   }
 
   async registerUser(userBody: User): Promise<boolean> {
     const user: User = await this._http
       .post<User>(
-        `${environment.apiUrl}${environment.apiPath}/user/signUp`,
+        `${environment.apiUrl}${environment.apiPath}/signUp`,
         userBody
       )
       .pipe(map((res) => new User(res)))
@@ -66,6 +66,10 @@ export class UserService {
 
   public isLoggedOut() {
     return !this.isLoggedIn();
+  }
+
+  public getToken() {
+    return localStorage.getItem('id_token');
   }
 
   public getExpiration() {

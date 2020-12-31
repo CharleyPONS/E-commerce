@@ -28,13 +28,13 @@
         formControlName="password"
         required
       />
+      <mat-error
+        *ngIf="form.get('password').errors && form.get('password').touched"
+        >Votre mot de passe doit comporter au moins 6 caractères</mat-error
+      >
       <mat-icon matSuffix class="icon-selector" (click)="hide = !hide">{{
         hide ? "visibility_off" : "visibility"
       }}</mat-icon>
-      <mat-error
-        *ngIf="form.get('password').errors && form.get('email').touched"
-        >Votre mot de passe doit comporter au moins 6 caractères</mat-error
-      >
     </mat-form-field>
     <mat-card *ngIf="!authenticateSucceed" style="background-color: #ff8d79">
       <p>Votre authentification a échoué</p>
