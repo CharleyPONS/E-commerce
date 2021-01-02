@@ -4,7 +4,10 @@
 
 > Build in TSED bringing typeorm plugin for interaction with PostgreSQL
 > Using stripes with custom payments flow validate in server side
-> Using stripes CLI and webhook
+> Using stripes CLI and webhook 
+> If you wanna test webhook two choice
+- open up your local environment to the public internet in order for Stripe to communicate to it.
+- do it with stripe CLI (faster)
 > Using JWT token for authentication and bcrypt for password security
 > Using nodemailer and express-handlebars
 > Using Oauth 2 connection for SSO with facebook
@@ -34,13 +37,11 @@ npm install
 
 ## Getting started
 
-You will need to add an .env file at the root of the project
-
 ```bash
 #Main
 PORT= port you wanna use (3000 as default if not set)
 NODE_ENV= development
-CORS_ORIGIN= your localhost
+CORS_ORIGIN= your localhost + webhook
 CONNECTION_NAME=connection name
 CONFIGURATION_TYPE= type config
 

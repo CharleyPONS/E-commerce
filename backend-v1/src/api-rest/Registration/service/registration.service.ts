@@ -5,8 +5,8 @@ import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
 import { EmailSenderService } from '../../../core/services/emailSender.service';
 import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../../User/entities/user.entity';
-import { UserRepository } from '../../User/services/user.repository';
 import { IUser } from '../../User/models/user.interface';
+import { UserRepository } from '../../User/services/user.repository';
 
 @Service()
 export class RegistrationService {

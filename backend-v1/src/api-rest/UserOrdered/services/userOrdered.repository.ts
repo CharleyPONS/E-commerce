@@ -22,6 +22,21 @@ export class UserOrderedRepository extends Repository<UserOrderedEntity> {
     }
   }
 
+  async findByUserId(userId: string): Promise<any> {
+    try {
+      new WinstonLogger().logger().info(`Search a userOrdered with userid ${userId}`);
+      const userOrdered = await this.findOne({
+        where: { userId },
+        relations: ['product']
+      });
+      return userOrdered;
+    } catch (err) {
+      new WinstonLogger()
+        .logger()
+        .warn(`Search a userOrdered with user id ${userId} request failed`, { error: err });
+    }
+  }
+
   async saveUserOrder(userOrdered: UserOrderedEntity): Promise<any> {
     try {
       new WinstonLogger().logger().info(`Save userOrdered`, { userOrdered });
@@ -36,9 +51,9 @@ export class UserOrderedRepository extends Repository<UserOrderedEntity> {
   }
 
   async updateOne(
-    filter: FindConditions<UserEntity>,
-    updateQuery: QueryDeepPartialEntity<UserEntity>,
-    userOrdered: UserOrderedEntity
+    filter: FindConditions<UserOrderedEntity>,
+    updateQuery: QueryDeepPartialEntity<UserOrderedEntity>,
+    userOrdered: UserOrderedEntity | UserEntity
   ): Promise<any> {
     try {
       new WinstonLogger().logger().info(`update userOrdered`, { userOrdered });

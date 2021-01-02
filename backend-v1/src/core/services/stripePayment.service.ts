@@ -1,3 +1,4 @@
+import { deepClone } from '@tsed/core';
 import { Service } from '@tsed/di';
 import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
@@ -16,7 +17,6 @@ import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userO
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
-import { deepClone } from '@tsed/core';
 import { WinstonLogger } from './winstonLogger';
 
 /**
@@ -119,7 +119,7 @@ export class StripePaymentService {
       )}, Quantity: ${listOrder?.product?.map(m => m.quantity)}`,
       statement_descriptor: `${process.env.STATEMENT_DESCRIPTOR}`.substr(0, 22),
       metadata: {
-        client: `Email client: ${listOrder.userEmail}`,
+        client: `${listOrder.userEmail}`,
         amount: `Amount: ${amount}`
       }
     });

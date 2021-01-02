@@ -65,7 +65,7 @@ export class Server {
     this.app
       .use(
         cors({
-          origin: process.env.CORS_ORIGIN || '*',
+          origin: (process.env.CORS_ORIGIN as string)?.split(',') || '*',
           methods: ['GET', 'POST', 'DELETE']
         })
       )
