@@ -4,9 +4,12 @@
 
 export const environment = {
   apiPath: '/api/rest',
-  apiUrl: 'http://0.0.0.0:5000',
+  apiUrl: 'https://0.0.0.0:5000',
   production: false,
   activePromotion: 'nouveau client',
+  stripeApiKey:
+    'pk_test_51I0Hi6FM04UOkXZEf5hHOf3dHhBqHJ8Jphm7TCnYCGnpD1dJaifrmqeicBadyNVaxZbx19eWtyoTDFyipLEJH7Wa00QKUNoJTf',
+  facebookAppId: 1217604388698602,
 };
 
 /*

@@ -8,6 +8,7 @@ import { routing } from './login.routing';
 import { MainWrapperComponent } from './main-wrapper/main-wrapper.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { CommonModule } from '@angular/common';
+import { FacebookConnectionComponent } from './facebook-connection/facebook-connection.component';
 
 @NgModule({
   imports: [
@@ -19,12 +20,18 @@ import { CommonModule } from '@angular/common';
     FlexLayoutModule,
   ],
 
-  exports: [MainWrapperComponent, ConnectionComponent, RegistrationComponent],
+  exports: [
+    MainWrapperComponent,
+    ConnectionComponent,
+    RegistrationComponent,
+    FacebookConnectionComponent,
+  ],
   providers: [],
   declarations: [
     MainWrapperComponent,
     ConnectionComponent,
     RegistrationComponent,
+    FacebookConnectionComponent,
   ],
 })
 export class LoginModule {}

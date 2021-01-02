@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartService } from 'ng-shopping-cart';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
+import { environment } from '../../../environments/environment';
 import { Transporter } from '../../core/enum/transporter.enum';
 import { CartItemCustom } from '../../core/models/cartItemCustom.model';
 import { Config } from '../../core/models/config.model';
@@ -19,7 +20,7 @@ import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 import { ConnectModalComponent } from '../../shared/modal/connect-modal/connect-modal.component';
 import { MatStepper } from '@angular/material/stepper';
 import { IReminderReduction } from '../reminder-cart/reminder-cart.component';
-
+declare const Stripe: any;
 export interface IListOrderInterface {
   userId: string;
   userEmail: string;
@@ -42,6 +43,7 @@ export class FormProcessOrderComponent implements OnInit {
   public connectionForm: FormGroup;
   public addressForm: FormGroup;
   public transporterForm: FormGroup;
+  public payForm: FormGroup;
   public hide: boolean;
   public emailAlreadyUse: boolean = false;
   public isConnected: boolean;
@@ -50,8 +52,31 @@ export class FormProcessOrderComponent implements OnInit {
   public transporter: ConfigTransporter[];
   public configuration: Config;
   public reduction: number;
+  public isDisabled: boolean = true;
+  public cardError: string = '';
+  public isCardError: boolean = false;
+  public card: any;
+  public stripe: any;
+  public spinnerHidden: boolean = true;
+  public paymentValidate: boolean = false;
   public secretStrip: {
     clientSecret: string | null;
+  };
+  public styleCard = {
+    base: {
+      color: '#32325d',
+      fontFamily: 'Arial, sans-serif',
+      fontSmoothing: 'antialiased',
+      fontSize: '16px',
+      '::placeholder': {
+        color: '#32325d',
+      },
+    },
+    invalid: {
+      fontFamily: 'Arial, sans-serif',
+      color: '#fa755a',
+      iconColor: '#fa755a',
+    },
   };
   public predefinedCountries: Country[] = [
     {
@@ -135,6 +160,9 @@ export class FormProcessOrderComponent implements OnInit {
     this.transporterForm = this._formBuilder.group({
       transporter: ['', Validators.required],
     });
+    this.payForm = this._formBuilder.group({
+      name: ['', Validators.required],
+    });
     const reduction = this._getSessionReduction();
     if (reduction) {
       this.reduction = roundToTwoDigitsAfterComma(
@@ -150,6 +178,24 @@ export class FormProcessOrderComponent implements OnInit {
       this.user = await this._userService.findByToken();
       console.log(this.user);
     }
+    this.stripe = Stripe(environment.stripeApiKey);
+
+    const elements = this.stripe.elements();
+
+    this.card = elements.create('card', {
+      hidePostalCode: true,
+      style: this.styleCard,
+    });
+    this.card.mount('.mat-step #card-element');
+    this.card.on('change', (e) => {
+      if (!e.empty) {
+        this.payForm.enabled;
+        this.isDisabled = false;
+      } else if (e.error) {
+        this.isCardError = true;
+        this.cardError = e.error;
+      }
+    });
   }
   public connectModal() {
     this._matDialog
@@ -162,6 +208,8 @@ export class FormProcessOrderComponent implements OnInit {
             this.user = res?.user;
             this.goForward();
             return;
+          } else if (this._userService.isLoggedIn()) {
+            this.goForward();
           }
           return;
         }
@@ -236,7 +284,7 @@ export class FormProcessOrderComponent implements OnInit {
     }
   }
 
-  public async transporterValidate() {
+  public async onPaymentMethod() {
     const reduction = this._getSessionReduction();
     if (this._userService.getToken()) {
       this.user = await this._userService.findByToken();
@@ -261,9 +309,37 @@ export class FormProcessOrderComponent implements OnInit {
       });
     });
     try {
+      this.spinnerHidden = false;
       this.secretStrip = await this._userOrderedService.intentPayment(order);
+      const paymentIntent = await this.stripe.confirmCardPayment(
+        this.secretStrip?.clientSecret,
+        {
+          payment_method: {
+            card: this.card,
+          },
+        }
+      );
+      this.spinnerHidden = true;
+      console.log(paymentIntent);
+      if (paymentIntent?.paymentIntent?.status === 'succeeded') {
+        this.paymentValidate = true;
+      } else if (paymentIntent.error) {
+        this._snackBar.open('Votre paiement a échoué', 'Erreur', {
+          duration: 3000,
+        });
+        this.isCardError = true;
+        this.cardError = paymentIntent?.error?.message;
+      }
     } catch (err) {
+      this.spinnerHidden = true;
       console.log(err);
+      this._snackBar.open(
+        'Votre paiement a échoué, contacté votre banque',
+        'Erreur',
+        {
+          duration: 3000,
+        }
+      );
     }
   }
 

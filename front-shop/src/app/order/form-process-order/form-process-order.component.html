@@ -16,6 +16,14 @@
       </div>
     </div>
     <div fxLayout="row">
+      <div>
+        <p>Vous êtes pressé?</p>
+      </div>
+      <div class="app-margin-lt-8 app-margin-tp-8">
+        <app-facebook-connection></app-facebook-connection>
+      </div>
+    </div>
+    <div fxLayout="row">
       <div class="app-margin-tp-12"><mat-icon>arrow_circle_down</mat-icon></div>
 
       <div>
@@ -290,7 +298,6 @@
         mat-button
         mat-raised-button
         matStepperNext
-        (click)="transporterValidate()"
         [disabled]="transporterForm.invalid || transporterForm.disabled"
         color="primary"
       >
@@ -357,5 +364,57 @@
         </div>
       </mat-card>
     </div>
+    <mat-card
+      class="app-margin-tp-8"
+      style="width: 70%; margin: auto; margin-top: 4%"
+    >
+      <form
+        [formGroup]="payForm"
+        id="payment-form"
+        fxLayout="column"
+        fxLayoutAlign="center"
+      >
+        <mat-form-field>
+          <mat-label>Nom sur la carte</mat-label>
+          <input
+            matInput
+            [placeholder]="'Votre nom'"
+            formControlName="name"
+            required
+          />
+        </mat-form-field>
+        <div id="card-element"></div>
+        <button
+          (click)="onPaymentMethod()"
+          style="margin-top: 3%"
+          [disabled]="isDisabled"
+          mat-button
+          mat-raised-button
+          color="primary"
+        >
+          Payer
+        </button>
+        <mat-progress-spinner
+          fxHide="{{ spinnerHidden }}"
+          style="margin: auto; margin-top: 8px"
+          color="primary"
+          [mode]="'indeterminate'"
+          [diameter]="'38'"
+        ></mat-progress-spinner>
+        <mat-card class="card-error" *ngIf="isCardError">
+          {{ cardError }}
+        </mat-card>
+        <mat-card class="card-success" *ngIf="paymentValidate">
+          <p>
+            Votre paiement a été validé, vous recevrez une confirmation par
+            mail.
+          </p>
+          <p>
+            Vous pourrez retrouver toutes les informations de votre commande
+            dans l'onglet 'mon compte'.
+          </p>
+        </mat-card>
+      </form>
+    </mat-card>
   </mat-step>
 </mat-vertical-stepper>

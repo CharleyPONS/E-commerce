@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  SocialAuthService,
+  FacebookLoginProvider,
+  SocialUser,
+} from 'angularx-social-login';
 import { map } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
 import { User } from '../models/user.model';
@@ -10,8 +15,12 @@ import * as moment from 'moment';
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private _http: HttpClient, private _snackBar: MatSnackBar) {}
-  async connectUser(userBody: User): Promise<any> {
+  constructor(
+    private _http: HttpClient,
+    private _snackBar: MatSnackBar,
+    private authService: SocialAuthService
+  ) {}
+  public async connectUser(userBody: User): Promise<any> {
     if (this.isLoggedIn()) {
       this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
         duration: 2000,
@@ -29,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  async registerUser(userBody: User): Promise<boolean> {
+  public async registerUser(userBody: User): Promise<boolean> {
     if (this.isLoggedIn()) {
       this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
         duration: 2000,
@@ -47,7 +56,7 @@ export class UserService {
     return this.isLoggedIn();
   }
 
-  async saveUser(userBody: User): Promise<User> {
+  public async saveUser(userBody: User): Promise<User> {
     const user: User = await this._http
       .post<User>(
         `${environment.apiUrl}${environment.apiPath}/user/save`,
@@ -58,7 +67,18 @@ export class UserService {
     return user;
   }
 
-  async findByToken(): Promise<User> {
+  public async saveUserSSO(token: string): Promise<boolean> {
+    const user: User = await this._http
+      .post<User>(`${environment.apiUrl}${environment.apiPath}/user/oauth`, {
+        ssoToken: token,
+      })
+      .pipe(map((res) => new User(res)))
+      .toPromise();
+    this.setSession(user);
+    return this.isLoggedIn();
+  }
+
+  public async findByToken(): Promise<User> {
     const user: User = await this._http
       .get<User>(
         `${environment.apiUrl}${environment.apiPath}/user/${this.getToken()}`
@@ -99,5 +119,19 @@ export class UserService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
+  }
+
+  public async signInWithFB(): Promise<SocialUser> {
+    const fbLoginOptions = {
+      scope: 'email',
+    };
+    return this.authService.signIn(
+      FacebookLoginProvider.PROVIDER_ID,
+      fbLoginOptions
+    );
+  }
+
+  public async signOut(): Promise<any> {
+    return this.authService.signOut();
   }
 }

@@ -2,6 +2,8 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShoppingCartModule } from 'ng-shopping-cart';
+import { FacebookConnectionComponent } from '../login/facebook-connection/facebook-connection.component';
+import { LoginModule } from '../login/login.module';
 import { ConnectModalComponent } from '../shared/modal/connect-modal/connect-modal.component';
 import { DisplayCartComponent } from '../shared/modal/display-cart/display-cart.component';
 import { SharedModule } from '../shared/shared.module';
@@ -25,6 +27,7 @@ import { FormProcessOrderComponent } from './form-process-order/form-process-ord
     SharedModule,
     ShoppingCartModule,
     MatSelectCountryModule,
+    LoginModule,
   ],
   entryComponents: [DisplayCartComponent, ConnectModalComponent],
   exports: [],

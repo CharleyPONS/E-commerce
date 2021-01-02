@@ -59,3 +59,10 @@
     </button>
   </div>
 </form>
+
+<div *ngIf="!isOnOrder">
+  <h3>Vous souhaitez vous connecter en un click?</h3>
+  <div class="shop-align-center">
+    <app-facebook-connection></app-facebook-connection>
+  </div>
+</div>
