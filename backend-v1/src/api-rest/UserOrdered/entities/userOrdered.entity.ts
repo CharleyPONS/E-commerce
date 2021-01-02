@@ -25,14 +25,13 @@ export class UserOrderedEntity extends BaseEntity {
   @Generated('uuid')
   userOrderedId: string;
 
-  @Column({ type: 'varchar', length: '255' })
-  billId?: string;
+  @PrimaryGeneratedColumn()
+  billId?: number;
 
   @Column({ type: 'boolean' })
   paid?: boolean;
 
-  @Required()
-  @Column({ type: 'int' })
+  @Column({ type: 'real' })
   amount: number;
 
   @Column({ type: 'varchar', length: '255' })

@@ -33,9 +33,11 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', length: '255', nullable: true })
   surname: string;
 
-  @Column({ type: 'varchar', length: '255' })
+  @Column({ type: 'varchar', length: '255', nullable: true })
   password: string;
 
+  @Column({ type: 'boolean', nullable: true })
+  fromSSO: boolean;
   @Required()
   @Email()
   @Column({ type: 'varchar', length: '255' })
@@ -57,7 +59,10 @@ export class UserEntity extends BaseEntity {
 
   @BeforeInsert()
   @BeforeUpdate()
-  private updateDates() {
+  private updateDatesAndSso() {
     this.dateUpdate = new Date().toUTCString();
+    if (!this.fromSSO) {
+      this.fromSSO = false;
+    }
   }
 }

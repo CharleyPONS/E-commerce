@@ -2,7 +2,6 @@ import { Service } from '@tsed/di';
 import { NotFound } from '@tsed/exceptions';
 import { Stripe } from 'stripe';
 
-import { ConfigurationEntity } from '../../api-rest/Configuration/entities/configuration.entity';
 import { ConfigurationPromotionEntity } from '../../api-rest/Configuration/entities/configurationPromotion.entity';
 import { ConfigurationType } from '../../api-rest/Configuration/entities/configurationType.enum';
 import { ConfigurationRepository } from '../../api-rest/Configuration/service/configuration.repository';
@@ -17,6 +16,7 @@ import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userO
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
+import { deepClone } from '@tsed/core';
 import { WinstonLogger } from './winstonLogger';
 
 /**
@@ -86,7 +86,8 @@ export class StripePaymentService {
     const userOrder: UserOrderedEntity = new UserOrderedEntity();
     userOrder.paid = false;
     userOrder.amount = amount?.price;
-    userOrder.userId = listOrder?.userId;
+    userOrder.userId = listOrder?.userId || user?.userId;
+    userOrder.transporter = listOrder.shipment;
     const userOrderProduct: UserOrderedProductsEntity = new UserOrderedProductsEntity();
     const userProduct: any[] = [];
     (listOrder.product || []).forEach(v => {
@@ -97,7 +98,7 @@ export class StripePaymentService {
         v.categories === CATEGORIES.FLOWER || v.categories === CATEGORIES.RESINE
           ? UNITY.GRAMME
           : UNITY.SIMPLE_UNITY;
-      userProduct.push(userOrderProduct);
+      userProduct.push(deepClone(userOrderProduct));
     });
     userOrder.product = userProduct;
 
@@ -190,7 +191,11 @@ export class StripePaymentService {
     const configuration = await this._configurationRepository.findByType(
       process.env.CONFIGURATION_TYPE as ConfigurationType
     );
-    if (listOrder.reduction && Array.isArray(configuration[0].promotion)) {
+    if (
+      listOrder?.reduction?.isReduction &&
+      listOrder?.reduction?.type &&
+      Array.isArray(configuration[0].promotion)
+    ) {
       const beforePrice: number = amount;
       const promotionRetrieve: ConfigurationPromotionEntity[] = configuration[0].promotion.filter(
         (v: any) => v.codePromotion === listOrder.reduction?.type

@@ -1,4 +1,3 @@
-//TODO une fois que la base sera définitive et clean refaire une passe sur les nullable a true souvent mis pour cause de pas cassage de couille erreur compilation
 import '@tsed/ajv';
 import { PlatformApplication } from '@tsed/common';
 import { Configuration, Inject } from '@tsed/di';
@@ -10,17 +9,24 @@ import compress from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import * as fs from 'fs-extra';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
 
 export const rootDir = __dirname;
 dotenv.config();
+const keyCertificate = fs.readFileSync(__dirname + '/certificates/localhost.key');
+const certificate = fs.readFileSync(__dirname + '/certificates/localhost.crt');
 
 @Configuration({
   rootDir,
   acceptMimes: ['application/json'],
-  httpPort: process.env.PORT || 5000,
-  httpsPort: false, // CHANGE
+  httpPort: false,
+  httpsPort: process.env.PORT || 5000,
+  httpsOptions: {
+    cert: certificate,
+    key: keyCertificate
+  },
   mount: {
     '/api/rest': [`${rootDir}/**/controller/**/*.ts`]
   },

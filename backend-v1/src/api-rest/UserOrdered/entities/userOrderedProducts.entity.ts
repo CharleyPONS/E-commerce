@@ -21,7 +21,6 @@ export class UserOrderedProductsEntity extends BaseEntity {
 
   @Required()
   @Column({ type: 'int' })
-  @Minimum(2)
   quantity: number;
 
   @Required()

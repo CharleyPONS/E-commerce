@@ -1,7 +1,17 @@
-import { BodyParams, Context, Controller, Delete, Get, PathParams, Post } from '@tsed/common';
+import {
+  BodyParams,
+  Context,
+  Controller,
+  Delete,
+  Get,
+  PathParams,
+  Post,
+  QueryParams
+} from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
 import { Status, Summary } from '@tsed/schema';
 
+import axios from 'axios';
 import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../entities/user.entity';
 import { UserAddressEntity } from '../entities/userAddress.entity';
@@ -10,6 +20,7 @@ import { UserRepository } from '../services/user.repository';
 import { UserAddressRepository } from '../services/userAddress.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';
+import { sign } from 'jsonwebtoken';
 
 @Controller({
   path: '/user'
@@ -33,6 +44,42 @@ export class UserCtrl {
     }
 
     throw new NotFound('User not present');
+  }
+
+  @Post('/oauth')
+  @Summary('Return a User from his ID')
+  @(Status(200, UserEntity).Description('Success'))
+  async oauthFacebookStrategy(
+    @Context() ctx: Context,
+    @BodyParams() authToken: { ssoToken: string }
+  ): Promise<any> {
+    const userFbData = await axios.get(
+      `https://graph.facebook.com/me?fields=email,name&access_token=${encodeURIComponent(
+        authToken?.ssoToken
+      )}`
+    );
+    if (userFbData?.status === 200) {
+      const userToSave: UserEntity = new UserEntity();
+      userToSave.email = userFbData?.data?.email;
+      userToSave.name = userFbData?.data?.name;
+      userToSave.fromSSO = true;
+      await this._userRepository.saveUser(userToSave);
+    }
+    const user = await this._userRepository.findByEmail(userFbData?.data?.email);
+    if (!user) {
+      new WinstonLogger().logger().info(`user not found`, { user });
+      throw new Error('user not found error during the save process');
+    }
+
+    const getToken: string = sign({ id: user.id }, process.env.JWT_KEY as string, {
+      expiresIn: process.env.JWT_EXPIRES_MS
+    });
+    await this._userRepository.updateOne({ id: user.id }, { token: getToken }, user);
+
+    ctx
+      .getResponse()
+      .status(200)
+      .send({ ...user, token: getToken, expiresIn: process.env.JWT_EXPIRES_MS });
   }
 
   @Delete('/:id')

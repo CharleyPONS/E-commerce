@@ -7,6 +7,7 @@
 > Using stripes CLI and webhook
 > Using JWT token for authentication and bcrypt for password security
 > Using nodemailer and express-handlebars
+> Using Oauth 2 connection for SSO with facebook
 
 See [Ts.ED](https://tsed.io) project for more information.
 
@@ -19,6 +20,8 @@ See [TypeORM](https://typeorm.io/) for more information.
 See [NodeMailer](https://nodemailer.com/) for more information.
 
 See [express-handlebars](https://www.npmjs.com/package/express-handlebars) for more information.
+
+See [facebook](https://developers.facebook.com/apps/) for more information.
 
 
 ## Install
@@ -69,12 +72,23 @@ PROTOCOL_HTTP= http | https
 EMAIL= your email for receipt payment
 STATEMENT_DESCRIPTOR= Statement for bank transfer
 
+#Oauth
+FACEBOOK_APP_ID=your app id
+FACEBOOK_APP_SECRET=your secret app
+
 ```
 
 ```bash
 npm run docs
 npm run watch
 ```
+
+Then You will need to generate cert file and then import to certificates/
+$ which openssl 
+If it return nothing install openssl on your os
+$ openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout localhost.key -out localhost.crt
+Put the two file in the folder
+
 ## Usages
 
 Don't change this code file
