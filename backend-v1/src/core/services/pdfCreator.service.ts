@@ -69,7 +69,10 @@ export class PdfCreatorService {
         });
       });
     });
-    const billTemplate = fs.readFileSync(rootDir + '/core/helpers/template/bill.html', 'utf8');
+    const billTemplate = await fs.readFileSync(
+      rootDir + '/core/helpers/template/bill.html',
+      'utf8'
+    );
 
     const document = {
       html: billTemplate,

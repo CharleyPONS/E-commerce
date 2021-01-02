@@ -1,4 +1,4 @@
-import { BodyParams, Context, Controller, Post, UseBefore } from '@tsed/common';
+import { BodyParams, Context, Controller, Post, Req, UseBefore } from '@tsed/common';
 import { Summary } from '@tsed/schema';
 import { Stripe } from 'stripe';
 
@@ -12,7 +12,7 @@ import { IListOrderInterface } from '../models/listOrderInterface';
 import { PdfCreatorService } from '../../../core/services/pdfCreator.service';
 import { EmailSenderService } from '../../../core/services/emailSender.service';
 import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
-
+import express, { Request } from 'express';
 @Controller({
   path: '/user-payment'
 })
@@ -41,14 +41,12 @@ export class UserPaymentCtrl {
 
   @Post('/stripe-webhook-success')
   @Summary('Response hook from stripe and update db')
-  async successPaymentHook(@Context() ctx: Context): Promise<void> {
-    let responseStripe;
-    try {
-      responseStripe = JSON.parse(ctx.request.body);
-    } catch (err) {
+  async successPaymentHook(@Context() ctx: Context, @Req() req: any): Promise<void> {
+    let responseStripe = ctx?.request?.body;
+    if (!responseStripe) {
       new WinstonLogger()
         .logger()
-        .crit('error trying to parse stripe webhook body', { body: ctx.request.body });
+        .info('error trying to parse stripe webhook body', { body: ctx.request.body });
       return ctx.getResponse().status(500).send();
     }
     const stripeConfig: IStripeConfigInterface = {
@@ -66,14 +64,10 @@ export class UserPaymentCtrl {
     if (endpointSecret) {
       const signature = ctx.request.headers['stripe-signature'] as any;
       try {
-        responseStripe = stripe.webhooks.constructEvent(
-          ctx.request.body,
-          signature,
-          endpointSecret
-        );
+        responseStripe = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
       } catch (err) {
         new WinstonLogger().logger().crit('error trying to get signature from stripe', {
-          body: ctx.request.body,
+          body: req.body,
           sign: signature
         });
         return ctx.getResponse().status(500).send();

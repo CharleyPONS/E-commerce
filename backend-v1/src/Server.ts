@@ -72,6 +72,7 @@ export class Server {
       .use(cookieParser())
       .use(compress({}))
       .use(methodOverride())
+      .use('/api/rest/user-payment/stripe-webhook-success', bodyParser.raw({ type: '*/*' }))
       .use(bodyParser.json({ limit: '10mb' }))
       .use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
       .use(helmet());
