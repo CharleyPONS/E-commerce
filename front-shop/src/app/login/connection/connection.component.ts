@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
 import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
+import set = Reflect.set;
 
 @Component({
   selector: 'app-connection',
@@ -15,11 +16,13 @@ export class ConnectionComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
   @Output() connect = new EventEmitter<{ connect: boolean }>();
   public form: FormGroup;
+  public resetForm: FormGroup;
   public hide: boolean;
   public authenticateSucceed: boolean = true;
   public isConnected: boolean;
   public matcher: any;
   public userRetrieve: User;
+  public isForgotPassword: boolean = false;
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
@@ -33,6 +36,9 @@ export class ConnectionComponent implements OnInit {
     this.form = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+    this.resetForm = this._formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -66,6 +72,23 @@ export class ConnectionComponent implements OnInit {
       this.connect.emit({ connect: true });
     } else {
       return;
+    }
+  }
+
+  public forgotPassword() {
+    this.isForgotPassword = true;
+  }
+
+  public async changePassword() {
+    const user: User = new User({
+      email: this.resetForm.get('email').value,
+    });
+    try {
+      await this._userService.resetPassword(user.email);
+    } catch (err) {
+      if (err.status === 404) {
+        console.log();
+      }
     }
   }
 }

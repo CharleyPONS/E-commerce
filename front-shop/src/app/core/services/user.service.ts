@@ -58,6 +58,15 @@ export class UserService {
     return this.isLoggedIn();
   }
 
+  public async resetPassword(userEmail: string): Promise<void> {
+    await this._http
+      .post<string>(
+        `${environment.apiUrl}${environment.apiPath}/user/forgotPassword`,
+        { email: userEmail }
+      )
+      .toPromise();
+  }
+
   public async saveUser(userBody: User): Promise<User> {
     const user: User = await this._http
       .post<User>(

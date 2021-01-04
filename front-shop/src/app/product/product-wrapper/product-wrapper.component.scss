@@ -1,27 +1,26 @@
-.product-display-button:hover{
+.product-display-button:hover {
 }
-.product-display-button{
-  }
-.product-image{
-  width: 270px ;
+.product-display-button {
+  width: 100%;
+}
+.product-image {
+  width: 270px;
   height: auto;
 }
 
-.custom-card{
+.custom-card {
   min-height: 350px;
   min-width: 300px;
   height: 440px;
   width: 350px;
 }
 
-.mat-card-actions{
+.mat-card-actions {
   position: absolute;
   bottom: 0;
 }
 
-::ng-deep .mat-card-header-text{
+::ng-deep .mat-card-header-text {
   margin-right: 0 !important;
   margin-left: 0 !important;
-
 }
-

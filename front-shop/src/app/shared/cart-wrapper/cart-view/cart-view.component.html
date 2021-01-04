@@ -1,4 +1,6 @@
-<h2 *ngIf="!isOnProcessPayment">Panier ({{ numberItem }}): {{ total }}€</h2>
+<h2>
+  Panier <span style="font-size: 22px">({{ numberItem }}): {{ total }}€</span>
+</h2>
 <cart-view
   [display]="display"
   [images]="showImages"

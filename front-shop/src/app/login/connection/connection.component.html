@@ -1,6 +1,7 @@
-<h2>Connectez-vous</h2>
+<h2 *ngIf="!isForgotPassword">Connectez-vous</h2>
+<h2 *ngIf="isForgotPassword">Modifier votre mot de passe</h2>
 <p>Bienvenue sur This is CBD, votre compagnon CBD.</p>
-<form [formGroup]="form">
+<form [formGroup]="form" *ngIf="!isForgotPassword">
   <div
     fxFlexAlign.gt-xs="column"
     fxLayoutGap="24px"
@@ -46,23 +47,65 @@
       <p>Votre authentification a échoué</p>
     </mat-card>
   </div>
-  <div class="shop-align-right">
+  <div class="margin-password">
+    <span style="font-size: 10px">
+      <a
+        (click)="forgotPassword()"
+        style="text-decoration: underline; cursor: pointer"
+        >Mot de passe oublié?</a
+      >
+    </span>
+  </div>
+  <button
+    type="submit"
+    style="margin-bottom: 10px; margin-top: 10px; width: 100%"
+    mat-raised-button
+    color="primary"
+    (click)="save()"
+    [disabled]="form.invalid || form.disabled"
+  >
+    Se connecter
+  </button>
+</form>
+<form [formGroup]="resetForm" *ngIf="isForgotPassword">
+  <div
+    fxFlexAlign.gt-xs="row"
+    fxLayoutGap="24px"
+    fxLayoutGap.sm="12px"
+    fxLayoutGap.xs="8px"
+  >
+    <p>
+      Renseigner votre adresse mail et on s'occupe de tout.<br />
+      On vous envoi un mail avec un nouveau mot de passe.
+    </p>
+    <mat-form-field color="accent">
+      <mat-label>Adresse e-mail</mat-label>
+      <input
+        matInput
+        [placeholder]="'Adresse e-mail'"
+        [errorStateMatcher]="matcher"
+        formControlName="email"
+        required
+      />
+      <mat-error *ngIf="form.get('email').errors && form.get('email').touched"
+        >Votre email n'est pas valide</mat-error
+      >
+    </mat-form-field>
     <button
       type="submit"
       style="margin-top: 20px"
       mat-raised-button
       color="primary"
-      (click)="save()"
-      [disabled]="form.invalid || form.disabled"
+      (click)="changePassword()"
+      [disabled]="resetForm.invalid || resetForm.disabled"
     >
-      Se connecter
+      Valider
     </button>
   </div>
 </form>
 
-<div *ngIf="!isOnOrder">
-  <h3>Vous souhaitez vous connecter en un click?</h3>
-  <div class="shop-align-center">
+<div *ngIf="!isOnOrder && !isForgotPassword">
+  <div>
     <app-facebook-connection
       [isOnOrder]="false"
       (connectionProcess)="isConnectedSSO($event)"

@@ -97,13 +97,28 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.2em;
-  font-family: roboto;
+  font-family: Merriweather, serif !important;
+}
+
+p,
+span,
+div,
+a {
+  font-family: Merriweather, serif !important;
+  font-size: 18px !important;
 }
 h1,
 h2,
 h3 {
-  font-family: Oswald;
-  font-size: 30px;
+  font-family: Montserrat, sans-serif !important;
+  font-size: 31px !important;
+  font-weight: 600 !important;
+}
+
+h3 {
+  font-family: Montserrat, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 500 !important;
 }
 
 mat-error {
