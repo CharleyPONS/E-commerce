@@ -4,6 +4,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../../User/entities/user.entity';
 import { UserOrderedEntity } from '../entities/userOrdered.entity';
+import { ProductEntity } from '../../Product/entities/product.entity';
 
 @EntityRepository(UserOrderedEntity)
 export class UserOrderedRepository extends Repository<UserOrderedEntity> {
@@ -22,27 +23,28 @@ export class UserOrderedRepository extends Repository<UserOrderedEntity> {
     }
   }
 
-  async findByUserId(userId: string): Promise<any> {
+  async findByUserIdAndUserOrderedId(user: string, userOrder: string): Promise<any> {
     try {
-      new WinstonLogger().logger().info(`Search a userOrdered with userid ${userId}`);
+      new WinstonLogger().logger().info(`Search a userOrdered with userid ${user}`);
       const userOrdered = await this.findOne({
-        where: { userId },
+        where: { userId: user, userOrderedId: userOrder },
         relations: ['product']
       });
       return userOrdered;
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Search a userOrdered with user id ${userId} request failed`, { error: err });
+        .warn(`Search a userOrdered with user id ${user} request failed`, { error: err });
     }
   }
 
   async saveUserOrder(userOrdered: UserOrderedEntity): Promise<any> {
     try {
       new WinstonLogger().logger().info(`Save userOrdered`, { userOrdered });
-      await this.save(userOrdered);
+      const saveUserOrdered = await this.save(userOrdered);
 
       new WinstonLogger().logger().info(`Save userOrdered succeed`, { userOrdered });
+      return saveUserOrdered;
     } catch (err) {
       new WinstonLogger()
         .logger()
@@ -66,16 +68,22 @@ export class UserOrderedRepository extends Repository<UserOrderedEntity> {
     }
   }
 
-  async deleteUser(userId: number): Promise<any> {
+  async deleteUserOrdered(userIdParam: string): Promise<any> {
     try {
-      new WinstonLogger().logger().info(`try todelete userOrdered`, { userId });
-      await this.delete({ id: userId });
-      new WinstonLogger().logger().info(`Delete userOrdered succeed`, { userId });
+      new WinstonLogger().logger().info(`try todelete userOrdered`, { userIdParam });
+      await this.delete({ userId: userIdParam });
+      new WinstonLogger().logger().info(`Delete userOrdered succeed`, { userIdParam });
       return;
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .warn(`Delete a userOrdered with id ${userId} failed`, { error: err });
+        .warn(`Delete a userOrdered with id ${userIdParam} failed`, { error: err });
     }
+  }
+
+  async findAll(): Promise<UserOrderedEntity[]> {
+    new WinstonLogger().logger().info(`Find all product`);
+    const userOrdered: UserOrderedEntity[] = await this.find({ relations: ['product'] });
+    return userOrdered;
   }
 }

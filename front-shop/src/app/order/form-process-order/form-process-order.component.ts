@@ -206,9 +206,11 @@ export class FormProcessOrderComponent implements OnInit {
         async (res: any): Promise<any> => {
           if (res?.user) {
             this.user = res?.user;
+            this.isConnected = true;
             this.goForward();
             return;
           } else if (this._userService.isLoggedIn()) {
+            this.isConnected = true;
             this.goForward();
           }
           return;
@@ -217,7 +219,11 @@ export class FormProcessOrderComponent implements OnInit {
   }
 
   public goForward() {
+    this.stepper.linear = false;
     this.stepper.next();
+    setTimeout(() => {
+      this.stepper.linear = true;
+    });
   }
 
   public async validateConnectionForm() {
@@ -238,7 +244,9 @@ export class FormProcessOrderComponent implements OnInit {
       );
       this._snackBar.open('Vous êtes Inscrit', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
+      this.isConnected = true;
     } catch (err) {
       if (err.status === 401 && err?.error?.message === 'email already use') {
         this.emailAlreadyUse = true;
@@ -246,6 +254,7 @@ export class FormProcessOrderComponent implements OnInit {
       }
       this._snackBar.open('Votre authentification a échoué', 'Erreur', {
         duration: 2000,
+        panelClass: 'error-dialog',
       });
     }
   }
@@ -272,6 +281,7 @@ export class FormProcessOrderComponent implements OnInit {
       );
       this._snackBar.open('Votre adresse est enregistré', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
     } catch (err) {
       this._snackBar.open(
@@ -279,6 +289,7 @@ export class FormProcessOrderComponent implements OnInit {
         'Erreur',
         {
           duration: 2000,
+          panelClass: 'error-dialog',
         }
       );
     }
@@ -326,6 +337,7 @@ export class FormProcessOrderComponent implements OnInit {
       } else if (paymentIntent.error) {
         this._snackBar.open('Votre paiement a échoué', 'Erreur', {
           duration: 3000,
+          panelClass: 'error-dialog',
         });
         this.isCardError = true;
         this.cardError = paymentIntent?.error?.message;
@@ -338,8 +350,17 @@ export class FormProcessOrderComponent implements OnInit {
         'Erreur',
         {
           duration: 3000,
+          panelClass: 'error-dialog',
         }
       );
+    }
+  }
+
+  public isConnectedSSO(connect: { connection: boolean }) {
+    if (connect?.connection) {
+      return this.goForward();
+    } else {
+      return;
     }
   }
 

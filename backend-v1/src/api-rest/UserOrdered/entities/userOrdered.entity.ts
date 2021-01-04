@@ -45,7 +45,7 @@ export class UserOrderedEntity extends BaseEntity {
   })
   product: UserOrderedProductsEntity[];
 
-  @Column()
+  @Column({ type: 'uuid', nullable: true })
   userId: string;
   @BeforeInsert()
   @BeforeUpdate()

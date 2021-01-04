@@ -24,6 +24,7 @@ export class UserService {
     if (this.isLoggedIn()) {
       this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
       return;
     }
@@ -42,6 +43,7 @@ export class UserService {
     if (this.isLoggedIn()) {
       this._snackBar.open('Vous êtes déjà connecté', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
       return true;
     }
@@ -98,9 +100,10 @@ export class UserService {
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
   }
 
-  private logout() {
+  public logout(): boolean {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    return this.isLoggedOut();
   }
 
   public isLoggedIn() {

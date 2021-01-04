@@ -23,11 +23,26 @@
     class="app-margin-tp-6"
   >
     <div class="bloc-button-custom">
-      <button mat-mini-fab class="button-custom" aria-label="Inscription">
-        <a [routerLink]="['login']">
-          <mat-icon color="warn">perm_identity</mat-icon>
-        </a>
+      <button
+        mat-mini-fab
+        class="button-custom"
+        aria-label="Inscription"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon color="warn">perm_identity</mat-icon>
       </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="isConnected">Mon compte</button>
+        <button mat-menu-item *ngIf="!isConnected" (click)="onRegisterModal()">
+          S'inscrire
+        </button>
+        <button mat-menu-item *ngIf="!isConnected" (click)="onConnectModal()">
+          Se connecter
+        </button>
+        <button mat-menu-item *ngIf="isConnected" (click)="logout()">
+          Se déconnecter
+        </button>
+      </mat-menu>
     </div>
   </div>
 </div>
@@ -66,11 +81,34 @@
       </div>
       <div fxShow="true" fxHide.lt-md fxFlex.gt-sm="5" fxFlex.lt-sm="20">
         <div class="bloc-button-custom">
-          <button mat-mini-fab class="button-custom" aria-label="Inscription">
-            <a [routerLink]="['login']">
-              <mat-icon color="warn">perm_identity</mat-icon>
-            </a>
+          <button
+            mat-mini-fab
+            class="button-custom"
+            aria-label="Inscription"
+            [matMenuTriggerFor]="menu"
+          >
+            <mat-icon color="warn">perm_identity</mat-icon>
           </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item *ngIf="isConnected">Mon compte</button>
+            <button
+              mat-menu-item
+              *ngIf="!isConnected"
+              (click)="onRegisterModal()"
+            >
+              S'inscrire
+            </button>
+            <button
+              mat-menu-item
+              *ngIf="!isConnected"
+              (click)="onConnectModal()"
+            >
+              Se connecter
+            </button>
+            <button mat-menu-item *ngIf="isConnected" (click)="logout()">
+              Se déconnecter
+            </button>
+          </mat-menu>
         </div>
       </div>
       <div fxFlex.gt-sm="10" fxFlex.lt-sm="50">
@@ -88,9 +126,34 @@
         <a [routerLink]="['/moon-rocks']" mat-list-item>Moon Rocks CBD</a>
         <a [routerLink]="['/oil']" mat-list-item>Huiles CBD</a>
         <div mat-list-item>
-          <button [routerLink]="['/login']" mat-button color="primary">
-            Connexion/S'inscrire
+          <button
+            mat-mini-fab
+            class="button-custom"
+            aria-label="Inscription"
+            [matMenuTriggerFor]="menu"
+          >
+            <mat-icon color="warn">perm_identity</mat-icon>
           </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item *ngIf="isConnected">Mon compte</button>
+            <button
+              mat-menu-item
+              *ngIf="!isConnected"
+              (click)="onRegisterModal()"
+            >
+              S'inscrire
+            </button>
+            <button
+              mat-menu-item
+              *ngIf="!isConnected"
+              (click)="onConnectModal()"
+            >
+              Se connecter
+            </button>
+            <button mat-menu-item *ngIf="isConnected" (click)="logout()">
+              Se déconnecter
+            </button>
+          </mat-menu>
         </div>
       </mat-nav-list>
     </mat-sidenav>

@@ -6,12 +6,17 @@ import {
   Get,
   PathParams,
   Post,
-  QueryParams
+  UseBefore
 } from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
-import { Status, Summary } from '@tsed/schema';
-
+import { Required, Status, Summary } from '@tsed/schema';
 import axios from 'axios';
+import { hashSync } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+
+import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
+import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
+import { EmailSenderService } from '../../../core/services/emailSender.service';
 import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../entities/user.entity';
 import { UserAddressEntity } from '../entities/userAddress.entity';
@@ -20,7 +25,6 @@ import { UserRepository } from '../services/user.repository';
 import { UserAddressRepository } from '../services/userAddress.repository';
 import { UserDeleteTokenService } from '../services/userDeleteToken.service';
 import { UserLogInService } from '../services/userLogIn.service';
-import { sign } from 'jsonwebtoken';
 
 @Controller({
   path: '/user'
@@ -30,7 +34,8 @@ export class UserCtrl {
     private _userRepository: UserRepository,
     private _userAddressRepository: UserAddressRepository,
     private _userLoginService: UserLogInService,
-    private _userDeleteTokenService: UserDeleteTokenService
+    private _userDeleteTokenService: UserDeleteTokenService,
+    private _emailSenderService: EmailSenderService
   ) {}
 
   @Get('/:token')
@@ -58,28 +63,32 @@ export class UserCtrl {
         authToken?.ssoToken
       )}`
     );
+    const userToSave: UserEntity = new UserEntity();
     if (userFbData?.status === 200) {
-      const userToSave: UserEntity = new UserEntity();
       userToSave.email = userFbData?.data?.email;
       userToSave.name = userFbData?.data?.name;
       userToSave.fromSSO = true;
-      await this._userRepository.saveUser(userToSave);
     }
     const user = await this._userRepository.findByEmail(userFbData?.data?.email);
     if (!user) {
-      new WinstonLogger().logger().info(`user not found`, { user });
-      throw new Error('user not found error during the save process');
+      new WinstonLogger().logger().info(`user not found we save user`, { user });
+      await this._userRepository.saveUser(userToSave);
+    } else {
+      const getToken: string = sign({ id: user.id }, process.env.JWT_KEY as string, {
+        expiresIn: process.env.JWT_EXPIRES_MS
+      });
+      await this._userRepository.updateOne({ id: user.id }, { token: getToken }, user);
     }
-
-    const getToken: string = sign({ id: user.id }, process.env.JWT_KEY as string, {
-      expiresIn: process.env.JWT_EXPIRES_MS
-    });
-    await this._userRepository.updateOne({ id: user.id }, { token: getToken }, user);
+    const userToSend = await this._userRepository.findByEmail(userFbData?.data?.email);
 
     ctx
       .getResponse()
       .status(200)
-      .send({ ...user, token: getToken, expiresIn: process.env.JWT_EXPIRES_MS });
+      .send({
+        ...userToSend,
+        token: userToSend?.token || null,
+        expiresIn: process.env.JWT_EXPIRES_MS
+      });
   }
 
   @Delete('/:id')
@@ -107,6 +116,46 @@ export class UserCtrl {
   async logOut(@Context() ctx: Context, @BodyParams('user') userBody: UserEntity): Promise<void> {
     await this._userDeleteTokenService.main(userBody);
     return;
+  }
+
+  @Post('/changePassword')
+  @Summary('Change userpassword')
+  @UseBefore(AuthJWTMiddleware)
+  @(Status(200).Description('Success'))
+  async changePassword(
+    @Context() ctx: Context,
+    @Required()
+    @PathParams('token')
+    token: string,
+    @Required()
+    @BodyParams()
+    password: { password: string }
+  ): Promise<void> {
+    const user = await this._userRepository.findByToken(token);
+    if (!user) {
+      new WinstonLogger().logger().info(`user not found`, { token });
+      throw new Error('User who want to change password not found');
+    }
+    const userToSave: UserEntity = new UserEntity();
+    userToSave.password = hashSync(password.password, 10);
+    await this._userRepository.updateOne({ id: user?.id }, { password: userToSave.password }, user);
+  }
+
+  @Post('/forgotPassword')
+  @Summary('send mail with new password')
+  @(Status(200).Description('Success'))
+  async forgotPassword(
+    @Context() ctx: Context,
+    @Required()
+    @BodyParams()
+    email: { email: string }
+  ): Promise<void> {
+    const user = await this._userRepository.findByEmail(email.email);
+    if (!user) {
+      new WinstonLogger().logger().info(`user not found`, { email });
+      throw new Error('email not found');
+    }
+    await this._emailSenderService.main(user, MailProcess.RESET_PASSWORD);
   }
 
   @Post('/save')

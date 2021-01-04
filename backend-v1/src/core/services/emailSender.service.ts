@@ -11,6 +11,7 @@ import { MailProcess } from '../models/enum/mailProcess.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';
 
 import { WinstonLogger } from './winstonLogger';
+import { hashSync } from 'bcrypt';
 // tslint:disable-next-line: no-var-requires
 const hbs = require('nodemailer-express-handlebars');
 
@@ -20,7 +21,7 @@ export class EmailSenderService {
     private _userRepository: UserRepository,
     private _userOrderedRepository: UserOrderedRepository
   ) {}
-  async main(user: UserEntity, mailProcess: MailProcess): Promise<void> {
+  async main(user: UserEntity, mailProcess: MailProcess, userOrderedId?: string): Promise<void> {
     const userData: any = await this._userRepository.findByEmail(user?.email);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -38,15 +39,29 @@ export class EmailSenderService {
         }
       };
     }
-    if (mailProcess === MailProcess.VALIDATE_ORDER) {
-      const userOrderedData = await this._userOrderedRepository.findByUserId(user.userId);
+    let userOrderedData;
+    if (mailProcess === MailProcess.VALIDATE_ORDER && userOrderedId) {
+      userOrderedData = await this._userOrderedRepository.findByUserIdAndUserOrderedId(
+        user.userId,
+        userOrderedId as string
+      );
       mailProcessInformation = {
         subject: 'Vous êtes un champion.',
         template: 'validate-order',
         attachment: {
           isAttachment: true,
-          path: rootDir + 'tmp/bill/',
-          file: userOrderedData.billId + '.pdf'
+          path: rootDir + '/tmp/bill/' + userOrderedData.billId.toString() + '.pdf',
+          file: 'Facture numéro ' + userOrderedData.billId.toString()
+        }
+      };
+    }
+    // @ts-ignore
+    if (mailProcess === MailProcess.RESET_PASSWORD) {
+      mailProcessInformation = {
+        subject: 'Magie magie.',
+        template: 'reset',
+        attachment: {
+          isAttachment: false
         }
       };
     }
@@ -96,13 +111,27 @@ export class EmailSenderService {
         ]
       };
     }
+    if (mailProcess === MailProcess.RESET_PASSWORD) {
+      const newPassword = Math.random().toString(36).slice(2);
+      sendOptions = {
+        ...sendOptions,
+        // @ts-ignore
+        context: {
+          ...sendOptions.context,
+          password: newPassword
+        }
+      };
+      await this._userRepository.updateOne(
+        { id: user.id },
+        { password: hashSync(newPassword, 10) },
+        user
+      );
+    }
 
     try {
       await defineTransporter.sendMail(sendOptions);
-      if (mailProcessInformation?.attachment?.isAttachment) {
-        await fs.unlink(
-          `${mailProcessInformation?.attachment?.path}/${mailProcessInformation?.attachment?.file}`
-        );
+      if (userOrderedData && fs.existsSync(rootDir + `/tmp/bill/${userOrderedData.billId}.pdf`)) {
+        fs.unlinkSync(rootDir + `/tmp/bill/${userOrderedData.billId}.pdf`);
       }
       new WinstonLogger().logger().info(`send email to user done`, { user, mailProcess });
     } catch (err) {

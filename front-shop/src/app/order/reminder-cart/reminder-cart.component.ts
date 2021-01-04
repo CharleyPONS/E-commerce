@@ -145,6 +145,7 @@ export class ReminderCartComponent implements OnDestroy, OnInit {
         );
         this._snackBar.open('Promotion appliqué avec succès', 'promo', {
           duration: 2000,
+          panelClass: 'success-dialog',
         });
       } else {
         this.codeInvalid = true;

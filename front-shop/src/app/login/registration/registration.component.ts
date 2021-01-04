@@ -1,7 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { User } from '../../core/models/user.model';
 import { UserService } from '../../core/services/user.service';
 import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
@@ -13,6 +12,7 @@ import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 })
 export class RegistrationComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
+  @Output() connect = new EventEmitter<{ connect: boolean }>();
   public form: FormGroup;
   public hide: boolean;
   public isConnected: boolean;
@@ -21,7 +21,6 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _userService: UserService,
-    private _router: Router,
     private _snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
@@ -42,17 +41,20 @@ export class RegistrationComponent implements OnInit {
       this.authenticateSucceed = await this._userService.registerUser(
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
+      this.connect.emit({
+        connect: true,
+      });
       this._snackBar.open('Vous êtes inscrit', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
     } catch (err) {
       if (err.status === 401 && err?.error?.message === 'email already use') {
         this.emailAlreadyUse = true;
         return;
+      } else {
+        this.authenticateSucceed = false;
       }
-    }
-    if (!this.isOnOrder) {
-      return this._router.navigateByUrl('/');
     }
     return;
   }

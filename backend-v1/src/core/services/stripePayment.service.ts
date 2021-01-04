@@ -102,7 +102,7 @@ export class StripePaymentService {
     });
     userOrder.product = userProduct;
 
-    await this._userOrderedRepository.saveUserOrder(userOrder);
+    const saveUserOrdered = await this._userOrderedRepository.saveUserOrder(userOrder);
 
     new WinstonLogger().logger().info('user ordered have been save on stripe payment service', {
       user,
@@ -120,7 +120,8 @@ export class StripePaymentService {
       statement_descriptor: `${process.env.STATEMENT_DESCRIPTOR}`.substr(0, 22),
       metadata: {
         client: `${listOrder.userEmail}`,
-        amount: `Amount: ${amount}`
+        amount: `Amount: ${amount}`,
+        userOrderedId: saveUserOrdered.userOrderedId
       }
     });
     return {

@@ -16,6 +16,8 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { FloatButtonCartComponent } from './float-button-cart/float-button-cart.component';
 import { DisplayCartComponent } from './modal/display-cart/display-cart.component';
 import { ConnectModalComponent } from './modal/connect-modal/connect-modal.component';
+import { RegisterModalComponent } from './modal/register-modal/register-modal.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   imports: [
@@ -55,6 +57,9 @@ import { ConnectModalComponent } from './modal/connect-modal/connect-modal.compo
     FloatButtonCartComponent,
     DisplayCartComponent,
     ConnectModalComponent,
+    RegisterModalComponent,
+    ResetPasswordComponent,
   ],
+  entryComponents: [RegisterModalComponent, ConnectModalComponent],
 })
 export class SharedModule {}

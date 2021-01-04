@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SocialAuthService } from 'angularx-social-login';
@@ -11,11 +11,11 @@ import { UserService } from '../../core/services/user.service';
 })
 export class FacebookConnectionComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
+  @Output() connectionProcess? = new EventEmitter<{ connect: boolean }>();
   constructor(
     private _userService: UserService,
     private _matSnackBar: MatSnackBar,
-    private authService: SocialAuthService,
-    private _router: Router
+    private authService: SocialAuthService
   ) {}
 
   ngOnInit(): void {
@@ -29,9 +29,7 @@ export class FacebookConnectionComponent implements OnInit {
           this._matSnackBar.open('Vous êtes connecté', 'succès', {
             duration: 2000,
           });
-          if (!this.isOnOrder) {
-            return this._router.navigateByUrl('/');
-          }
+          this.connectionProcess.emit({ connect: true });
           return;
         }
       }

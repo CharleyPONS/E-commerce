@@ -69,6 +69,7 @@ export class ProductDetailsWrapperComponent
     if (productAdded.isAdded) {
       this._snackBar.open('Produit ajouté au panier', 'Ajout', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
       this._matDialog
         .open(ProductAddedComponent, {

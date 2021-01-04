@@ -3,10 +3,15 @@
 ✨ Add a little magic ✨
 
 > Build in TSED bringing typeorm plugin for interaction with PostgreSQL
+
 > Using stripes with custom payments flow validate in server side
+
 > Using stripes CLI and webhook 
+
 > Using JWT token for authentication and bcrypt for password security
+
 > Using nodemailer and express-handlebars
+
 > Using Oauth 2 connection for SSO with facebook
 
 See [Ts.ED](https://tsed.io) project for more information.
@@ -86,14 +91,19 @@ npm run watch
 ## Certificate
 
 Then You will need to generate cert file and then import to certificates/
+
 $ which openssl 
+
 If it return nothing install openssl on your os
+
 $ openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout localhost.key -out localhost.crt
+
 Put the two file in the folder
 
 ##Tunnel
 
 If you wanna test webhook in localhost you need to expose your localserver on the internet
+
 Go to [ngrok](https://dashboard.ngrok.com/get-started/setup)
 Follow the insctruction and then expose the url forworarding your localhost on stripe config webhook 
 ## Usages

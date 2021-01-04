@@ -11,6 +11,7 @@ import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userO
 import { rootDir } from '../../Server';
 
 import { WinstonLogger } from './winstonLogger';
+import { UserEntity } from '../../api-rest/User/entities/user.entity';
 // tslint:disable-next-line: no-var-requires
 const pdf = require('pdf-creator-node');
 
@@ -21,13 +22,15 @@ export class PdfCreatorService {
     private _userOrderedRepository: UserOrderedRepository,
     private _productRepository: ProductRepository
   ) {}
-  async main(userOrdered: UserOrderedEntity): Promise<boolean> {
+  async main(userOrdered: UserOrderedEntity, user: UserEntity): Promise<boolean> {
+    if (!userOrdered || !user) {
+      return false;
+    }
     const options = {
       format: 'A3',
       orientation: 'portrait',
       border: '10mm'
     };
-    const user: any = this._userRepository.findById(userOrdered.userId);
     const userOrderedClone: UserOrderedEntity = deepClone(userOrdered);
     const product: ProductEntity[] = await this._productRepository.findManyProduct(
       (userOrderedClone.product || []).map(v => v.productName)
@@ -62,17 +65,14 @@ export class PdfCreatorService {
               amount = amount + p?.price?.basePrice * v.quantity;
               break;
           }
+          productsBuilder.push({
+            name: v.productName,
+            price: amount
+          });
         }
-        productsBuilder.push({
-          name: v.productName,
-          price: amount
-        });
       });
     });
-    const billTemplate = await fs.readFileSync(
-      rootDir + '/core/helpers/template/bill.html',
-      'utf8'
-    );
+    const billTemplate = fs.readFileSync(rootDir + '/core/helpers/template/bill.html', 'utf8');
 
     const document = {
       html: billTemplate,
@@ -84,9 +84,12 @@ export class PdfCreatorService {
         date: new Date().toLocaleDateString(),
         total: userOrdered.amount
       },
-      path: rootDir + `tmp/bill/${userOrderedClone.billId}.pdf`
+      path: rootDir + `/tmp/bill/${userOrderedClone.billId}.pdf`
     };
     try {
+      if (fs.existsSync(rootDir + `/tmp/bill/${userOrderedClone.billId}.pdf`)) {
+        fs.unlinkSync(rootDir + `/tmp/bill/${userOrderedClone.billId}.pdf`);
+      }
       await pdf.create(document, options);
       new WinstonLogger()
         .logger()
@@ -96,7 +99,7 @@ export class PdfCreatorService {
     } catch (err) {
       new WinstonLogger()
         .logger()
-        .crit(`bill pdf have been created for user`, { user, bill: document, error: err });
+        .info(`bill pdf have been created for user`, { user, bill: document, error: err });
 
       return false;
     }

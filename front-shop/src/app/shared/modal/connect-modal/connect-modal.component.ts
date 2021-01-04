@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { User } from '../../../core/models/user.model';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-connect-modal',
@@ -8,17 +7,25 @@ import { User } from '../../../core/models/user.model';
   styleUrls: ['./connect-modal.component.scss'],
 })
 export class ConnectModalComponent implements OnInit {
-  constructor(public dialogRef: MatDialogRef<ConnectModalComponent>) {}
+  public isOnOrder: boolean = true;
+  constructor(
+    public dialogRef: MatDialogRef<ConnectModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data.isOnNav) {
+      this.isOnOrder = false;
+    }
+  }
 
   public close() {
     this.dialogRef.close({ close: true });
   }
 
-  public isConnected(connection: { connect: boolean; user: User }) {
+  public isConnected(connection: { connect: boolean }) {
     if (connection?.connect) {
-      this.dialogRef.close({ user: connection?.user });
+      this.dialogRef.close({ connect: connection?.connect });
     }
   }
 }

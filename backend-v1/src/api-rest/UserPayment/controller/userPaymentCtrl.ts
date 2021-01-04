@@ -1,18 +1,18 @@
 import { BodyParams, Context, Controller, Post, Req, UseBefore } from '@tsed/common';
 import { Summary } from '@tsed/schema';
+import express, { Request } from 'express';
 import { Stripe } from 'stripe';
 
 import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
+import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
 import { IStripeConfigInterface } from '../../../core/models/interface/stripeConfig.interface';
+import { EmailSenderService } from '../../../core/services/emailSender.service';
+import { PdfCreatorService } from '../../../core/services/pdfCreator.service';
 import { StripePaymentService } from '../../../core/services/stripePayment.service';
 import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserRepository } from '../../User/services/user.repository';
 import { UserOrderedRepository } from '../../UserOrdered/services/userOrdered.repository';
 import { IListOrderInterface } from '../models/listOrderInterface';
-import { PdfCreatorService } from '../../../core/services/pdfCreator.service';
-import { EmailSenderService } from '../../../core/services/emailSender.service';
-import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
-import express, { Request } from 'express';
 @Controller({
   path: '/user-payment'
 })
@@ -41,7 +41,7 @@ export class UserPaymentCtrl {
 
   @Post('/stripe-webhook-success')
   @Summary('Response hook from stripe and update db')
-  async successPaymentHook(@Context() ctx: Context, @Req() req: any): Promise<void> {
+  async successPaymentHook(@Context() ctx: Context, @Req() req: Request): Promise<void> {
     let responseStripe = ctx?.request?.body;
     if (!responseStripe) {
       new WinstonLogger()
@@ -78,16 +78,23 @@ export class UserPaymentCtrl {
         const paymentIntent = responseStripe.data.object;
         const user = await this._userRepository.findByEmail(paymentIntent?.metadata?.client);
         if (user) {
-          const userOrdered = await this._userOrderedRepository.findByUserId(user.userId);
+          const userOrdered = await this._userOrderedRepository.findByUserIdAndUserOrderedId(
+            user.userId,
+            paymentIntent?.metadata?.userOrderedId
+          );
           await this._userOrderedRepository.updateOne(
             { userId: user.userId },
             { paid: true },
             user
           );
           if (userOrdered) {
-            const isPdf = await this._pdfCreatorService.main(userOrdered);
+            const isPdf = await this._pdfCreatorService.main(userOrdered, user);
             if (isPdf) {
-              await this._emailSenderService.main(user, MailProcess.VALIDATE_ORDER);
+              await this._emailSenderService.main(
+                user,
+                MailProcess.VALIDATE_ORDER,
+                paymentIntent?.metadata?.userOrderedId
+              );
             }
           }
         }

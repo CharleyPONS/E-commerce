@@ -13,7 +13,7 @@ import { RemoveNullUndefined } from '../../core/utils/removeNullUndefined';
 })
 export class ConnectionComponent implements OnInit {
   @Input() isOnOrder: boolean = false;
-  @Output() connect = new EventEmitter<{ connect: boolean; user: User }>();
+  @Output() connect = new EventEmitter<{ connect: boolean }>();
   public form: FormGroup;
   public hide: boolean;
   public authenticateSucceed: boolean = true;
@@ -46,21 +46,26 @@ export class ConnectionComponent implements OnInit {
         RemoveNullUndefined.removeNullOrUndefined(user)
       );
       this.authenticateSucceed = this._userService.isLoggedIn();
-      if (this.isOnOrder) {
-        this.connect.emit({ connect: true, user: this.userRetrieve });
-      }
+      this.connect.emit({ connect: true });
+
       this._snackBar.open('Vous êtes connecté', 'Succès', {
         duration: 2000,
+        panelClass: 'success-dialog',
       });
     } catch (err) {
       this._snackBar.open('Votre authentification a échoué', 'Erreur', {
         duration: 2000,
+        panelClass: 'error-dialog',
       });
     }
-
-    if (!this.isOnOrder) {
-      return this._router.navigateByUrl('/');
-    }
     return;
+  }
+
+  public isConnectedSSO(connect: { connection: boolean }) {
+    if (connect?.connection) {
+      this.connect.emit({ connect: true });
+    } else {
+      return;
+    }
   }
 }

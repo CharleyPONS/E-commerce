@@ -66,6 +66,8 @@ $warn: (
     A700: $black-87-opacity,
   ),
 );
+
+$error: #ff8d79;
 $shop-app-primary: mat-palette($primary);
 $shop-app-accent: mat-palette($accent);
 
@@ -209,6 +211,22 @@ mat-error {
 
 .cart-summary .cart-summary-icon img.summary-icon {
   display: none;
+}
+
+//  here we set global css style for snack bar
+
+.success-dialog {
+  color: white !important;
+  .mat-simple-snackbar-action {
+    color: #88bf8a !important;
+  }
+}
+
+.error-dialog {
+  color: white !important;
+  .mat-simple-snackbar-action {
+    color: $error !important;
+  }
 }
 
 @for $i from 0 through 15 {
