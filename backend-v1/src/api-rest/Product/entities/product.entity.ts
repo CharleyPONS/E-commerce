@@ -1,4 +1,13 @@
-import { Allow, Description, Enum, Maximum, Minimum, Required } from '@tsed/schema';
+import {
+  Allow,
+  Description,
+  Enum,
+  Integer,
+  Maximum,
+  Minimum,
+  Property,
+  Required
+} from '@tsed/schema';
 import {
   BaseEntity,
   BeforeInsert,
@@ -20,43 +29,57 @@ export class ProductEntity {
   id: number;
 
   @Required()
+  @Property()
   @Column({ type: 'varchar', length: '255' })
   name: string;
 
+  @Property()
   @Column({ type: 'varchar', nullable: true })
   title: string;
 
+  @Property()
   @Column({ type: 'varchar', nullable: true })
   mainDescription: string;
 
   @Column({ type: 'varchar', nullable: true })
+  @Property()
   optionalDescription: string;
   @Required()
-  @Column({ type: 'varchar', length: '255' })
+  @Property()
   @Enum(CATEGORIES)
+  @Column({ type: 'varchar', length: '255' })
   categories: CATEGORIES;
 
   @OneToOne(() => ProductPriceEntity, { cascade: true })
+  @Property()
   @JoinColumn()
   price: ProductPriceEntity;
 
+  @Property()
+  @Integer()
   @Minimum(0)
   @Maximum(80)
   @Column({ type: 'int', nullable: true })
   cbdRate?: number;
 
+  @Property()
   @Column({ type: 'varchar', length: '255' })
   imagePath: string;
+
+  @Property()
+  @Integer()
   @Minimum(0)
   @Maximum(1)
   @Column({ type: 'int', nullable: true })
   thcRate?: number;
 
-  @Column({ type: 'varchar', length: '255' })
+  @Property()
   @Description('Last modification date')
+  @Column({ type: 'varchar', length: '255' })
   dateUpdate: string;
 
   @Description('Depending on the product in stock we add the right unity of measure')
+  @Property()
   @OneToOne(() => ProductStockEntity, { cascade: true })
   @JoinColumn()
   stock: ProductStockEntity;

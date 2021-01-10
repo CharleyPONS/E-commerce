@@ -1,4 +1,4 @@
-import { Allow, Description, Email, Property, Required } from '@tsed/schema';
+import { Allow, Description, Email, Integer, Property, Required } from '@tsed/schema';
 import {
   BaseEntity,
   BeforeInsert,
@@ -23,29 +23,39 @@ export class UserEntity extends BaseEntity {
   @Generated('uuid')
   userId: string;
 
+  @Property()
   @OneToOne(() => UserAddressEntity, { cascade: true, onUpdate: 'CASCADE' })
   @JoinColumn()
   address: UserAddressEntity;
 
+  @Property()
   @Column({ type: 'varchar', length: '255', nullable: true })
   name: string;
 
+  @Property()
   @Column({ type: 'varchar', length: '255', nullable: true })
   surname: string;
 
+  @Property()
   @Column({ type: 'varchar', length: '255', nullable: true })
   password: string;
 
+  @Property()
   @Column({ type: 'boolean', nullable: true })
   fromSSO: boolean;
+
   @Required()
+  @Property()
   @Email()
   @Column({ type: 'varchar', length: '255' })
   email: string;
 
+  @Property()
+  @Integer()
   @Column({ type: 'int', nullable: true })
   numberOrder: number;
 
+  @Property()
   @Column({ type: 'varchar', length: '255' })
   @Description('Last modification date')
   dateUpdate: string;
@@ -54,6 +64,8 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   token: string | null;
 
+  @Property()
+  @Integer()
   @Column({ type: 'int', nullable: true })
   expiresIn: number;
 

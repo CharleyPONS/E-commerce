@@ -1,4 +1,4 @@
-import { Allow, Enum, Minimum, Property, Required } from '@tsed/schema';
+import { Allow, Enum, Integer, Minimum, Property, Required } from '@tsed/schema';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CATEGORIES, UNITY } from '../../Product/entities/product.enum';
@@ -11,23 +11,30 @@ export class UserOrderedProductsEntity extends BaseEntity {
   id: number;
 
   @Required()
-  @Column({ type: 'varchar', length: '255', nullable: true })
+  @Property()
   @Enum(CATEGORIES)
+  @Column({ type: 'varchar', length: '255', nullable: true })
   type: CATEGORIES;
 
   @Required()
+  @Property()
   @Column({ type: 'varchar', length: '255' })
   productName: string;
 
   @Required()
+  @Property()
+  @Integer()
   @Column({ type: 'int' })
   quantity: number;
 
   @Required()
   @Property()
+  @Enum(UNITY)
   @Column({ type: 'varchar' })
   unityMeasure: UNITY;
 
+  @Property()
+  @Integer()
   @Column({ type: 'int', nullable: true })
   grammeNumber: number;
 
