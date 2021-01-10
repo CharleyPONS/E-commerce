@@ -1,9 +1,10 @@
 import { Service } from '@tsed/common';
+import { NotFound } from '@tsed/exceptions';
 import { hashSync } from 'bcrypt';
 
 import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
+import { $logger } from '../../../core/services/customLogger';
 import { EmailSenderService } from '../../../core/services/emailSender.service';
-import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../../User/entities/user.entity';
 import { IUser } from '../../User/models/user.interface';
 import { UserRepository } from '../../User/services/user.repository';
@@ -22,8 +23,8 @@ export class RegistrationService {
     await this._userService.saveUser(registerUserToSaved);
     const user = this._userService.findByEmail(registerUserToSaved.email);
     if (!user) {
-      new WinstonLogger().logger().info(`user not found`, { user });
-      throw new Error('user not found error during the save process');
+      $logger.info(`user not found`, { user });
+      throw new NotFound('user not found error during the save process');
     }
     await this._emailSenderService.main(registerUserToSaved, MailProcess.NEW_CLIENT);
     return user;

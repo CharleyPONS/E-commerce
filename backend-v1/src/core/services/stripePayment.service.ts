@@ -15,9 +15,10 @@ import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrder
 import { UserOrderedProductsEntity } from '../../api-rest/UserOrdered/entities/userOrderedProducts.entity';
 import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';
 import { IListOrderInterface } from '../../api-rest/UserPayment/models/listOrderInterface';
+import { config } from '../config';
 import { IStripeConfigInterface } from '../models/interface/stripeConfig.interface';
 
-import { WinstonLogger } from './winstonLogger';
+import { $logger } from './customLogger';
 
 /**
  * Ce service est une validation côté serveur du prix de la commande pour éviter toute manipulation côté client du prix
@@ -40,48 +41,38 @@ export class StripePaymentService {
   }> {
     const user = await this._userRepository.findByEmail(listOrder?.userEmail);
     if (!user) {
-      new WinstonLogger()
-        .logger()
-        .crit('user trying to purchase payment is not in our base', { user, listOrder });
+      $logger.fatal('user trying to purchase payment is not in our base', { user, listOrder });
       throw new NotFound('user trying to purchase payment is not in our base');
     }
     if (!listOrder) {
-      new WinstonLogger()
-        .logger()
-        .crit('user trying to purchase have not product in his own', { user, listOrder });
+      $logger.fatal('user trying to purchase have not product in his own', { user, listOrder });
       throw new NotFound('user trying to purchase have not product in his own');
     }
-    new WinstonLogger()
-      .logger()
-      .info('user is identified, listOrder is present payment process can start now', {
-        user,
-        listOrder
-      });
+    $logger.info('user is identified, listOrder is present payment process can start now', {
+      user,
+      listOrder
+    });
     const stripeConfig: IStripeConfigInterface = {
       apiKey:
-        process.env.NODE_ENV === 'development'
-          ? process.env.SECRET_KEY_DEVELOPMENT
-          : process.env.SECRET_KEY_PRODUCTION,
+        config.NODE_ENV === 'development'
+          ? config.SECRET_KEY_DEVELOPMENT
+          : config.SECRET_KEY_PRODUCTION,
       apiVersion: '2020-08-27',
-      protocol: process.env.PROTOCOL_HTTP as 'http' | 'https'
+      protocol: config.PROTOCOL_HTTP as 'http' | 'https'
     };
     const stripeConfigOptions: IStripeConfigInterface = { ...stripeConfig };
     delete stripeConfigOptions.apiKey;
     const stripe = new Stripe(stripeConfig.apiKey as string, stripeConfigOptions);
     const amount: { price: number } = await this.calculateOrderAmountLogic(user, listOrder);
     if (!amount) {
-      new WinstonLogger()
-        .logger()
-        .crit('user trying to purchase have an amount at 0', { user, amount });
+      $logger.fatal('user trying to purchase have an amount at 0', { user, amount });
       throw new NotFound('user trying to purchase have an amount at 0');
     }
 
-    new WinstonLogger()
-      .logger()
-      .info('price have been set for user transaction and payment can begin now', {
-        user,
-        price: amount
-      });
+    $logger.info('price have been set for user transaction and payment can begin now', {
+      user,
+      price: amount
+    });
 
     const userOrder: UserOrderedEntity = new UserOrderedEntity();
     userOrder.paid = false;
@@ -104,20 +95,20 @@ export class StripePaymentService {
 
     const saveUserOrdered = await this._userOrderedRepository.saveUserOrder(userOrder);
 
-    new WinstonLogger().logger().info('user ordered have been save on stripe payment service', {
+    $logger.info('user ordered have been save on stripe payment service', {
       user,
       userOrder
     });
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount.price * 100,
-      receipt_email: process.env.EMAIL,
+      receipt_email: config.EMAIL,
       currency: 'EUR',
       use_stripe_sdk: true,
       description: `Product: ${listOrder?.product?.map(
         v => v.productName
       )}, Quantity: ${listOrder?.product?.map(m => m.quantity)}`,
-      statement_descriptor: `${process.env.STATEMENT_DESCRIPTOR}`.substr(0, 22),
+      statement_descriptor: `${config.STATEMENT_DESCRIPTOR}`.substr(0, 22),
       metadata: {
         client: `${listOrder.userEmail}`,
         amount: `Amount: ${amount}`,
@@ -134,7 +125,7 @@ export class StripePaymentService {
     listOrder: IListOrderInterface
   ): Promise<{ price: number }> {
     if (!Array.isArray(listOrder.product)) {
-      new WinstonLogger().logger().info('list order contain no product', {
+      $logger.info('list order contain no product', {
         user,
         listOrder
       });
@@ -147,12 +138,10 @@ export class StripePaymentService {
     );
     // @ts-ignore
     if (!product && !Array.isArray(product) && product.length < 1) {
-      new WinstonLogger()
-        .logger()
-        .crit('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE', {
-          user,
-          listOrder
-        });
+      $logger.fatal('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE', {
+        user,
+        listOrder
+      });
       throw new NotFound('user trying to purchase have PRODUCT WHO MATCH NOTHING IN BASE');
     }
     for (const productSelected of product) {
@@ -190,7 +179,7 @@ export class StripePaymentService {
       }
     }
     const configuration = await this._configurationRepository.findByType(
-      process.env.CONFIGURATION_TYPE as ConfigurationType
+      config.CONFIGURATION_TYPE as ConfigurationType
     );
     if (
       listOrder?.reduction?.isReduction &&
@@ -203,7 +192,7 @@ export class StripePaymentService {
       );
       const priceReduction = promotionRetrieve ? promotionRetrieve[0]?.promotionReduction : 1;
       amount = amount - amount * (priceReduction / 100);
-      new WinstonLogger().logger().info('reduction have been apply for user', {
+      $logger.info('reduction have been apply for user', {
         user,
         priceBefore: beforePrice,
         newPrice: amount,
@@ -217,13 +206,13 @@ export class StripePaymentService {
       );
       amount =
         amount + (configurationTransporterEntity ? configurationTransporterEntity.basePrice : 0);
-      new WinstonLogger().logger().info('price have been update with shipment tax for user', {
+      $logger.info('price have been update with shipment tax for user', {
         user,
         price: amount,
         transporter: configurationTransporterEntity
       });
     }
-    new WinstonLogger().logger().info('price have been set for user', { user, price: amount });
+    $logger.info('price have been set for user', { user, price: amount });
     return { price: this._roundToTwoDigitsAfterComma(amount) };
   }
 

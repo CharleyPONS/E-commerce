@@ -5,13 +5,13 @@ import * as fs from 'fs';
 import { ProductEntity } from '../../api-rest/Product/entities/product.entity';
 import { CATEGORIES } from '../../api-rest/Product/entities/product.enum';
 import { ProductRepository } from '../../api-rest/Product/services/product.repository';
+import { UserEntity } from '../../api-rest/User/entities/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { UserOrderedEntity } from '../../api-rest/UserOrdered/entities/userOrdered.entity';
 import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';
 import { rootDir } from '../../Server';
 
-import { WinstonLogger } from './winstonLogger';
-import { UserEntity } from '../../api-rest/User/entities/user.entity';
+import { $logger } from './customLogger';
 // tslint:disable-next-line: no-var-requires
 const pdf = require('pdf-creator-node');
 
@@ -91,15 +91,11 @@ export class PdfCreatorService {
         fs.unlinkSync(rootDir + `/tmp/bill/${userOrderedClone.billId}.pdf`);
       }
       await pdf.create(document, options);
-      new WinstonLogger()
-        .logger()
-        .info(`bill pdf have been created for user`, { user, bill: document });
+      $logger.info(`bill pdf have been created for user`, { user, bill: document });
 
       return true;
     } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .info(`bill pdf have been created for user`, { user, bill: document, error: err });
+      $logger.error(`bill pdf have been created for user`, { user, bill: document, error: err });
 
       return false;
     }

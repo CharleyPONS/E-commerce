@@ -12,6 +12,8 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs-extra';
 import helmet from 'helmet';
 import methodOverride from 'method-override';
+import { createLogger } from 'winston';
+import { config } from './core/config';
 
 export const rootDir = __dirname;
 dotenv.config();
@@ -22,7 +24,7 @@ const certificate = fs.readFileSync(__dirname + '/certificates/localhost.crt');
   rootDir,
   acceptMimes: ['application/json'],
   httpPort: false,
-  httpsPort: process.env.PORT || 5000,
+  httpsPort: config.PORT,
   httpsOptions: {
     cert: certificate,
     key: keyCertificate
@@ -41,11 +43,11 @@ const certificate = fs.readFileSync(__dirname + '/certificates/localhost.crt');
     {
       name: 'default',
       type: 'postgres',
-      host: process.env.POSTGRES_URL,
+      host: config.POSTGRES_URL,
       port: 5432,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
+      username: config.POSTGRES_USER,
+      password: config.POSTGRES_PASSWORD,
+      database: config.POSTGRES_DB,
       synchronize: true,
       logging: false,
       entities: [`${rootDir}/**/entities/**/*.ts`]
@@ -62,10 +64,11 @@ export class Server {
   constructor(private _typeORMService: TypeORMService) {}
 
   $beforeRoutesInit(): void {
+    createLogger();
     this.app
       .use(
         cors({
-          origin: (process.env.CORS_ORIGIN as string)?.split(',') || '*',
+          origin: (config.CORS_ORIGIN as string)?.split(',') || '*',
           methods: ['GET', 'POST', 'DELETE']
         })
       )

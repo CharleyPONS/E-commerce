@@ -1,7 +1,9 @@
 import { Context, IMiddleware, Middleware } from '@tsed/common';
 import { verify } from 'jsonwebtoken';
 
-import { WinstonLogger } from '../services/winstonLogger';
+import { $logger } from '../services/customLogger';
+import { config } from '../config';
+import { NotFound } from '@tsed/exceptions';
 
 @Middleware()
 export class AuthJWTMiddleware implements IMiddleware {
@@ -9,17 +11,17 @@ export class AuthJWTMiddleware implements IMiddleware {
   async use(@Context() ctx: Context): Promise<void> {
     const token: string = ctx?.request?.headers['x-access-token'] as string;
     if (!token) {
-      new WinstonLogger().logger().info('no token provided');
-      return ctx.getResponse().status(404).send('no token provided in request headers');
+      $logger.info('no token provided');
+      throw new NotFound('no token provided in request headers');
     }
-    verify(token, process.env.JWT_KEY as string, (err, decoded) => {
+    verify(token, config.JWT_KEY as string, (err, decoded) => {
       if (err) {
         if (err?.name === 'TokenExpiredError') {
-          new WinstonLogger().logger().info('TokenExpiredError', { err });
-          return ctx.getResponse().status(404).send('TokenExpiredError');
+          $logger.info('TokenExpiredError', { err });
+          throw new NotFound('TokenExpiredError');
         }
-        new WinstonLogger().logger().info('error during token verification', { err });
-        return ctx.getResponse().status(404).send('token cannot be verified');
+        $logger.info('error during token verification', { err });
+        throw new NotFound('token cannot be verified');
       }
     });
     return;

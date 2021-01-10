@@ -1,11 +1,12 @@
 import { BodyParams, Context, Controller, Get, PathParams, Post, UseBefore } from '@tsed/common';
 import { Returns, Summary } from '@tsed/schema';
 
+import { NotFound } from '@tsed/exceptions';
 import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
+import { $logger } from '../../../core/services/customLogger';
+import { UserRepository } from '../../User/services/user.repository';
 import { UserOrderedEntity } from '../entities/userOrdered.entity';
 import { UserCommandService } from '../services/userCommand.service';
-import { UserRepository } from '../../User/services/user.repository';
-import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserOrderedRepository } from '../services/userOrdered.repository';
 
 @Controller({
@@ -32,17 +33,16 @@ export class UserCtrl {
   @Get('/:token')
   @Summary('Return all User Ordered')
   @UseBefore(AuthJWTMiddleware)
-  @Returns(200)
+  @(Returns(200, Array).of(UserOrderedEntity))
   async allUserCommand(
     @Context() ctx: Context,
     @PathParams('token') token: string
   ): Promise<UserOrderedEntity[]> {
     const user = await this._userRepository.findByToken(token);
     if (!user) {
-      new WinstonLogger().logger().warn(`user not found`, { token });
-      throw new Error('user not found');
+      $logger.warn(`user not found`, { token });
+      throw new NotFound('user not found');
     }
-    const userOrdered: UserOrderedEntity[] = await this._userOrderedRepository.findAll();
-    return ctx.getResponse().status(200).send(userOrdered);
+    return this._userOrderedRepository.findAll();
   }
 }

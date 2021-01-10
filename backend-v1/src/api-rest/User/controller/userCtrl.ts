@@ -9,15 +9,16 @@ import {
   UseBefore
 } from '@tsed/common';
 import { NotFound } from '@tsed/exceptions';
-import { Required, Status, Summary } from '@tsed/schema';
+import { Required, Returns, Summary } from '@tsed/schema';
 import axios from 'axios';
 import { hashSync } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
+import { config } from '../../../core/config';
 import { AuthJWTMiddleware } from '../../../core/middleware/authJWT.middleware';
 import { MailProcess } from '../../../core/models/enum/mailProcess.enum';
+import { $logger } from '../../../core/services/customLogger';
 import { EmailSenderService } from '../../../core/services/emailSender.service';
-import { WinstonLogger } from '../../../core/services/winstonLogger';
 import { UserEntity } from '../entities/user.entity';
 import { UserAddressEntity } from '../entities/userAddress.entity';
 import { IUser } from '../models/user.interface';
@@ -40,7 +41,7 @@ export class UserCtrl {
 
   @Get('/:token')
   @Summary('Return a User from his ID')
-  @(Status(200, UserEntity).Description('Success'))
+  @(Returns(200, UserEntity).Description('Success'))
   async getUser(@PathParams('token') token: string): Promise<UserEntity> {
     const user = await this._userRepository.findByToken(token);
 
@@ -53,7 +54,7 @@ export class UserCtrl {
 
   @Post('/oauth')
   @Summary('Return a User from his ID')
-  @(Status(200, UserEntity).Description('Success'))
+  @(Returns(200, UserEntity).Description('Success'))
   async oauthFacebookStrategy(
     @Context() ctx: Context,
     @BodyParams() authToken: { ssoToken: string }
@@ -71,29 +72,26 @@ export class UserCtrl {
     }
     const user = await this._userRepository.findByEmail(userFbData?.data?.email);
     if (!user) {
-      new WinstonLogger().logger().info(`user not found we save user`, { user });
+      $logger.info(`user not found we save user`, { user });
       await this._userRepository.saveUser(userToSave);
     } else {
-      const getToken: string = sign({ id: user.id }, process.env.JWT_KEY as string, {
-        expiresIn: process.env.JWT_EXPIRES_MS
+      const getToken: string = sign({ id: user.id }, config.JWT_KEY as string, {
+        expiresIn: config.JWT_EXPIRES_MS
       });
       await this._userRepository.updateOne({ id: user.id }, { token: getToken }, user);
     }
     const userToSend = await this._userRepository.findByEmail(userFbData?.data?.email);
 
-    ctx
-      .getResponse()
-      .status(200)
-      .send({
-        ...userToSend,
-        token: userToSend?.token || null,
-        expiresIn: process.env.JWT_EXPIRES_MS
-      });
+    return {
+      ...userToSend,
+      token: userToSend?.token || null,
+      expiresIn: config.JWT_EXPIRES_MS
+    };
   }
 
   @Delete('/:id')
   @Summary('Delete a User from his ID')
-  @(Status(204, UserEntity).Description('Success delete'))
+  @(Returns(204, UserEntity).Description('Success delete'))
   async deleteUser(@PathParams('id') id: number): Promise<UserEntity> {
     const user = await this._userRepository.deleteUser(id);
     if (user) {
@@ -104,15 +102,15 @@ export class UserCtrl {
 
   @Post('/signIn')
   @Summary('Return JWT token if sign in succeed')
-  @(Status(200, UserEntity).Description('Success'))
-  async logInUser(@Context() ctx: Context, @BodyParams() userBody: IUser): Promise<UserEntity> {
+  @(Returns(200, UserEntity).Description('Success'))
+  async logInUser(@Context() ctx: Context, @BodyParams() userBody: IUser): Promise<IUser> {
     const user: IUser = await this._userLoginService.main(ctx, userBody);
-    return ctx.getResponse().status(200).send(user);
+    return user;
   }
 
   @Post('/logout')
   @Summary('Delete JWT token')
-  @(Status(200).Description('Success'))
+  @(Returns(200).Description('Success'))
   async logOut(@Context() ctx: Context, @BodyParams('user') userBody: UserEntity): Promise<void> {
     await this._userDeleteTokenService.main(userBody);
     return;
@@ -121,7 +119,6 @@ export class UserCtrl {
   @Post('/changePassword')
   @Summary('Change userpassword')
   @UseBefore(AuthJWTMiddleware)
-  @(Status(200).Description('Success'))
   async changePassword(
     @Context() ctx: Context,
     @Required()
@@ -133,7 +130,7 @@ export class UserCtrl {
   ): Promise<void> {
     const user = await this._userRepository.findByToken(token);
     if (!user) {
-      new WinstonLogger().logger().info(`user not found`, { token });
+      $logger.info(`user not found`, { token });
       throw new Error('User who want to change password not found');
     }
     const userToSave: UserEntity = new UserEntity();
@@ -143,7 +140,7 @@ export class UserCtrl {
 
   @Post('/forgotPassword')
   @Summary('send mail with new password')
-  @(Status(200).Description('Success'))
+  @(Returns(200).Description('Email send for new password'))
   async forgotPassword(
     @Context() ctx: Context,
     @Required()
@@ -152,7 +149,7 @@ export class UserCtrl {
   ): Promise<void> {
     const user = await this._userRepository.findByEmail(email.email);
     if (!user) {
-      new WinstonLogger().logger().info(`user not found`, { email });
+      $logger.info(`user not found`, { email });
       throw new Error('email not found');
     }
     await this._emailSenderService.main(user, MailProcess.RESET_PASSWORD);
@@ -160,7 +157,7 @@ export class UserCtrl {
 
   @Post('/save')
   @Summary('Return JWT token if sign in succeed')
-  @(Status(200, UserEntity).Description('Success'))
+  @(Returns(200, UserEntity).Description('Success'))
   async saveUser(@Context() ctx: Context, @BodyParams() userBody: IUser): Promise<UserEntity> {
     let user;
     if (userBody?.email) {
@@ -186,13 +183,12 @@ export class UserCtrl {
     );
     const userSaved = await this._userRepository.findById(user?.userId as string);
     if (updateUser) {
-      new WinstonLogger().logger().info(`Update user done`, { userSaved });
-
-      return ctx.getResponse().status(200).send(userSaved);
+      $logger.info(`Update user done`, { userSaved });
+      return userSaved;
     } else {
-      new WinstonLogger().logger().warn(`Update user failed`, { updateUser });
+      $logger.warn(`Update user failed`, { updateUser });
 
-      return ctx.getResponse().status(404).send('user not save');
+      throw new NotFound('user not save');
     }
   }
 }

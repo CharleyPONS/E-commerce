@@ -1,7 +1,7 @@
-import { EntityRepository, FindConditions, Repository } from 'typeorm';
+import { EntityRepository, FindConditions, Repository, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-import { WinstonLogger } from '../../../core/services/winstonLogger';
+import { $logger } from '../../../core/services/customLogger';
 import { UserEntity } from '../entities/user.entity';
 import { IUser } from '../models/user.interface';
 
@@ -10,82 +10,54 @@ export class UserRepository extends Repository<UserEntity> {
   $onInit() {}
 
   async findById(idUser: string): Promise<UserEntity | undefined> {
-    try {
-      new WinstonLogger().logger().info(`Search a user with id ${idUser}`);
-      const user = await this.findOne({
-        where: { userId: idUser },
-        relations: ['address']
-      });
-      return user;
-    } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .warn(`Search a user with id ${idUser} request failed`, { error: err });
-    }
+    $logger.info(`Search a user with id ${idUser}`);
+    return this.findOne({
+      where: { userId: idUser },
+      relations: ['address']
+    });
   }
 
   async findByEmail(userEmail: string): Promise<UserEntity | undefined> {
-    try {
-      new WinstonLogger().logger().info(`Search a user with email ${userEmail}`);
-      const user = await this.findOne({
-        where: { email: userEmail },
-        relations: ['address']
-      });
-      return user;
-    } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .warn(`Search a user with email ${userEmail} request failed`, { error: err });
-    }
+    $logger.info(`Search a user with email ${userEmail}`);
+    const user = await this.findOne({
+      where: { email: userEmail },
+      relations: ['address']
+    });
+    return user;
   }
 
   async findByToken(tokenId: string): Promise<UserEntity | undefined> {
-    try {
-      new WinstonLogger().logger().info(`Search a user with token ${tokenId}`);
-      const user = await this.findOne({
-        where: { token: tokenId }
-      });
-      return user;
-    } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .warn(`Search a user with token ${tokenId} request failed`, { error: err });
-    }
+    $logger.info(`Search a user with token ${tokenId}`);
+    const user = await this.findOne({
+      where: { token: tokenId }
+    });
+    return user;
   }
 
   async saveUser(user: UserEntity): Promise<void> {
-    try {
-      new WinstonLogger().logger().info(`Save user`, { user });
-      await this.save(user);
-      new WinstonLogger().logger().info(`Save user succeed`, { user });
-    } catch (err) {
-      new WinstonLogger().logger().warn(`Save a user with id request failed`, { error: err });
-    }
+    await this.save(user);
+    $logger.info(`Save user succeed`, { user });
+    return;
   }
 
   async updateOne(
     filter: FindConditions<UserEntity>,
     updateQuery: QueryDeepPartialEntity<UserEntity>,
     user: IUser | UserEntity
-  ): Promise<any> {
-    try {
-      new WinstonLogger().logger().info(`update user`, { user });
-      const updateUser = await this.update(filter, updateQuery);
-      new WinstonLogger().logger().info(`Update user succeed`, { user });
-      return updateUser;
-    } catch (err) {
-      new WinstonLogger().logger().warn(`Update a user with id request failed`, { error: err });
-    }
+  ): Promise<UpdateResult> {
+    const updateUser = await this.update(filter, updateQuery);
+    $logger.info(`Update user succeed`, { user });
+    return updateUser;
   }
 
   async deleteUser(userId: number): Promise<any> {
     try {
-      new WinstonLogger().logger().info(`try to delete user`, { userId });
+      $logger.info(`try to delete user`, { userId });
       await this.delete({ id: userId });
-      new WinstonLogger().logger().info(`Delete user succeed`, { userId });
+      $logger.info(`Delete user succeed`, { userId });
       return;
     } catch (err) {
-      new WinstonLogger().logger().warn(`Delete a user with id ${userId} failed`, { error: err });
+      $logger.warn(`Delete a user with id ${userId} failed`, { error: err });
     }
   }
 }

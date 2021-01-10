@@ -1,7 +1,9 @@
 import { BodyParams, Context, Controller, Get, Post } from '@tsed/common';
+import { NotFound } from '@tsed/exceptions';
 import { Returns, Summary } from '@tsed/schema';
 
-import { WinstonLogger } from '../../../core/services/winstonLogger';
+import { config } from '../../../core/config';
+import { $logger } from '../../../core/services/customLogger';
 import { ConfigurationEntity } from '../entities/configuration.entity';
 import { ConfigurationType } from '../entities/configurationType.enum';
 import { ConfigurationRepository } from '../service/configuration.repository';
@@ -14,40 +16,40 @@ export class ConfigurationCtrl {
 
   @Get('')
   @Summary('Return a User from his ID')
+  @(Returns(200, ConfigurationEntity).Description('returns configuration'))
   async getConfiguration(@Context() ctx: Context): Promise<ConfigurationEntity> {
-    new WinstonLogger().logger().info(`retreive configuration`);
-    const data: ConfigurationEntity = await this._configurationRepository.findByType(
-      process.env.CONFIGURATION_TYPE as ConfigurationType
+    $logger.info('Retrieve configuration');
+    const configuration: ConfigurationEntity = await this._configurationRepository.findByType(
+      config.CONFIGURATION_TYPE as ConfigurationType
     );
-    return ctx.getResponse().status(200).send(data);
+    if (!configuration) {
+      $logger.warn('Configuration not provided on DB');
+      throw new NotFound('No configuration provided on the DB');
+    }
+    return configuration;
   }
   @Post('/reduction')
   @Summary('Verify offer of client')
-  async checkReduction(
-    @Context() ctx: Context,
-    @BodyParams() offerCode: { code: string }
-  ): Promise<any> {
-    const config: ConfigurationEntity[] = await this._configurationRepository.findByType(
-      process.env.CONFIGURATION_TYPE as ConfigurationType
+  @(Returns(200).Description('Control if reduction is authorized'))
+  async checkReduction(@BodyParams() offerCode: { code: string }): Promise<any> {
+    const configuration: ConfigurationEntity[] = await this._configurationRepository.findByType(
+      config.CONFIGURATION_TYPE as ConfigurationType
     );
     if (
       offerCode.code &&
-      config[0].promotion &&
-      Array.isArray(config[0].promotion) &&
-      config[0].promotion.find(v => v.codePromotion === offerCode.code && v.isPromotion)
+      configuration[0].promotion &&
+      Array.isArray(configuration[0].promotion) &&
+      configuration[0].promotion.find(v => v.codePromotion === offerCode.code && v.isPromotion)
     ) {
-      new WinstonLogger().logger().info(`Code offer match`, { code: offerCode });
+      $logger.info(`Code offer match`, { code: offerCode });
 
-      return ctx
-        .getResponse()
-        .status(200)
-        .send({
-          isPromotion: true,
-          promotionReduction: config[0].promotion.find(v => v.codePromotion === offerCode.code)
-            ?.promotionReduction
-        });
+      return {
+        isPromotion: true,
+        promotionReduction: configuration[0].promotion.find(v => v.codePromotion === offerCode.code)
+          ?.promotionReduction
+      };
     }
-    new WinstonLogger().logger().info(`Code offer not match`, { code: offerCode.code });
-    return ctx.getResponse().status(404).send('Promotion not found');
+    $logger.warn(`Code offer not match`, { code: offerCode.code });
+    throw new NotFound('Promotion not found');
   }
 }

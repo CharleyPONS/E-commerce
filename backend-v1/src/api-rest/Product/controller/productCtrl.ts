@@ -5,6 +5,7 @@ import { Returns, Summary } from '@tsed/schema';
 import { ProductEntity } from '../entities/product.entity';
 import { CATEGORIES } from '../entities/product.enum';
 import { ProductRepository } from '../services/product.repository';
+import { $logger } from '../../../core/services/customLogger';
 
 @Controller({
   path: '/product'
@@ -16,18 +17,18 @@ export class ProductCtrl {
   @Summary('Return all Product')
   async getAllProduct(@Context() ctx: Context): Promise<ProductEntity[]> {
     const product: ProductEntity[] = await this._productRepository.findAll();
-    return ctx.getResponse().status(200).send(product);
+    return product;
   }
 
   @Get('/:category')
   @Summary('Return a Product from his ID')
-  @(Returns(200).Description('Success'))
+  @(Returns(200, ProductEntity).Description('Success'))
   async getProduct(@PathParams('id') category: CATEGORIES): Promise<ProductEntity[]> {
     const product = await this._productRepository.findByCategories(category);
-    if (product) {
-      return product;
+    if (!product) {
+      $logger.warn('Product not found', { id: category });
+      throw new NotFound('Product not found');
     }
-
-    throw new NotFound('Product not found');
+    return product;
   }
 }

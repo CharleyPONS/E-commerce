@@ -1,5 +1,6 @@
 import { Service } from '@tsed/common';
 import { InternalServerError } from '@tsed/exceptions';
+import { hashSync } from 'bcrypt';
 import * as fs from 'fs-extra';
 import * as node_mailer from 'nodemailer';
 
@@ -7,11 +8,11 @@ import { UserEntity } from '../../api-rest/User/entities/user.entity';
 import { UserRepository } from '../../api-rest/User/services/user.repository';
 import { UserOrderedRepository } from '../../api-rest/UserOrdered/services/userOrdered.repository';
 import { rootDir } from '../../Server';
+import { config } from '../config';
 import { MailProcess } from '../models/enum/mailProcess.enum';
 import { IMailProcessInformationInterface } from '../models/interface/mailProcessInformation.interface';
 
-import { WinstonLogger } from './winstonLogger';
-import { hashSync } from 'bcrypt';
+import { $logger } from './customLogger';
 // tslint:disable-next-line: no-var-requires
 const hbs = require('nodemailer-express-handlebars');
 
@@ -67,11 +68,11 @@ export class EmailSenderService {
     }
 
     const defineTransporter = node_mailer.createTransport({
-      host: process.env.HOST_SMTP,
+      host: config.HOST_SMTP,
       secure: false,
       auth: {
-        user: process.env.AUTH_USER,
-        pass: process.env.AUTH_PASSWORD
+        user: config.AUTH_USER,
+        pass: config.AUTH_PASSWORD
       },
       debug: true
     });
@@ -90,7 +91,7 @@ export class EmailSenderService {
 
     let sendOptions;
     sendOptions = {
-      from: `${process.env.AUTH_USER}` as string,
+      from: `${config.AUTH_USER}` as string,
       to: `${userData?.email}`,
       subject: mailProcessInformation.subject,
       // @ts-ignore
@@ -133,14 +134,12 @@ export class EmailSenderService {
       if (userOrderedData && fs.existsSync(rootDir + `/tmp/bill/${userOrderedData.billId}.pdf`)) {
         fs.unlinkSync(rootDir + `/tmp/bill/${userOrderedData.billId}.pdf`);
       }
-      new WinstonLogger().logger().info(`send email to user done`, { user, mailProcess });
+      $logger.info(`send email to user done`, { user, mailProcess });
     } catch (err) {
-      new WinstonLogger()
-        .logger()
-        .info(`error during send email to user`, { user, mailProcess, err });
+      $logger.error(`error during send email to user`, { user, mailProcess, err });
       throw new InternalServerError('error during send email');
     }
 
-    new WinstonLogger().logger().info(`email sent`, { user, mailProcess });
+    $logger.info(`email sent`, { user, mailProcess });
   }
 }
