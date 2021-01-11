@@ -1,4 +1,6 @@
 import { Logger } from '@tsed/logger';
+import '@tsed/logger-smtp';
+
 import Path from 'path';
 
 import { rootDir } from '../../Server';
@@ -21,7 +23,11 @@ $logger.appenders
   .set('file-dir', {
     type: 'file',
     filename: `${Path.join(rootDir, '..')}/${config.LOGGER_FILE}`,
-    pattern: '.yyyy-MM-dd',
+    pattern: '.yyyy-MM-dd-hh',
+    layout: {
+      type: 'json',
+      separator: ','
+    },
     daysToKeep: 10,
     compress: true
   })
@@ -30,6 +36,7 @@ $logger.appenders
     level: ['error', 'warn', 'fatal'],
     SMTP: {
       host: config.HOST_SMTP,
+      port: 25,
       auth: {
         user: config.AUTH_USER,
         pass: config.AUTH_PASSWORD
@@ -40,7 +47,7 @@ $logger.appenders
       message: "Voici les logs présentant des incidents d'une demi journée",
       filename: `${Path.join(rootDir, '..')}/${config.LOGGER_FILE}`
     },
-    sendInterval: 36000,
+    sendInterval: 3600,
     shutdownTimeout: 10,
     recipients: config.AUTH_USER,
     subject: 'Log green-shop',

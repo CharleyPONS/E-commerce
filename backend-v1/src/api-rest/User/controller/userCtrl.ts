@@ -182,7 +182,7 @@ export class UserCtrl {
       userBody
     );
     const userSaved = await this._userRepository.findById(user?.userId as string);
-    if (updateUser) {
+    if (userSaved) {
       $logger.info(`Update user done`, { userSaved });
       return userSaved;
     } else {

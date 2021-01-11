@@ -33,7 +33,7 @@ export class UserCtrl {
   @Get('/:token')
   @Summary('Return all User Ordered')
   @UseBefore(AuthJWTMiddleware)
-  @(Returns(200, Array).of(UserOrderedEntity))
+  @(Returns(200, Array).Of(UserOrderedEntity))
   async allUserCommand(
     @Context() ctx: Context,
     @PathParams('token') token: string

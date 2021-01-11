@@ -18,7 +18,7 @@ export const config = {
   JWT_EXPIRES_MS: process.env.JWT_EXPIRES_MS || 400000000,
 
   SERVICE: process.env.SERVICE || '',
-  HOST_SMTP: process.env.CACHE_EXPIRE_DURATION || '',
+  HOST_SMTP: process.env.HOST_SMTP || '',
   HOST_MAIL_LOGGER: process.env.HOST_MAIL_LOGGER || '',
   ASSOCIATE_EMAIL: process.env.ASSOCIATE_EMAIL || '',
 
